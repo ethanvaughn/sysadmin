@@ -1,0 +1,297 @@
+Building configuration...
+
+Current configuration : 6765 bytes
+!
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+service password-encryption
+!
+hostname hmcstack
+!
+boot-start-marker
+boot-end-marker
+!
+enable password 7 053C26012A495C001F031E11
+!
+aaa new-model
+!
+!
+!
+!
+!
+aaa session-id common
+clock timezone MST -7
+switch 1 provision ws-c3750g-24t
+switch 2 provision ws-c3750g-24t
+system mtu routing 1500
+ip subnet-zero
+no ip domain-lookup
+ip domain-name tomax.com
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-865234048
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-865234048
+ revocation-check none
+ rsakeypair TP-self-signed-865234048
+!
+!
+crypto pki certificate chain TP-self-signed-865234048
+ certificate self-signed 01
+  30820248 308201B1 A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  30312E30 2C060355 04031325 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 38363532 33343034 38301E17 0D393330 33303130 30303134
+  355A170D 32303031 30313030 30303030 5A303031 2E302C06 03550403 1325494F
+  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3836 35323334
+  30343830 819F300D 06092A86 4886F70D 01010105 0003818D 00308189 02818100
+  E71A97FA F1CAD9EC 63E1E20E 3AF51264 1E85ED80 C79AE736 2F33D9E2 5FC5F0B0
+  584BDD68 F2957B80 CBE2F6B1 E6693875 0521EC3C B1E03D0A 72217CF3 F770CA01
+  C42B6317 0EAD1AEF 64AB3F39 E571A3FA 5CD38721 497E2F7E 3E3EC356 4CE18C14
+  6C1FB944 A252AA32 6F834A8B 5F189DD2 E92F8308 3B2A4B82 3C5C9B8D 082B49E1
+  02030100 01A37230 70300F06 03551D13 0101FF04 05300301 01FF301D 0603551D
+  11041630 14821268 6D637374 61636B2E 746F6D61 782E636F 6D301F06 03551D23
+  04183016 80145690 2BD70EE9 5CDD65C9 5936DF22 CAE60BCD EFA4301D 0603551D
+  0E041604 1456902B D70EE95C DD65C959 36DF22CA E60BCDEF A4300D06 092A8648
+  86F70D01 01040500 03818100 1DE8E00B 94950CCC 99EF24B2 5FF13568 05E8672A
+  44AD8E41 B9CC673D C74B32F0 A4067372 4A6D8AF4 082FC09E 7B35D92A 05B177DF
+  B2059891 AF2D617C DD7C5C78 89BF427E 264B113C 0DCDA8E2 4F33392B 60643D19
+  AC6BA955 DA8A8BA9 F9C74123 7BD0DF18 056C4454 76727877 A23DE8C5 1E818724
+  BA69FC00 16909A3F B44254D0
+  quit
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+interface Port-channel1
+ description hmcnas01-uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel2
+ description hmcnas02-uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/1
+ description hmcnas01-eoa
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface GigabitEthernet1/0/2
+ description hmcnas01-eob
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface GigabitEthernet1/0/3
+ description hmc01-hba
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/4
+ description hmc03-hba
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/5
+ description hmc05-hba
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/6
+ description hmc07-hba
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/7
+ description hmc07-gb2
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/8
+ description hmc07-pci2a
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/9
+!
+interface GigabitEthernet1/0/10
+!
+interface GigabitEthernet1/0/11
+!
+interface GigabitEthernet1/0/12
+!
+interface GigabitEthernet1/0/13
+!
+interface GigabitEthernet1/0/14
+!
+interface GigabitEthernet1/0/15
+!
+interface GigabitEthernet1/0/16
+!
+interface GigabitEthernet1/0/17
+ description hmc05-gb1
+ switchport access vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/18
+ description hmc07-gb1
+ switchport access vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/19
+ description hmc01-gb1
+ switchport access vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/20
+ description hmc03-gb1
+ switchport access vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/21
+ description hmclb01-ge1
+ switchport access vlan 225
+!
+interface GigabitEthernet1/0/22
+ description hmclb01-ge2
+ switchport access vlan 226
+!
+interface GigabitEthernet1/0/23
+ description hmcfw01-p1
+ switchport access vlan 225
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/24
+ description hmcfw01-p2
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/1
+ description hmcnas02-e0a
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode on
+!
+interface GigabitEthernet2/0/2
+ description hmcnas02-e0b
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode on
+!
+interface GigabitEthernet2/0/3
+ description hmc02-hba
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/4
+ description hmc04-hba
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/5
+ description hmc04-pci2a
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/6
+ description hmc04-gb2
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/7
+ description hmc06-hba
+ switchport access vlan 227
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/8
+ description Backup Network uplink to wdcstack-1/0/9
+ switchport access vlan 401
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/9
+!
+interface GigabitEthernet2/0/10
+!
+interface GigabitEthernet2/0/11
+!
+interface GigabitEthernet2/0/12
+!
+interface GigabitEthernet2/0/13
+!
+interface GigabitEthernet2/0/14
+!
+interface GigabitEthernet2/0/15
+!
+interface GigabitEthernet2/0/16
+!
+interface GigabitEthernet2/0/17
+ description g30u02-0/2
+ switchport access vlan 225
+!
+interface GigabitEthernet2/0/18
+ description hmc06-gb1
+ switchport access vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/19
+ description hmc02-gb1
+ switchport access vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/20
+ description hmc04-gb1
+ switchport access vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/21
+ description hmclb02-ge1
+ switchport access vlan 225
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/22
+ description hmclb02-ge2
+ switchport access vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/23
+ description hmcfw02-p1
+ switchport access vlan 225
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/24
+ description hmcfw02-p2
+ spanning-tree portfast
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip classless
+no ip http server
+no ip http secure-server
+!
+!
+control-plane
+!
+!
+line con 0
+ session-timeout 30
+line vty 0 4
+ transport input none
+line vty 5 15
+ transport input none
+!
+end

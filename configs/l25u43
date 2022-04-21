@@ -1,0 +1,153 @@
+Building configuration...
+
+Current configuration : 2974 bytes
+!
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname L25U43
+!
+enable secret 5 $1$sIKG$sicNFaX/eUMYANyVuGWo31
+!
+no aaa new-model
+ip subnet-zero
+!
+!
+!
+!
+no file verify auto
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+interface GigabitEthernet0/1
+ switchport access vlan 404
+ spanning-tree portfast
+!
+interface GigabitEthernet0/2
+ switchport access vlan 407
+ spanning-tree portfast
+!
+interface GigabitEthernet0/3
+ switchport access vlan 404
+ spanning-tree portfast
+!
+interface GigabitEthernet0/4
+ switchport access vlan 404
+ spanning-tree portfast
+!
+interface GigabitEthernet0/5
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet0/6
+ description vmware12
+ switchport access vlan 404
+ spanning-tree portfast
+!
+interface GigabitEthernet0/7
+ switchport access vlan 404
+ spanning-tree portfast
+!
+interface GigabitEthernet0/8
+ switchport access vlan 404
+ spanning-tree portfast
+!
+interface GigabitEthernet0/9
+ switchport access vlan 404
+ spanning-tree portfast
+!
+interface GigabitEthernet0/10
+ switchport access vlan 404
+ spanning-tree portfast
+!
+interface GigabitEthernet0/11
+ switchport access vlan 404
+ spanning-tree portfast
+!
+interface GigabitEthernet0/12
+ switchport access vlan 407
+ spanning-tree portfast
+!
+interface GigabitEthernet0/13
+ description vmware12 trunk
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet0/14
+ description asterisk-new
+ switchport access vlan 10
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet0/15
+ description vmware08 trunk
+ switchport access vlan 404
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet0/16
+ switchport access vlan 404
+ spanning-tree portfast
+!
+interface GigabitEthernet0/17
+ switchport access vlan 407
+ spanning-tree portfast
+!
+interface GigabitEthernet0/18
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet0/19
+ switchport access vlan 407
+ spanning-tree portfast
+!
+interface GigabitEthernet0/20
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet0/21
+ spanning-tree portfast
+!
+interface GigabitEthernet0/22
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet0/23
+ description wdcstack01 - L37U26 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/24
+ description wdcstack01 - L37U27 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Vlan1
+ no ip address
+ no ip route-cache
+!         
+ip http server
+!
+control-plane
+!
+!
+line con 0
+line vty 0 4
+ no login
+line vty 5 15
+ no login
+!
+!
+end

@@ -1,0 +1,14 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+
+<h1>The Following Error Occurred:</h1>
+
+
+<tmpl_if name="msg">
+	<div>
+	<tmpl_var name="msg">
+	</div>
+</tmpl_if>
+
+<p><a class="button" href="<tmpl_var name='errnav'>">&larr; Back</a></p>
+
+<tmpl_include name = "../tmpl/footer.tmpl">

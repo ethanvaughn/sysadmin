@@ -1,0 +1,181 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::vo;
+use lib::mal;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+my $errnav = "main";
+my $remote_user = $cgi->remote_user;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+#----- viewMain ----------------------------------------------------------
+sub viewMain {
+	# Get required data.
+	my $list = lib::mal::getOpenList( $dbh );
+
+	# Paint the picture
+	$htmlview = HTML::Template->new( filename => "../tmpl/mal.tmpl", loop_context_vars => 1 );
+
+	$htmlview->param( tabmenu   => $tabmenu );
+	$htmlview->param( subtitle  => "Application Log Alerts" );
+	$htmlview->param( cgi       => $self_url );
+	$htmlview->param( user      => $remote_user );
+	$htmlview->param( listloop  => $list );
+}
+
+
+
+#----- viewHist ----------------------------------------------------------
+sub viewHist {
+	# Get required data.
+	my $list = lib::mal::getClosedList( $dbh );
+
+	# Paint the picture
+	$htmlview = HTML::Template->new( filename => "../tmpl/history.tmpl", loop_context_vars => 1 );
+
+	$htmlview->param( tabmenu      => $tabmenu );
+	$htmlview->param( subtitle     => "Application Log History" );
+	$htmlview->param( user         => $remote_user );
+	$htmlview->param( listloop     => $list );
+}
+
+
+
+#---- Main -------------------------------------------------------------------
+
+						#DEBUG
+#						print STDERR "cgi/main: ACTION=$ACTION\n";
+#						foreach my $key (keys( %$vars )) {
+#							print STDERR "mal:main: $key=$vars->{$key}\n";
+#						};
+						
+# Set up the tabmenu:
+#$tabmenu = www::cgi::helpers::gen_tabmenu( "MAL" );
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- list --------------------------
+if ($ACTION eq "list") {
+	$vars->{username} = $remote_user;
+	viewMain();
+
+
+
+#---- close --------------------------
+} elsif ($ACTION eq "close") {
+
+	# Build an array of posted IDs to loop through:
+	my @id_list;
+	foreach my $key (keys( %$vars )) {
+		if ($key =~ /id-/) {
+			push( @id_list, $vars->{$key} );
+		}
+	}
+
+	if (!$remote_user) {
+		my $errmsg = "Unable to close record. Please contact system administrator.";
+		print STDERR "mal::main: Unable to close. Missing remote_user. Problem with authentcation? Action = [$ACTION]\n";
+		www::cgi::helpers::exitonerr( $errnav, $errmsg );
+	}
+		
+	$vars->{username} = $remote_user;
+
+	# Close the selected records.
+	foreach my $id (@id_list) {
+		$vars->{id} = $id;
+		lib::mal::closeRec( $dbh, $vars );
+		www::cgi::helpers::chkDB( $dbh );
+	}
+
+	viewMain();
+
+
+
+#---- del --------------------------
+} elsif ($ACTION eq "del") {
+	if (!$vars->{id}) {
+		print STDERR "mal::main: Unable to delete. Missing id. Action = [$ACTION]\n";
+	}
+
+	lib::mal::delRec( $dbh, $vars->{id} );
+	www::cgi::helpers::chkDB( $dbh );
+
+	viewMain();
+
+
+
+#---- generate --------------------------
+} elsif ($ACTION eq "generate") {
+	# Generate a test message.
+	lib::mal::genRec( $dbh );
+	www::cgi::helpers::chkDB( $dbh );
+	viewMain();
+
+
+#---- history --------------------------
+} elsif ($ACTION eq "history") {
+	viewHist();
+
+
+
+
+#---- unknown --------------------------
+} else {
+	www::cgi::helpers::exitonerr( 
+		$errnav,
+		"CGI: $errnav: Unknown action value [$ACTION].\n",
+		"../tmpl/error_dlg.tmpl"
+	);
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+# Misc. message to display. Useful for debugging or status messages.
+if ($msg) {
+	$htmlview->param( msg => $msg );
+}
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

@@ -1,0 +1,54 @@
+<html>
+<head>
+<title><tmpl_var name=title></title>
+<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=portalusername>.css" />
+</head>
+<body>
+<table style="width:99%">
+	<caption>Server Details: <tmpl_var name=desc> (IP Address: <tmpl_var name=address>)</caption>
+	<thead>
+		<tr>
+			<th>Status</th>
+			<th>Description</th>
+			<th>Output</th>
+		</tr>
+	</thead>
+	<tmpl_loop name=dataset>
+	<tr class='<TMPL_IF NAME="__odd__">altrow</tmpl_if>'	>
+		<td>
+			<tmpl_if name=service_up>
+				<img src="../images/up.gif" border="0">
+			</tmpl_if>
+			<tmpl_if name=service_warning>
+				<tmpl_if name=serv_ack>
+					<img src="../images/warningack.gif" border="0">
+				<tmpl_else>
+					<img src="../images/warning.gif" border="0">
+				</tmpl_if>
+			</tmpl_if>
+			<tmpl_if name=service_critical>
+				<tmpl_if name=serv_ack>
+					<img src="../images/criticalack.gif" border="0">
+				<tmpl_else>
+					<img src="../images/critical.gif" border="0">
+				</tmpl_if>
+			</tmpl_if>
+			<tmpl_if name=maintenance>
+				<img src="../images/maintenance.gif" bordre="0">
+			</tmpl_if>
+		</td>
+		<td>
+			<tmpl_if name=image>
+				<a href="readgraphs.pl?host=<tmpl_var name=host>&graph=<tmpl_var name=description>"><tmpl_var name=description></a>
+			<tmpl_else>
+				<tmpl_var name=description>
+			</tmpl_if>
+		</td>
+		<td><tmpl_var name=plugin_output></td>
+	</tr>
+	</tmpl_loop>
+</table>
+</body>
+</html>
+

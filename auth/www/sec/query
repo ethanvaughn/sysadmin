@@ -1,0 +1,91 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::getaccount;
+use lib::getgroup;
+
+use strict;
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "passwd";
+}
+
+my $vars = $cgi->Vars;
+my $msg;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+my $hostname = $vars->{hostname};
+
+my $remote_host =  $cgi->remote_host();
+my $referer = $cgi->referer();
+my $user_agent = $cgi->user_agent();
+my $debug_data = <<EOL;
+remote_host: $remote_host
+user_agent: $user_agent
+EOL
+
+
+#---- Main -------------------------------------------------------------------
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- passwd --------------------------
+if ($ACTION eq "passwd") {
+	my $accounts = lib::getaccount::mkPasswd( $dbh );
+	print $cgi->header( 'text/plain' );
+	print "$hostname\n";
+	foreach my $account (@$accounts) {
+		print "$account\n";
+	}
+
+} elsif ($ACTION eq "shadow") {
+	my $accounts = lib::getaccount::mkShadow( $dbh );
+	print $cgi->header( 'text/plain' );
+	foreach my $account (@$accounts) {
+		print "$account\n";
+	}
+
+
+} elsif ($ACTION eq "group") {
+	my $groups = lib::getgroup::mkGroup( $dbh );
+	print $cgi->header( 'text/plain' );
+	foreach my $group (@$groups) {
+		print "$group\n";
+	}
+
+	
+#---- unknown --------------------------
+} else {
+	print $cgi->header();
+	print STDERR "Unknown ACTION in mal::nagios. ACTION=[$ACTION]\n";
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+exit (0);

@@ -1,0 +1,81 @@
+#!/bin/sh
+#
+# Init script for the jboss application server
+#
+# chkconfig: 345 95 5
+# Description: startup/shutdown using the "screen" command to contain 
+# the console. (see the man page for the screen command.)
+
+USER=jboss
+BINDIR=/u01/app/jboss/jboss-4.0.5.GA-8480/bin
+PORT=8080
+
+function status {
+	retval=0
+	if netstat -tlpn |grep -q $PORT; then 
+		echo "JBoss is running on port [$PORT] ..."
+	else 
+		echo "JBoss is not running on port [$PORT]."
+		retval=1
+	fi
+	return $retval
+}
+
+
+function start {
+	status
+	result=$?
+	if [ $result -eq 0 ]; then
+		echo
+		echo "[ STARTUP FAILED ] : JBoss already running for user [$USER] on port [$PORT]."
+		exit 1
+	fi
+
+	echo -n "Starting JBoss for user [${USER}] on port [$PORT] ... "
+	su - $USER -c "screen -d -m -S ${USER}${PORT} ${BINDIR}/start.sh"
+	echo "done."
+}
+
+
+function stop {
+	status
+	result=$?
+	if [ $result -ne 0 ]; then
+		echo
+		echo "[ FAILED ] : JBoss not running for user [$USER] on port [$PORT]."
+		exit 1
+	fi
+
+	echo -n "Stopping JBoss for user [${USER}] on port [$PORT] ... "
+	su - $USER -c "${BINDIR}/stop.sh"
+	echo "done."
+}
+
+
+case $1 in
+
+start)
+	start
+;;
+
+stop)
+	stop
+;;
+
+restart)
+	stop
+	start
+;;
+
+status)
+	status
+;;
+
+*)
+	echo "Usage: $0 {start|stop|restart|status}"
+	exit 1
+;;
+
+esac
+
+exit 0

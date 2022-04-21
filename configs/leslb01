@@ -1,0 +1,823 @@
+:Generated on 02/09/2010 11:15:58
+!Active version: sg0810106
+
+configure
+
+
+!*************************** GLOBAL ***************************
+  username admin des-password wamebe3gbhggdgmfjaaaebgfbehe3ehh superuser
+
+  snmp community public read-only
+
+  flow-state 161 udp flow-enable
+
+  ip route 0.0.0.0 0.0.0.0 10.24.84.1 1
+
+!************************* INTERFACE *************************
+interface  1/1
+  bridge vlan 219
+
+interface  1/2
+  bridge vlan 220
+
+interface Ethernet-Mgmt
+  admin-shutdown
+
+!************************** CIRCUIT **************************
+circuit VLAN220
+
+  ip address 10.24.84.129 255.255.255.192
+
+circuit VLAN219
+
+  ip address 10.24.84.5 255.255.255.128
+
+!************************** SERVICE **************************
+service les01
+  ip address 10.24.84.140
+  keepalive type none
+  active
+
+service les02
+  ip address 10.24.84.141
+  keepalive type none
+  active
+
+service les03
+  ip address 10.24.84.142
+  keepalive type none
+  active
+
+service les03-1099
+  ip address 10.24.84.142
+  keepalive type tcp
+  keepalive port 1099
+  active
+
+service les03-16109
+  ip address 10.24.84.142
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service les03-389
+  ip address 10.24.84.142
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service les03-636
+  ip address 10.24.84.142
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service les03-7777
+  ip address 10.24.84.142
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service les03-7778
+  ip address 10.24.84.142
+  keepalive type tcp
+  keepalive port 7778
+
+service les03-7779
+  ip address 10.24.84.142
+  keepalive type tcp
+  keepalive port 7779
+
+service les03-7780
+  ip address 10.24.84.142
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service les03-7781
+  ip address 10.24.84.142
+  keepalive type tcp
+  keepalive port 7781
+  active
+
+service les03-8080
+  ip address 10.24.84.142
+  keepalive type tcp
+  keepalive port 8080
+  active
+
+service les04
+  ip address 10.24.84.143
+  keepalive type none
+  active
+
+service les04-16109
+  ip address 10.24.84.143
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service les04-389
+  ip address 10.24.84.143
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service les04-636
+  ip address 10.24.84.143
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service les04-7777
+  ip address 10.24.84.143
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service les04-7778
+  ip address 10.24.84.143
+  keepalive type tcp
+  keepalive port 7778
+
+service les04-7779
+  ip address 10.24.84.143
+  keepalive type tcp
+  keepalive port 7779
+
+service les04-7780
+  ip address 10.24.84.143
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service les04-7781
+  ip address 10.24.84.143
+  keepalive type tcp
+  keepalive port 7781
+  active
+
+service les05
+  ip address 10.24.84.144
+  keepalive type none
+  active
+
+service les06
+  ip address 10.24.84.145
+  keepalive type none
+  active
+
+service les07
+  ip address 10.24.84.146
+  keepalive type none
+  active
+
+service les09
+  ip address 10.24.84.147
+  keepalive type none
+  active
+
+service les10
+  ip address 10.24.84.148
+  keepalive type none
+  active
+
+service les11
+  ip address 10.24.84.151
+  keepalive type none
+  active
+
+service les12
+  ip address 10.24.84.152
+  keepalive type none
+  active
+
+service les12-389
+  ip address 10.24.84.152
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service les12-636
+  ip address 10.24.84.152
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service les12-7777
+  ip address 10.24.84.152
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service les12-7778
+  ip address 10.24.84.152
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service les12-7779
+  ip address 10.24.84.152
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service les13
+  ip address 10.24.84.153
+  keepalive type none
+  active
+
+service les13-389
+  ip address 10.24.84.153
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service les13-636
+  ip address 10.24.84.153
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service les13-7777
+  ip address 10.24.84.153
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service les13-7778
+  ip address 10.24.84.153
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service les13-7779
+  ip address 10.24.84.153
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service les14
+  ip address 10.24.84.154
+  keepalive type none
+  active
+
+service les15
+  ip address 10.24.84.155
+  keepalive type none
+  active
+
+service les18
+  ip address 10.24.84.158
+  keepalive type none
+  active
+
+service les19
+  ip address 10.24.84.171
+  keepalive type none
+  active
+
+service les20
+  ip address 10.24.84.172
+  keepalive type none
+  active
+
+service les20-389
+  ip address 10.24.84.172
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service les20-636
+  ip address 10.24.84.173
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service les20-7777
+  ip address 10.24.84.173
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service les20-7778
+  ip address 10.24.84.172
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service les20-7779
+  ip address 10.24.84.173
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service les21
+  ip address 10.24.84.173
+  keepalive type none
+  active
+
+service les21-389
+  ip address 10.24.84.173
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service les21-636
+  ip address 10.24.84.172
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service les21-7777
+  ip address 10.24.84.172
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service les21-7778
+  ip address 10.24.84.172
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service les21-7779
+  ip address 10.24.84.173
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service les22
+  ip address 10.24.84.174
+  keepalive type none
+  active
+
+service les23
+  ip address 10.24.84.175
+  keepalive type none
+  active
+
+service les24
+  ip address 10.24.84.176
+  keepalive type none
+  active
+
+service les25
+  ip address 10.24.84.177
+  keepalive type none
+  active
+
+!*************************** OWNER ***************************
+owner APP01
+
+  content 1099
+    vip address 10.24.84.21
+    protocol tcp
+    port 1099
+    add service les03-1099
+    active
+
+  content 16109
+    protocol tcp
+    vip address 10.24.84.21
+    port 16109
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les03-16109
+    add service les04-16109
+    active
+
+  content 389
+    vip address 10.24.84.21
+    protocol tcp
+    port 389
+    add service les03-389
+    add service les04-389
+    active
+
+  content 636
+    vip address 10.24.84.21
+    protocol tcp
+    port 636
+    add service les03-636
+    add service les04-636
+    active
+
+  content 7777
+    vip address 10.24.84.21
+    protocol tcp
+    port 7777
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les03-7777
+    add service les04-7777
+    active
+
+  content 7778
+    vip address 10.24.84.21
+    protocol tcp
+    port 7778
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les03-7778
+
+  content 7779
+    vip address 10.24.84.21
+    port 7779
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les03-7779
+    add service les04-7779
+
+  content 7780
+    vip address 10.24.84.21
+    protocol tcp
+    port 7780
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les03-7780
+    add service les04-7780
+    active
+
+  content 7781
+    vip address 10.24.84.21
+    protocol tcp
+    port 7781
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les03-7781
+    add service les04-7781
+    active
+
+  content 8080
+    vip address 10.24.84.21
+    protocol tcp
+    port 8080
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les03-8080
+    active
+
+owner NAT
+
+  content les01
+    vip address 10.24.84.40
+    add service les01
+    flow-timeout-multiplier 1125
+    active
+
+  content les02
+    vip address 10.24.84.41
+    add service les02
+    flow-timeout-multiplier 1125
+    active
+
+  content les03
+    vip address 10.24.84.60
+    add service les03
+    flow-timeout-multiplier 1125
+    active
+
+  content les04
+    vip address 10.24.84.61
+    add service les04
+    flow-timeout-multiplier 1125
+    active
+
+  content les05
+    vip address 10.24.84.62
+    add service les05
+    flow-timeout-multiplier 1125
+    active
+
+  content les06
+    vip address 10.24.84.63
+    add service les06
+    flow-timeout-multiplier 1125
+    active
+
+  content les07
+    vip address 10.24.84.64
+    add service les07
+    flow-timeout-multiplier 1125
+    active
+
+  content les09
+    vip address 10.24.84.42
+    add service les09
+    flow-timeout-multiplier 1125
+    active
+
+  content les10
+    vip address 10.24.84.65
+    add service les10
+    flow-timeout-multiplier 1125
+    active
+
+  content les11
+    vip address 10.24.84.51
+    add service les11
+    flow-timeout-multiplier 1125
+    active
+
+  content les12
+    vip address 10.24.84.52
+    add service les12
+    flow-timeout-multiplier 1125
+    active
+
+  content les13
+    vip address 10.24.84.53
+    add service les13
+    flow-timeout-multiplier 1125
+    active
+
+  content les14
+    vip address 10.24.84.54
+    add service les14
+    flow-timeout-multiplier 1125
+    active
+
+  content les15
+    vip address 10.24.84.55
+    add service les15
+    flow-timeout-multiplier 1125
+    active
+
+  content les18
+    vip address 10.24.84.58
+    add service les18
+    flow-timeout-multiplier 1125
+    active
+
+  content les19
+    vip address 10.24.84.71
+    add service les19
+    flow-timeout-multiplier 1125
+    active
+
+  content les20
+    vip address 10.24.84.72
+    add service les20
+    flow-timeout-multiplier 1125
+    active
+
+  content les21
+    vip address 10.24.84.73
+    add service les21
+    flow-timeout-multiplier 1125
+    active
+
+  content les22
+    vip address 10.24.84.74
+    add service les22
+    flow-timeout-multiplier 1125
+    active
+
+  content les23
+    vip address 10.24.84.75
+    add service les23
+    flow-timeout-multiplier 1125
+    active
+
+  content les24
+    vip address 10.24.84.76
+    add service les24
+    flow-timeout-multiplier 1125
+    active
+
+  content les25
+    vip address 10.24.84.77
+    add service les25
+    flow-timeout-multiplier 1125
+    active
+
+owner PROD
+
+  content 389
+    vip address 10.24.84.23
+    protocol tcp
+    port 389
+    add service les12-389
+    add service les13-389
+    flow-timeout-multiplier 1125
+    active
+
+  content 636
+    vip address 10.24.84.23
+    protocol tcp
+    port 636
+    add service les12-636
+    add service les13-636
+    flow-timeout-multiplier 1125
+    active
+
+  content 7777
+    vip address 10.24.84.23
+    protocol tcp
+    port 7777
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les12-7777
+    add service les13-7777
+    flow-timeout-multiplier 1125
+    active
+
+  content 7778
+    vip address 10.24.84.23
+    port 7778
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les12-7778
+    add service les13-7778
+    flow-timeout-multiplier 1125
+    active
+
+  content 7779
+    vip address 10.24.84.23
+    protocol tcp
+    port 7779
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les12-7779
+    add service les13-7779
+    flow-timeout-multiplier 1125
+    active
+
+owner UAT
+
+  content 389
+    vip address 10.24.84.22
+    protocol tcp
+    port 389
+    add service les20-389
+    add service les21-389
+    flow-timeout-multiplier 1125
+    active
+
+  content 636
+    vip address 10.24.84.22
+    protocol tcp
+    port 636
+    add service les20-636
+    add service les21-636
+    flow-timeout-multiplier 1125
+    active
+
+  content 7777
+    vip address 10.24.84.22
+    port 7777
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les20-7777
+    add service les21-7777
+    flow-timeout-multiplier 1125
+    active
+
+  content 7778
+    vip address 10.24.84.22
+    port 7778
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les20-7778
+    add service les21-7778
+    flow-timeout-multiplier 1125
+    active
+
+  content 7779
+    vip address 10.24.84.22
+    protocol tcp
+    port 7779
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service les20-7779
+    add service les21-7779
+    flow-timeout-multiplier 1125
+    active
+
+!*************************** GROUP ***************************
+group les01
+  vip address 10.24.84.40
+  add service les01
+  flow-timeout-multiplier 1125
+  active
+
+group les02
+  vip address 10.24.84.41
+  add service les02
+  flow-timeout-multiplier 1125
+  active
+
+group les03
+  vip address 10.24.84.60
+  add service les03
+  flow-timeout-multiplier 1125
+  active
+
+group les04
+  vip address 10.24.84.61
+  add service les04
+  flow-timeout-multiplier 1125
+  active
+
+group les05
+  vip address 10.24.84.62
+  add service les05
+  flow-timeout-multiplier 1125
+  active
+
+group les06
+  vip address 10.24.84.63
+  add service les06
+  flow-timeout-multiplier 1125
+  active
+
+group les07
+  vip address 10.24.84.64
+  add service les07
+  flow-timeout-multiplier 1125
+  active
+
+group les09
+  vip address 10.24.84.42
+  add service les09
+  flow-timeout-multiplier 1125
+  active
+
+group les10
+  add service les10
+  flow-timeout-multiplier 1125
+  vip address 10.24.84.65
+  active
+
+group les11
+  vip address 10.24.84.51
+  add service les11
+  flow-timeout-multiplier 1125
+  active
+
+group les14
+  vip address 10.24.84.54
+  add service les14
+  flow-timeout-multiplier 1125
+  active
+
+group les15
+  vip address 10.24.84.55
+  add service les15
+  flow-timeout-multiplier 1125
+  active
+
+group les18
+  vip address 10.24.84.58
+  add service les18
+  flow-timeout-multiplier 1125
+  active
+
+group les19
+  vip address 10.24.84.71
+  add service les19
+  flow-timeout-multiplier 1125
+  active
+
+group les22
+  vip address 10.24.84.74
+  add service les22
+  flow-timeout-multiplier 1125
+  active
+
+group les23
+  vip address 10.24.84.75
+  add service les23
+  flow-timeout-multiplier 1125
+  active
+
+group les24
+  vip address 10.24.84.76
+  add service les24
+  flow-timeout-multiplier 1125
+  active
+
+group les25
+  vip address 10.24.84.77
+  add service les25
+  flow-timeout-multiplier 1125
+  active
+
+group lesPROD
+  vip address 10.24.84.23
+  add service les12
+  add service les13
+  flow-timeout-multiplier 1125
+  active
+
+group lesUAT
+  vip address 10.24.84.22
+  add service les20
+  add service les21
+  flow-timeout-multiplier 1125
+  active

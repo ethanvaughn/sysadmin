@@ -1,0 +1,105 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+
+<div id="nav">
+	<tmpl_if name="ADMIN">
+		<a class="button" href="main?action=detailnew">Add New Item</a>
+		<a class="button" href="company">Company Maint</a>
+		<a class="button" href="property">Property Maint</a>
+		<a class="button" href="template">Template Maint</a>
+	</tmpl_if>
+</div>
+
+<div id="subtitle">
+	<h1><tmpl_var name="subtitle"></h1>
+</div>
+
+<div id="content">
+	<tmpl_if name="msg">
+		<div class="message">
+		<tmpl_var name="msg">
+		</div>
+	</tmpl_if>
+
+	<tmpl_if name="ADMIN">
+		<form method="post" action="company">
+			<tmpl_if name="navback">
+				<input type="hidden" name="navback" value="<tmpl_var name='navback'>">
+				<input type="hidden" name="navbackid" value="<tmpl_var name='navbackid'>">
+				<input type="hidden" name="navbackaction" value="<tmpl_var name='navbackaction'>">
+				<input type="hidden" name="navbackdescr" value="<tmpl_var name='navbackdescr'>">
+			</tmpl_if>
+
+<!--
+			<tmpl_if name="ADD">
+				<input type="hidden" name="action" value="add">
+			<tmpl_else>
+				<input type="hidden" name="action" value="update">
+			</tmpl_if>
+-->
+			<input type="hidden" name="id" value="<tmpl_var name='id'>">
+
+			<table>
+			<tmpl_unless name="ADD">	
+			<tr>
+				<td>Unique ID:</td>
+				<td><tmpl_var name='id'></td>
+			</tr>
+			</tmpl_unless>
+	
+			<tr>
+				<td>Name:</td>
+				<td><input type="text" name="name" value="<tmpl_var name='name'>"></td>
+			</tr>
+			<tr>
+				<td>Code:</td>
+				<td><input type="text" name="code" value="<tmpl_var name='code'>"></td>
+			</tr>
+			</table>
+
+
+			<div class="buttonrow">
+			<tmpl_if name="ADD">
+				<!-- <input style="width:100%" type="submit" value="Add New Company"> --> 
+				<button title="Add company." name="action" value="add">Add</button>
+			<tmpl_else>
+				<!-- <input title = "Update company." type="submit" value="Update"> -->
+				<!-- <button title="Cancel update." type="reset">Cancel</button> -->
+				<button title="Update company." name="action" value="update">Update</button>
+			</tmpl_if>
+			</div>
+		</form>
+	</tmpl_if>
+
+
+
+	<table>
+	<thead>
+	<tr>
+	    <th>Name</th>
+	    <th>Code</th>
+		<tmpl_if name="ADMIN">
+		    <th>X</th>
+		</tmpl_if>
+	
+	</tr>
+	</thead>
+	<tmpl_if name="ADMIN">
+		<tmpl_loop name="listloop">
+		<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+		    <td><a href='company?action=detail&id=<tmpl_var name="id">'><tmpl_var name="name"></a></td>
+		    <td><tmpl_var name="code"></td>
+	    	<td class="nopad"><a title="Delete company <tmpl_var name='name'>" class="button" href="JavaScript:del_post( 'company', 'action=del&id=<tmpl_var name='id'>', '<tmpl_var name='name'>' );">del</a></td>
+		</tr>
+		</tmpl_loop>
+	<tmpl_else>
+		<tmpl_loop name="listloop">
+		<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+		    <td><a href='company?action=detail&id=<tmpl_var name="id">'><tmpl_var name="name"></a></td>
+		    <td><tmpl_var name="code"></td>
+		</tr>
+		</tmpl_loop>
+	</tmpl_if>
+	</table>
+</div>
+
+<tmpl_include name = "../tmpl/footer.tmpl">

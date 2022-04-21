@@ -1,0 +1,1656 @@
+: Saved
+:
+ASA Version 8.2(1)
+!
+terminal width 160
+hostname wdcvpn01
+domain-name tomax.com
+enable password mYeNr0cSeWbBfOBq encrypted
+passwd mYeNr0cSeWbBfOBq encrypted
+no names
+dns-guard
+!
+interface GigabitEthernet0/0
+ nameif External
+ security-level 0
+ ip address 66.133.106.5 255.255.254.0
+!
+interface GigabitEthernet0/1
+ nameif Internal
+ security-level 100
+ ip address 10.24.74.3 255.255.255.192 standby 10.24.74.34
+!
+interface GigabitEthernet0/2
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet0/3
+ description LAN Failover Interface
+!
+interface Management0/0
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+boot system disk0:/asa821-k8.bin
+ftp mode passive
+clock timezone MST -7
+dns server-group DefaultDNS
+ domain-name tomax.com
+same-security-traffic permit intra-interface
+object-group network vpnLocal
+ network-object 10.24.74.9 255.255.255.255
+ network-object 10.24.74.10 255.255.255.255
+ network-object 10.24.74.12 255.255.255.255
+ network-object 10.24.74.13 255.255.255.255
+ network-object 10.24.74.14 255.255.255.255
+ network-object 10.24.74.19 255.255.255.255
+ network-object 10.24.74.20 255.255.255.255
+ network-object 172.30.230.0 255.255.254.0
+ network-object 10.24.74.35 255.255.255.255
+object-group network SDCFW01
+ network-object 10.9.15.128 255.255.255.240
+ network-object 10.9.15.144 255.255.255.240
+ network-object 10.9.15.0 255.255.255.224
+ network-object 10.9.15.160 255.255.255.240
+ network-object 10.9.15.192 255.255.255.224
+ network-object 10.24.74.208 255.255.255.240
+ network-object 10.9.16.0 255.255.255.224
+ network-object 10.9.16.32 255.255.255.224
+ network-object 10.9.16.64 255.255.255.224
+ network-object 10.9.15.96 255.255.255.224
+ network-object 10.9.16.160 255.255.255.224
+ network-object 10.9.16.192 255.255.255.224
+object-group network ABC-Prod
+ network-object 10.1.2.224 255.255.255.255
+ network-object 10.1.2.225 255.255.255.255
+ network-object 10.1.2.226 255.255.255.255
+ network-object 10.1.2.228 255.255.255.255
+ network-object 10.1.2.230 255.255.255.255
+ network-object 10.1.2.231 255.255.255.255
+ network-object 10.1.8.200 255.255.255.255
+ network-object 10.1.8.201 255.255.255.255
+ network-object 10.1.8.202 255.255.255.255
+object-group network ADR-NonProd
+ network-object 10.9.15.201 255.255.255.255
+object-group network ADR-Prod
+ network-object 10.9.15.192 255.255.255.224
+object-group network AFS-NonProd
+ network-object 10.9.15.167 255.255.255.255
+ network-object 10.9.15.168 255.255.255.255
+object-group network AFS-Prod
+ network-object 10.9.15.160 255.255.255.240
+object-group network AND-NonProd
+ network-object 10.9.15.135 255.255.255.255
+object-group network AND-Prod
+ network-object 10.9.14.0 255.255.255.0
+ network-object 10.9.15.112 255.255.255.240
+ network-object 10.9.15.144 255.255.255.240
+ network-object 10.9.15.128 255.255.255.240
+object-group network APW-NonProd
+ network-object 10.9.16.71 255.255.255.255
+object-group network APW-Prod
+ network-object 10.9.16.64 255.255.255.224
+object-group network ATG-NonProd
+ network-object 10.24.74.136 255.255.255.255
+object-group network ATG-Prod
+ network-object 10.24.74.128 255.255.255.240
+object-group network BLK-Prod
+ network-object 10.24.74.0 255.255.255.192
+object-group network BM-NonProd
+ network-object 10.24.83.20 255.255.255.255
+ network-object 10.24.83.21 255.255.255.255
+ network-object 10.24.83.22 255.255.255.255
+ network-object 10.24.83.30 255.255.255.255
+object-group network BM-Prod
+ network-object 10.24.83.0 255.255.255.128
+object-group network DB-Prod
+ network-object 10.10.4.28 255.255.255.255
+ network-object 10.10.4.30 255.255.255.255
+ network-object 10.1.2.79 255.255.255.255
+ network-object 10.1.2.80 255.255.255.255
+ network-object 10.1.2.91 255.255.255.255
+ network-object 10.1.2.92 255.255.255.255
+ network-object 10.1.2.93 255.255.255.255
+ network-object 10.1.2.102 255.255.255.255
+ network-object 10.1.2.106 255.255.255.255
+ network-object 10.1.2.110 255.255.255.255
+ network-object 10.1.2.111 255.255.255.255
+ network-object 10.1.2.150 255.255.255.255
+ network-object 10.1.2.151 255.255.255.255
+ network-object 10.1.2.152 255.255.255.255
+ network-object 10.1.2.153 255.255.255.255
+ network-object 10.1.2.154 255.255.255.255
+ network-object 10.1.2.157 255.255.255.255
+ network-object 10.1.2.180 255.255.255.255
+object-group network DW-NonProd
+ network-object 10.24.82.42 255.255.255.255
+ network-object 10.24.82.43 255.255.255.255
+ network-object 10.24.82.52 255.255.255.255
+ network-object 10.24.82.64 255.255.255.255
+ network-object 10.24.82.65 255.255.255.255
+object-group network DW-Prod
+ network-object 10.24.82.0 255.255.255.128
+object-group network DWR-NonProd
+ network-object 10.9.15.104 255.255.255.255
+ network-object 10.9.15.105 255.255.255.255
+object-group network DWR-Prod
+ network-object 10.9.15.96 255.255.255.224
+object-group network FEL-NonProd
+ network-object 111.111.3.52 255.255.255.255
+ network-object 111.111.3.58 255.255.255.255
+object-group network FEL-Prod
+ network-object 111.111.3.52 255.255.255.255
+ network-object 111.111.3.54 255.255.255.255
+ network-object 111.111.3.55 255.255.255.255
+ network-object 111.111.3.56 255.255.255.255
+ network-object 111.111.3.57 255.255.255.255
+ network-object 111.111.3.58 255.255.255.255
+object-group network GK-Prod
+ network-object 10.0.4.148 255.255.255.255
+ network-object 10.0.4.149 255.255.255.255
+ network-object 10.0.4.150 255.255.255.255
+ network-object 10.0.4.151 255.255.255.255
+ network-object 10.0.4.152 255.255.255.255
+ network-object 10.0.4.155 255.255.255.255
+ network-object 10.0.4.156 255.255.255.255
+ network-object 10.0.4.157 255.255.255.255
+ network-object 10.0.4.167 255.255.255.255
+object-group network HFA-Prod
+ network-object 192.168.1.14 255.255.255.255
+ network-object 192.168.1.15 255.255.255.255
+ network-object 192.168.1.16 255.255.255.255
+ network-object 192.168.1.17 255.255.255.255
+ network-object 192.168.1.18 255.255.255.255
+ network-object 192.168.1.114 255.255.255.255
+ network-object 192.168.1.115 255.255.255.255
+ network-object 192.168.1.116 255.255.255.255
+ network-object 192.168.1.117 255.255.255.255
+object-group network HMC-Prod
+ network-object 10.110.10.0 255.255.255.224
+object-group network KAL-Prod
+ network-object 10.22.10.0 255.255.255.0
+ network-object 10.100.40.0 255.255.255.0
+ network-object 10.100.41.0 255.255.255.0
+ network-object 10.100.42.0 255.255.255.0
+ network-object 10.100.43.0 255.255.255.0
+ network-object 10.100.44.0 255.255.255.0
+ network-object 10.22.20.0 255.255.255.0
+ network-object 10.100.0.24 255.255.255.255
+ network-object 10.22.30.0 255.255.255.0
+object-group network KMP-NonProd
+ network-object 10.250.0.14 255.255.255.255
+ network-object 10.250.0.15 255.255.255.255
+ network-object 10.250.0.16 255.255.255.255
+ network-object 10.250.0.20 255.255.255.255
+ network-object 10.250.0.22 255.255.255.255
+ network-object 10.250.0.25 255.255.255.255
+ network-object 10.250.0.40 255.255.255.255
+ network-object 10.250.0.43 255.255.255.255
+object-group network KMP-Prod
+ network-object 10.250.0.0 255.255.255.0
+object-group network LLB-Prod
+ network-object 10.10.33.0 255.255.255.0
+ network-object 10.10.34.0 255.255.255.0
+ network-object 172.16.248.0 255.255.248.0
+ network-object 172.21.8.0 255.255.248.0
+ network-object 172.21.248.0 255.255.248.0
+ network-object 10.10.15.0 255.255.255.0
+ network-object 10.10.16.0 255.255.255.0
+ network-object 172.31.249.91 255.255.255.255
+object-group network LNG-NonProd
+ network-object 192.40.40.195 255.255.255.255
+ network-object 192.40.40.198 255.255.255.255
+object-group network LNG-Prod
+ network-object 10.10.10.2 255.255.255.255
+ network-object 10.10.10.3 255.255.255.255
+ network-object 192.40.40.0 255.255.255.0
+ network-object 192.168.254.92 255.255.255.255
+ network-object 192.168.254.93 255.255.255.255
+ network-object 192.168.254.174 255.255.255.255
+object-group network MB-NonProd
+ network-object 10.24.74.115 255.255.255.255
+object-group network MB-Prod
+ network-object 10.24.74.112 255.255.255.240
+object-group network NF-Prod
+ network-object 10.4.70.83 255.255.255.255
+ network-object 10.4.70.84 255.255.255.255
+ network-object 10.7.70.83 255.255.255.255
+ network-object 10.7.70.84 255.255.255.255
+object-group network PA-Prod
+ network-object 193.1.1.0 255.255.255.0
+object-group network PAM-NonProd
+ network-object 10.65.91.24 255.255.255.255
+ network-object 10.65.91.25 255.255.255.255
+ network-object 10.65.91.34 255.255.255.255
+ network-object 10.65.91.35 255.255.255.255
+object-group network PAM-Prod
+ network-object 10.65.90.0 255.255.255.0
+ network-object 10.65.91.0 255.255.255.0
+ network-object 10.65.92.0 255.255.255.0
+ network-object 10.65.93.0 255.255.255.0
+object-group network PC-NonProd
+ network-object 172.33.1.120 255.255.255.255
+ network-object 172.33.1.124 255.255.255.255
+ network-object 172.33.1.125 255.255.255.255
+ network-object 172.33.1.126 255.255.255.255
+ network-object 172.33.1.130 255.255.255.255
+ network-object 172.33.1.134 255.255.255.255
+ network-object 172.33.1.135 255.255.255.255
+ network-object 172.33.1.136 255.255.255.255
+ network-object 172.33.1.140 255.255.255.255
+ network-object 172.33.1.144 255.255.255.255
+ network-object 172.33.1.145 255.255.255.255
+ network-object 172.33.1.146 255.255.255.255
+ network-object 172.33.1.153 255.255.255.255
+object-group network PC-Prod
+ network-object 10.19.1.0 255.255.255.0
+ network-object 172.33.1.0 255.255.255.0
+ network-object 10.1.2.115 255.255.255.255
+object-group network RAT-NonProd
+ network-object 10.24.81.21 255.255.255.255
+ network-object 10.24.81.22 255.255.255.255
+ network-object 10.24.81.24 255.255.255.255
+ network-object 10.24.81.32 255.255.255.255
+ network-object 10.24.81.60 255.255.255.255
+ network-object 10.24.81.61 255.255.255.255
+ network-object 10.24.81.65 255.255.255.255
+ network-object 10.24.81.20 255.255.255.255
+ network-object 10.24.81.71 255.255.255.255
+ network-object 10.24.81.72 255.255.255.255
+ network-object 10.24.81.73 255.255.255.255
+object-group network RAT-Prod
+ network-object 10.24.81.0 255.255.255.128
+ network-object 10.24.100.6 255.255.255.255
+object-group network SAV-NonProd
+ network-object 10.9.16.5 255.255.255.255
+object-group network SAV-Prod
+ network-object 10.9.16.0 255.255.255.224
+object-group network SDS-NonProd
+ network-object 10.24.74.211 255.255.255.255
+ network-object 10.24.74.215 255.255.255.255
+object-group network SDS-Prod
+ network-object 10.24.74.208 255.255.255.240
+object-group network SPG-NonProd
+ network-object 10.24.74.199 255.255.255.255
+object-group network SPG-Prod
+ network-object 10.24.74.192 255.255.255.240
+object-group network SW-NonProd
+ network-object 192.168.1.4 255.255.255.255
+ network-object 192.168.1.8 255.255.255.255
+ network-object 192.168.0.40 255.255.255.255
+ network-object 192.168.0.41 255.255.255.255
+ network-object 192.168.0.42 255.255.255.255
+ network-object 192.168.0.47 255.255.255.255
+ network-object 192.168.0.120 255.255.255.255
+ network-object 192.168.0.48 255.255.255.255
+ network-object 192.168.0.49 255.255.255.255
+ network-object 192.168.0.46 255.255.255.255
+ network-object 192.168.0.121 255.255.255.255
+object-group network SW-Prod
+ network-object 192.168.0.40 255.255.255.255
+ network-object 192.168.0.41 255.255.255.255
+ network-object 192.168.0.42 255.255.255.255
+ network-object 192.168.1.2 255.255.255.255
+ network-object 192.168.1.3 255.255.255.255
+ network-object 192.168.1.4 255.255.255.255
+ network-object 192.168.1.5 255.255.255.255
+ network-object 192.168.1.6 255.255.255.255
+ network-object 192.168.1.8 255.255.255.255
+ network-object 192.168.1.9 255.255.255.255
+ network-object 192.168.1.30 255.255.255.255
+ network-object 192.168.1.31 255.255.255.255
+ network-object 192.168.1.32 255.255.255.255
+ network-object 192.168.1.33 255.255.255.255
+ network-object 192.168.1.68 255.255.255.255
+ network-object 192.168.1.69 255.255.255.255
+ network-object 192.168.1.72 255.255.255.255
+ network-object 192.168.1.100 255.255.255.255
+ network-object 192.168.91.11 255.255.255.255
+ network-object 192.168.0.47 255.255.255.255
+ network-object 192.168.0.48 255.255.255.255
+ network-object 192.168.0.49 255.255.255.255
+ network-object 192.168.0.120 255.255.255.255
+ network-object 192.168.0.46 255.255.255.255
+ network-object 192.168.0.121 255.255.255.255
+object-group network SWA-NonProd
+ network-object 192.168.230.9 255.255.255.255
+ network-object 192.168.230.10 255.255.255.255
+ network-object 192.168.230.6 255.255.255.255
+ network-object 192.168.230.7 255.255.255.255
+object-group network SWA-Prod
+ network-object 192.168.230.0 255.255.255.0
+object-group network TMXDEMO-Prod
+ network-object 10.24.74.160 255.255.255.224
+ network-object 10.24.74.230 255.255.255.255
+object-group network TRN-Prod
+ network-object 159.112.0.0 255.255.0.0
+ network-object 206.44.0.0 255.255.0.0
+object-group network UFA-NonProd
+ network-object 10.9.16.174 255.255.255.255
+ network-object 10.9.16.175 255.255.255.255
+object-group network UFA-Prod
+ network-object 10.9.16.160 255.255.255.224
+object-group network ULT-NonProd
+ network-object 10.223.2.24 255.255.255.255
+ network-object 10.223.2.26 255.255.255.255
+ network-object 10.223.2.55 255.255.255.255
+ network-object 10.223.2.66 255.255.255.255
+ network-object 10.223.2.91 255.255.255.255
+object-group network ULT-Prod
+ network-object 10.223.2.13 255.255.255.255
+ network-object 10.223.2.16 255.255.255.255
+ network-object 10.223.2.21 255.255.255.255
+ network-object 10.223.2.22 255.255.255.255
+ network-object 10.223.2.24 255.255.255.255
+ network-object 10.223.2.26 255.255.255.255
+ network-object 10.223.2.29 255.255.255.255
+ network-object 10.223.2.35 255.255.255.255
+ network-object 10.223.2.52 255.255.255.255
+ network-object 10.223.2.53 255.255.255.255
+ network-object 10.223.2.55 255.255.255.255
+ network-object 10.223.2.63 255.255.255.255
+ network-object 10.223.2.66 255.255.255.255
+ network-object 10.223.2.68 255.255.255.255
+ network-object 10.223.2.69 255.255.255.255
+ network-object 10.223.2.79 255.255.255.255
+ network-object 10.223.2.80 255.255.255.255
+ network-object 10.223.2.81 255.255.255.255
+ network-object 10.223.2.82 255.255.255.255
+ network-object 10.223.2.87 255.255.255.255
+ network-object 10.223.2.91 255.255.255.255
+ network-object 10.223.2.98 255.255.255.255
+ network-object 10.223.2.105 255.255.255.255
+ network-object 10.223.2.129 255.255.255.255
+ network-object 10.223.2.130 255.255.255.255
+ network-object 10.223.2.134 255.255.255.255
+ network-object 10.223.2.135 255.255.255.255
+ network-object 10.223.2.136 255.255.255.255
+ network-object 10.223.2.137 255.255.255.255
+ network-object 10.223.2.226 255.255.255.255
+ network-object 10.223.2.227 255.255.255.255
+ network-object 10.223.2.228 255.255.255.255
+object-group network RAC-Prod
+ network-object 10.9.16.192 255.255.255.224
+object-group network LES-Prod
+ network-object 10.24.84.0 255.255.255.128
+ network-object 10.10.241.64 255.255.255.192
+object-group network mgmtLocal
+ network-object 10.24.74.9 255.255.255.255
+ network-object 10.24.74.10 255.255.255.255
+ network-object 10.24.74.12 255.255.255.255
+ network-object 10.24.74.13 255.255.255.255
+ network-object 10.24.74.14 255.255.255.255
+ network-object 10.24.74.19 255.255.255.255
+ network-object 10.24.74.20 255.255.255.255
+ network-object 10.24.74.35 255.255.255.255
+ network-object 10.24.74.45 255.255.255.255
+ network-object 172.30.230.0 255.255.254.0
+object-group network cvpnLocal
+ network-object 172.33.132.0 255.255.255.0
+object-group network GK-NonProd
+ network-object 10.0.4.150 255.255.255.255
+object-group network ZUR-NonProd
+ network-object 10.9.16.42 255.255.255.255
+object-group network ZUR-Prod
+ network-object 10.9.16.32 255.255.255.224
+object-group network EWJ-Prod
+ network-object 172.16.90.0 255.255.255.0
+ network-object 172.16.91.0 255.255.255.0
+object-group network testingNet
+ network-object 10.10.10.0 255.255.255.0
+object-group network FWTERM01
+ network-object 10.24.50.0 255.255.255.0
+ network-object 10.24.52.0 255.255.255.0
+object-group network SDCTERM
+ network-object 10.9.14.0 255.255.255.0
+object-group network FWSHARED01
+ network-object 10.24.74.112 255.255.255.240
+ network-object 10.24.74.128 255.255.255.240
+ network-object 10.24.74.192 255.255.255.240
+ network-object 10.24.80.0 255.255.255.0
+object-group network centralAuth
+ network-object host 10.24.74.13
+object-group protocol DEFAULT_DENY
+ protocol-object ip
+ protocol-object icmp
+object-group network LOCALvpn
+ network-object 172.30.230.0 255.255.254.0
+object-group network wdcMgmt
+ network-object 10.24.74.0 255.255.255.192
+object-group network tmxInternal
+ network-object 172.21.0.0 255.255.0.0
+object-group network asterisk
+ network-object host 10.24.74.50
+object-group network oncall
+ network-object host 10.24.74.35
+object-group network Support
+ group-object ABC-Prod
+ group-object ATG-Prod
+ group-object SPG-Prod
+ group-object SDS-Prod
+ group-object FEL-Prod
+ group-object SW-Prod
+ group-object GK-Prod
+ group-object RAT-Prod
+ group-object ULT-Prod
+ group-object LNG-Prod
+ group-object DB-Prod
+ group-object KMP-Prod
+ group-object HFA-Prod
+ group-object BM-Prod
+ group-object LLB-Prod
+ group-object TRN-Prod
+ group-object DW-Prod
+ group-object AND-Prod
+ group-object PC-Prod
+ group-object ADR-Prod
+ group-object TMXDEMO-Prod
+ group-object PAM-Prod
+ group-object MB-Prod
+ group-object NF-Prod
+ group-object ZUR-Prod
+ group-object DWR-Prod
+ group-object APW-Prod
+ group-object UFA-Prod
+ group-object SWA-Prod
+ group-object RAC-Prod
+ group-object asterisk
+ group-object oncall
+ group-object SAV-Prod
+ group-object EWJ-Prod
+object-group network adminHosts
+ network-object host 10.24.74.9
+object-group network internalNetworks
+ network-object 10.0.0.0 255.0.0.0
+ network-object 172.0.0.0 255.0.0.0
+ network-object 192.168.0.0 255.255.0.0
+ network-object 192.40.40.0 255.255.255.0
+object-group network LES-NonProd
+ network-object 10.24.84.0 255.255.255.128
+ network-object 10.10.241.64 255.255.255.192
+object-group network ABC-NonProd
+ group-object ABC-Prod
+object-group network BLK-NonProd
+ group-object BLK-Prod
+object-group network DB-NonProd
+ group-object DB-Prod
+object-group network HFA-NonProd
+ group-object HFA-Prod
+object-group network HMC-NonProd
+ group-object HMC-Prod
+object-group network KAL-NonProd
+ group-object KAL-Prod
+object-group network LLB-NonProd
+ group-object LLB-Prod
+object-group network NF-NonProd
+ group-object NF-Prod
+object-group network PA-NonProd
+ group-object PA-Prod
+object-group network RAC-NonProd
+ group-object RAC-Prod
+object-group network TMXDEMO-NonProd
+ group-object TMXDEMO-Prod
+object-group network TRN-NonProd
+ group-object TRN-Prod
+access-list DBA extended permit ip any any
+access-list SysAdmin extended permit ip any any
+access-list testingNet standard permit 10.9.16.0 255.255.255.0
+access-list testingNet standard permit 10.10.10.0 255.255.255.0
+access-list ABC-NonProd extended permit ip object-group ABC-NonProd object-group vpnLocal
+access-list ABC-NonProd extended permit ip object-group vpnLocal object-group ABC-NonProd
+access-list ABC-Prod extended permit ip object-group ABC-Prod object-group vpnLocal
+access-list ABC-Prod extended permit ip object-group vpnLocal object-group ABC-Prod
+access-list ADR-NonProd extended permit ip object-group ADR-NonProd object-group vpnLocal
+access-list ADR-NonProd extended permit ip object-group vpnLocal object-group ADR-NonProd
+access-list ADR-Prod extended permit ip object-group ADR-Prod object-group vpnLocal
+access-list ADR-Prod extended permit ip object-group vpnLocal object-group ADR-Prod
+access-list AFS-NonProd extended permit ip object-group AFS-NonProd object-group vpnLocal
+access-list AFS-NonProd extended permit ip object-group vpnLocal object-group AFS-NonProd
+access-list AFS-Prod extended permit ip object-group AFS-Prod object-group vpnLocal
+access-list AFS-Prod extended permit ip object-group vpnLocal object-group AFS-Prod
+access-list AND-NonProd extended permit ip object-group AND-NonProd object-group vpnLocal
+access-list AND-NonProd extended permit ip object-group vpnLocal object-group AND-NonProd
+access-list AND-Prod extended permit ip object-group AND-Prod object-group vpnLocal
+access-list AND-Prod extended permit ip object-group vpnLocal object-group AND-Prod
+access-list APW-NonProd extended permit ip object-group APW-NonProd object-group vpnLocal
+access-list APW-NonProd extended permit ip object-group vpnLocal object-group APW-NonProd
+access-list APW-Prod extended permit ip object-group APW-Prod object-group vpnLocal
+access-list APW-Prod extended permit ip object-group vpnLocal object-group APW-Prod
+access-list ATG-NonProd extended permit ip object-group ATG-NonProd object-group vpnLocal
+access-list ATG-NonProd extended permit ip object-group vpnLocal object-group ATG-NonProd
+access-list ATG-Prod extended permit ip object-group ATG-Prod object-group vpnLocal
+access-list ATG-Prod extended permit ip object-group vpnLocal object-group ATG-Prod
+access-list BLK-Prod extended permit ip object-group BLK-Prod object-group vpnLocal
+access-list BLK-Prod extended permit ip object-group vpnLocal object-group BLK-Prod
+access-list BM-NonProd extended permit ip object-group BM-NonProd object-group vpnLocal
+access-list BM-NonProd extended permit ip object-group vpnLocal object-group BM-NonProd
+access-list BM-Prod extended permit ip object-group vpnLocal object-group BM-Prod
+access-list DB-Prod extended permit ip object-group DB-Prod object-group vpnLocal
+access-list DB-Prod extended permit ip object-group vpnLocal object-group DB-Prod
+access-list DW-NonProd extended permit ip object-group DW-NonProd object-group vpnLocal
+access-list DW-NonProd extended permit ip object-group vpnLocal object-group DW-NonProd
+access-list DW-Prod extended permit ip object-group DW-Prod object-group vpnLocal
+access-list DW-Prod extended permit ip object-group vpnLocal object-group DW-Prod
+access-list DWR-NonProd extended permit ip object-group DWR-NonProd object-group vpnLocal
+access-list DWR-NonProd extended permit ip object-group vpnLocal object-group DWR-NonProd
+access-list DWR-Prod extended permit ip object-group DWR-Prod object-group vpnLocal
+access-list DWR-Prod extended permit ip object-group vpnLocal object-group DWR-Prod
+access-list FEL-NonProd extended permit ip object-group FEL-NonProd object-group vpnLocal
+access-list FEL-NonProd extended permit ip object-group vpnLocal object-group FEL-NonProd
+access-list FEL-Prod extended permit ip object-group FEL-Prod object-group vpnLocal
+access-list FEL-Prod extended permit ip object-group vpnLocal object-group FEL-Prod
+access-list GK-NonProd extended permit ip object-group GK-NonProd object-group vpnLocal
+access-list GK-NonProd extended permit ip object-group vpnLocal object-group GK-NonProd
+access-list GK-Prod extended permit ip object-group GK-Prod object-group vpnLocal
+access-list GK-Prod extended permit ip object-group vpnLocal object-group GK-Prod
+access-list HFA-Prod extended permit ip object-group HFA-Prod object-group vpnLocal
+access-list HFA-Prod extended permit ip object-group vpnLocal object-group HFA-Prod
+access-list HMC-Prod extended permit ip object-group HMC-Prod object-group vpnLocal
+access-list HMC-Prod extended permit ip object-group vpnLocal object-group HMC-Prod
+access-list KAL-Prod extended permit ip object-group KAL-Prod object-group vpnLocal
+access-list KAL-Prod extended permit ip object-group vpnLocal object-group KAL-Prod
+access-list KMP-NonProd extended permit ip object-group KMP-NonProd object-group vpnLocal
+access-list KMP-NonProd extended permit ip object-group vpnLocal object-group KMP-NonProd
+access-list KMP-Prod extended permit ip object-group KMP-Prod object-group vpnLocal
+access-list KMP-Prod extended permit ip object-group vpnLocal object-group KMP-Prod
+access-list LLB-Prod extended permit ip object-group LLB-Prod object-group vpnLocal
+access-list LLB-Prod extended permit ip object-group vpnLocal object-group LLB-Prod
+access-list LNG-NonProd extended permit ip object-group LNG-NonProd object-group vpnLocal
+access-list LNG-NonProd extended permit ip object-group vpnLocal object-group LNG-NonProd
+access-list LNG-Prod extended permit ip object-group LNG-Prod object-group vpnLocal
+access-list LNG-Prod extended permit ip object-group vpnLocal object-group LNG-Prod
+access-list MB-NonProd extended permit ip object-group MB-NonProd object-group vpnLocal
+access-list MB-NonProd extended permit ip object-group vpnLocal object-group MB-NonProd
+access-list MB-Prod extended permit ip object-group MB-Prod object-group vpnLocal
+access-list MB-Prod extended permit ip object-group vpnLocal object-group MB-Prod
+access-list NF-Prod extended permit ip object-group NF-Prod object-group vpnLocal
+access-list NF-Prod extended permit ip object-group vpnLocal object-group NF-Prod
+access-list PA-Prod extended permit ip object-group PA-Prod object-group vpnLocal
+access-list PA-Prod extended permit ip object-group vpnLocal object-group PA-Prod
+access-list PAM-NonProd extended permit ip object-group PAM-NonProd object-group vpnLocal
+access-list PAM-NonProd extended permit ip object-group vpnLocal object-group PAM-NonProd
+access-list PAM-Prod extended permit ip object-group PAM-Prod object-group vpnLocal
+access-list PAM-Prod extended permit ip object-group vpnLocal object-group PAM-Prod
+access-list PC-NonProd extended permit ip object-group PC-NonProd object-group vpnLocal
+access-list PC-NonProd extended permit ip object-group vpnLocal object-group PC-NonProd
+access-list PC-Prod extended permit ip object-group PC-Prod object-group vpnLocal
+access-list PC-Prod extended permit ip object-group vpnLocal object-group PC-Prod
+access-list RAT-NonProd extended permit ip object-group RAT-NonProd object-group vpnLocal
+access-list RAT-NonProd extended permit ip object-group vpnLocal object-group RAT-NonProd
+access-list RAT-Prod extended permit ip object-group RAT-Prod object-group vpnLocal
+access-list RAT-Prod extended permit ip object-group vpnLocal object-group RAT-Prod
+access-list SAV-NonProd extended permit ip object-group SAV-NonProd object-group vpnLocal
+access-list SAV-NonProd extended permit ip object-group vpnLocal object-group SAV-NonProd
+access-list SAV-Prod extended permit ip object-group SAV-Prod object-group vpnLocal
+access-list SAV-Prod extended permit ip object-group vpnLocal object-group SAV-Prod
+access-list SDS-NonProd extended permit ip object-group SDS-NonProd object-group vpnLocal
+access-list SDS-NonProd extended permit ip object-group vpnLocal object-group SDS-NonProd
+access-list SDS-Prod extended permit ip object-group SDS-Prod object-group vpnLocal
+access-list SDS-Prod extended permit ip object-group vpnLocal object-group SDS-Prod
+access-list SPG-NonProd extended permit ip object-group SPG-NonProd object-group vpnLocal
+access-list SPG-NonProd extended permit ip object-group vpnLocal object-group SPG-NonProd
+access-list SPG-Prod extended permit ip object-group SPG-Prod object-group vpnLocal
+access-list SPG-Prod extended permit ip object-group vpnLocal object-group SPG-Prod
+access-list SW-NonProd extended permit ip object-group SW-NonProd object-group vpnLocal
+access-list SW-NonProd extended permit ip object-group vpnLocal object-group SW-NonProd
+access-list SW-Prod extended permit ip object-group SW-Prod object-group vpnLocal
+access-list SW-Prod extended permit ip object-group vpnLocal object-group SW-Prod
+access-list SWA-NonProd extended permit ip object-group SWA-NonProd object-group vpnLocal
+access-list SWA-NonProd extended permit ip object-group vpnLocal object-group SWA-NonProd
+access-list SWA-Prod extended permit ip object-group SWA-Prod object-group vpnLocal
+access-list SWA-Prod extended permit ip object-group vpnLocal object-group SWA-Prod
+access-list TMXDEMO-Prod extended permit ip object-group TMXDEMO-Prod object-group vpnLocal
+access-list TMXDEMO-Prod extended permit ip object-group vpnLocal object-group TMXDEMO-Prod
+access-list TRN-Prod extended permit ip object-group TRN-Prod object-group vpnLocal
+access-list TRN-Prod extended permit ip object-group vpnLocal object-group TRN-Prod
+access-list UFA-NonProd extended permit ip object-group UFA-NonProd object-group vpnLocal
+access-list UFA-NonProd extended permit ip object-group vpnLocal object-group UFA-NonProd
+access-list UFA-Prod extended permit ip object-group UFA-Prod object-group vpnLocal
+access-list UFA-Prod extended permit ip object-group vpnLocal object-group UFA-Prod
+access-list ULT-NonProd extended permit ip object-group ULT-NonProd object-group vpnLocal
+access-list ULT-NonProd extended permit ip object-group vpnLocal object-group ULT-NonProd
+access-list ULT-Prod extended permit ip object-group ULT-Prod object-group vpnLocal
+access-list ULT-Prod extended permit ip object-group vpnLocal object-group ULT-Prod
+access-list ZUR-NonProd extended permit ip object-group ZUR-NonProd object-group vpnLocal
+access-list ZUR-NonProd extended permit ip object-group vpnLocal object-group ZUR-NonProd
+access-list BLK-NonProd extended permit ip object-group BLK-NonProd object-group vpnLocal
+access-list BLK-NonProd extended permit ip object-group vpnLocal object-group BLK-NonProd
+access-list DB-NonProd extended permit ip object-group DB-NonProd object-group vpnLocal
+access-list DB-NonProd extended permit ip object-group vpnLocal object-group DB-NonProd
+access-list FC-NonProd extended permit ip any object-group centralAuth
+access-list HFA-NonProd extended permit ip object-group HFA-NonProd object-group vpnLocal
+access-list HFA-NonProd extended permit ip object-group vpnLocal object-group HFA-NonProd
+access-list ZUR-Prod extended permit ip object-group ZUR-Prod object-group vpnLocal
+access-list ZUR-Prod extended permit ip object-group vpnLocal object-group ZUR-Prod
+access-list RAC-Prod extended permit ip object-group RAC-Prod object-group vpnLocal
+access-list RAC-Prod extended permit ip object-group vpnLocal object-group RAC-Prod
+access-list LES-Prod extended permit ip object-group LES-Prod object-group vpnLocal
+access-list LES-Prod extended permit ip object-group vpnLocal object-group LES-Prod
+access-list HMC-NonProd extended permit ip object-group HMC-NonProd object-group vpnLocal
+access-list HMC-NonProd extended permit ip object-group vpnLocal object-group HMC-NonProd
+access-list KAL-NonProd extended permit ip object-group KAL-NonProd object-group vpnLocal
+access-list KAL-NonProd extended permit ip object-group vpnLocal object-group KAL-NonProd
+access-list LES-NonProd extended permit ip object-group LES-NonProd object-group vpnLocal
+access-list LES-NonProd extended permit ip object-group vpnLocal object-group LES-NonProd
+access-list LLB-NonProd extended permit ip object-group LLB-NonProd object-group vpnLocal
+access-list LLB-NonProd extended permit ip object-group vpnLocal object-group LLB-NonProd
+access-list NF-NonProd extended permit ip object-group NF-NonProd object-group vpnLocal
+access-list NF-NonProd extended permit ip object-group vpnLocal object-group NF-NonProd
+access-list NoAccess extended permit ip any object-group centralAuth
+access-list NoAccess extended permit ip object-group centralAuth any
+access-list PA-NonProd extended permit ip object-group PA-NonProd object-group vpnLocal
+access-list PA-NonProd extended permit ip object-group vpnLocal object-group PA-NonProd
+access-list RAC-NonProd extended permit ip object-group RAC-NonProd object-group vpnLocal
+access-list RAC-NonProd extended permit ip object-group vpnLocal object-group RAC-NonProd
+access-list TMXDEMO-NonProd extended permit ip object-group TMXDEMO-NonProd object-group vpnLocal
+access-list TMXDEMO-NonProd extended permit ip object-group vpnLocal object-group TMXDEMO-NonProd
+access-list TRN-NonProd extended permit ip object-group TRN-NonProd object-group vpnLocal
+access-list TRN-NonProd extended permit ip object-group vpnLocal object-group TRN-NonProd
+access-list split-tunnel standard permit 10.10.10.0 255.255.255.0
+access-list split-tunnel standard permit 172.33.132.0 255.255.255.0
+access-list split-tunnel standard permit 172.30.230.0 255.255.254.0
+access-list split-tunnel standard permit 10.9.15.128 255.255.255.240
+access-list split-tunnel standard permit 10.9.15.144 255.255.255.240
+access-list split-tunnel standard permit 10.9.15.0 255.255.255.224
+access-list split-tunnel standard permit 10.9.15.160 255.255.255.240
+access-list split-tunnel standard permit 10.9.15.192 255.255.255.224
+access-list split-tunnel standard permit 10.24.74.208 255.255.255.240
+access-list split-tunnel standard permit 10.9.16.0 255.255.255.224
+access-list split-tunnel standard permit 10.9.16.32 255.255.255.224
+access-list split-tunnel standard permit 10.9.16.64 255.255.255.224
+access-list split-tunnel standard permit 10.9.15.96 255.255.255.224
+access-list split-tunnel standard permit 10.9.16.160 255.255.255.224
+access-list split-tunnel standard permit 10.9.16.192 255.255.255.224
+access-list split-tunnel standard permit 10.9.14.0 255.255.255.0
+access-list split-tunnel standard permit 10.9.15.112 255.255.255.240
+access-list split-tunnel standard permit 10.24.74.128 255.255.255.240
+access-list split-tunnel standard permit 10.24.74.0 255.255.255.192
+access-list split-tunnel standard permit 10.24.83.0 255.255.255.128
+access-list split-tunnel standard permit 10.24.82.0 255.255.255.128
+access-list split-tunnel standard permit 10.1.10.0 255.255.255.0
+access-list split-tunnel standard permit 10.1.12.0 255.255.255.0
+access-list split-tunnel standard permit 10.110.10.0 255.255.255.224
+access-list split-tunnel standard permit 10.22.10.0 255.255.255.0
+access-list split-tunnel standard permit 10.100.40.0 255.255.255.0
+access-list split-tunnel standard permit 10.100.41.0 255.255.255.0
+access-list split-tunnel standard permit 10.100.42.0 255.255.255.0
+access-list split-tunnel standard permit 10.100.43.0 255.255.255.0
+access-list split-tunnel standard permit 10.100.44.0 255.255.255.0
+access-list split-tunnel standard permit 10.22.20.0 255.255.255.0
+access-list split-tunnel standard permit 10.250.0.0 255.255.255.0
+access-list split-tunnel standard permit 10.10.33.0 255.255.255.0
+access-list split-tunnel standard permit 10.10.34.0 255.255.255.0
+access-list split-tunnel standard permit 172.16.248.0 255.255.248.0
+access-list split-tunnel standard permit 172.21.8.0 255.255.248.0
+access-list split-tunnel standard permit 172.21.248.0 255.255.248.0
+access-list split-tunnel standard permit 10.10.15.0 255.255.255.0
+access-list split-tunnel standard permit 10.10.16.0 255.255.255.0
+access-list split-tunnel standard permit 192.40.40.0 255.255.255.0
+access-list split-tunnel standard permit 10.24.74.112 255.255.255.240
+access-list split-tunnel standard permit 193.1.1.0 255.255.255.0
+access-list split-tunnel standard permit 10.65.90.0 255.255.255.0
+access-list split-tunnel standard permit 10.65.91.0 255.255.255.0
+access-list split-tunnel standard permit 10.65.92.0 255.255.255.0
+access-list split-tunnel standard permit 10.65.93.0 255.255.255.0
+access-list split-tunnel standard permit 10.19.1.0 255.255.255.0
+access-list split-tunnel standard permit 172.33.1.0 255.255.255.0
+access-list split-tunnel standard permit 10.24.81.0 255.255.255.128
+access-list split-tunnel standard permit 10.24.74.192 255.255.255.240
+access-list split-tunnel standard permit 192.168.230.0 255.255.255.0
+access-list split-tunnel standard permit 10.24.74.160 255.255.255.224
+access-list split-tunnel standard permit 159.112.0.0 255.255.0.0
+access-list split-tunnel standard permit 206.44.0.0 255.255.0.0
+access-list split-tunnel standard permit 10.24.84.0 255.255.255.128
+access-list split-tunnel standard permit 172.16.90.0 255.255.254.0
+access-list split-tunnel standard permit 10.24.50.0 255.255.255.0
+access-list split-tunnel standard permit 10.24.52.0 255.255.255.0
+access-list split-tunnel standard permit 10.24.80.0 255.255.255.0
+access-list split-tunnel standard permit 10.10.241.64 255.255.255.192
+access-list split-tunnel standard permit 10.9.16.96 255.255.255.224
+access-list split-tunnel standard permit 10.22.30.0 255.255.255.0
+access-list split-tunnel standard permit host 10.24.74.50
+access-list split-tunnel standard permit host 10.1.2.224
+access-list split-tunnel standard permit host 10.1.2.225
+access-list split-tunnel standard permit host 10.1.2.226
+access-list split-tunnel standard permit host 10.1.2.228
+access-list split-tunnel standard permit host 10.1.2.230
+access-list split-tunnel standard permit host 10.1.2.231
+access-list split-tunnel standard permit host 10.1.8.200
+access-list split-tunnel standard permit host 10.1.8.201
+access-list split-tunnel standard permit host 10.1.8.202
+access-list split-tunnel standard permit host 10.9.15.201
+access-list split-tunnel standard permit host 10.9.15.167
+access-list split-tunnel standard permit host 10.9.15.168
+access-list split-tunnel standard permit host 10.9.15.135
+access-list split-tunnel standard permit host 10.9.16.71
+access-list split-tunnel standard permit host 10.24.74.136
+access-list split-tunnel standard permit host 10.24.83.20
+access-list split-tunnel standard permit host 10.24.83.21
+access-list split-tunnel standard permit host 10.24.83.22
+access-list split-tunnel standard permit host 10.24.83.30
+access-list split-tunnel standard permit host 10.10.4.28
+access-list split-tunnel standard permit host 10.10.4.30
+access-list split-tunnel standard permit host 10.1.2.79
+access-list split-tunnel standard permit host 10.1.2.80
+access-list split-tunnel standard permit host 10.1.2.91
+access-list split-tunnel standard permit host 10.1.2.92
+access-list split-tunnel standard permit host 10.1.2.93
+access-list split-tunnel standard permit host 10.1.2.102
+access-list split-tunnel standard permit host 10.1.2.106
+access-list split-tunnel standard permit host 10.1.2.110
+access-list split-tunnel standard permit host 10.1.2.111
+access-list split-tunnel standard permit host 10.1.2.150
+access-list split-tunnel standard permit host 10.1.2.151
+access-list split-tunnel standard permit host 10.1.2.152
+access-list split-tunnel standard permit host 10.1.2.153
+access-list split-tunnel standard permit host 10.1.2.154
+access-list split-tunnel standard permit host 10.1.2.157
+access-list split-tunnel standard permit host 10.1.2.180
+access-list split-tunnel standard permit host 10.24.82.42
+access-list split-tunnel standard permit host 10.24.82.43
+access-list split-tunnel standard permit host 10.24.82.52
+access-list split-tunnel standard permit host 10.24.82.64
+access-list split-tunnel standard permit host 10.24.82.65
+access-list split-tunnel standard permit host 10.9.15.104
+access-list split-tunnel standard permit host 10.9.15.105
+access-list split-tunnel standard permit host 111.111.3.52
+access-list split-tunnel standard permit host 111.111.3.58
+access-list split-tunnel standard permit host 111.111.3.54
+access-list split-tunnel standard permit host 111.111.3.55
+access-list split-tunnel standard permit host 111.111.3.56
+access-list split-tunnel standard permit host 111.111.3.57
+access-list split-tunnel standard permit host 10.0.4.148
+access-list split-tunnel standard permit host 10.0.4.149
+access-list split-tunnel standard permit host 10.0.4.151
+access-list split-tunnel standard permit host 10.0.4.152
+access-list split-tunnel standard permit host 10.0.4.155
+access-list split-tunnel standard permit host 10.0.4.156
+access-list split-tunnel standard permit host 10.0.4.157
+access-list split-tunnel standard permit host 10.0.4.167
+access-list split-tunnel standard permit host 10.100.0.24
+access-list split-tunnel standard permit host 10.250.0.14
+access-list split-tunnel standard permit host 10.250.0.15
+access-list split-tunnel standard permit host 10.250.0.16
+access-list split-tunnel standard permit host 10.250.0.20
+access-list split-tunnel standard permit host 10.250.0.22
+access-list split-tunnel standard permit host 10.250.0.25
+access-list split-tunnel standard permit host 10.250.0.40
+access-list split-tunnel standard permit host 10.250.0.43
+access-list split-tunnel standard permit host 172.31.249.91
+access-list split-tunnel standard permit host 10.10.10.2
+access-list split-tunnel standard permit host 10.10.10.3
+access-list split-tunnel standard permit host 10.24.74.115
+access-list split-tunnel standard permit host 192.168.1.14
+access-list split-tunnel standard permit host 192.168.1.15
+access-list split-tunnel standard permit host 192.168.1.16
+access-list split-tunnel standard permit host 192.168.1.17
+access-list split-tunnel standard permit host 192.168.1.18
+access-list split-tunnel standard permit host 192.168.1.114
+access-list split-tunnel standard permit host 192.168.1.115
+access-list split-tunnel standard permit host 192.168.1.116
+access-list split-tunnel standard permit host 192.168.1.117
+access-list split-tunnel standard permit host 192.168.254.92
+access-list split-tunnel standard permit host 192.168.254.93
+access-list split-tunnel standard permit host 192.168.254.174
+access-list split-tunnel standard permit host 192.168.1.4
+access-list split-tunnel standard permit host 192.168.1.8
+access-list split-tunnel standard permit host 192.168.1.2
+access-list split-tunnel standard permit host 192.168.1.3
+access-list split-tunnel standard permit host 192.168.1.5
+access-list split-tunnel standard permit host 192.168.1.6
+access-list split-tunnel standard permit host 192.168.1.9
+access-list split-tunnel standard permit host 192.168.1.30
+access-list split-tunnel standard permit host 192.168.1.31
+access-list split-tunnel standard permit host 192.168.1.32
+access-list split-tunnel standard permit host 192.168.1.33
+access-list split-tunnel standard permit host 192.168.1.68
+access-list split-tunnel standard permit host 192.168.1.69
+access-list split-tunnel standard permit host 192.168.1.72
+access-list split-tunnel standard permit host 192.168.1.100
+access-list split-tunnel standard permit host 192.168.91.11
+access-list split-tunnel standard permit host 192.168.230.9
+access-list split-tunnel standard permit host 192.168.230.10
+access-list split-tunnel standard permit host 192.168.230.6
+access-list split-tunnel standard permit host 192.168.230.7
+access-list split-tunnel standard permit host 192.40.40.195
+access-list split-tunnel standard permit host 192.40.40.198
+access-list split-tunnel standard permit host 10.4.70.83
+access-list split-tunnel standard permit host 10.4.70.84
+access-list split-tunnel standard permit host 10.7.70.83
+access-list split-tunnel standard permit host 10.7.70.84
+access-list split-tunnel standard permit host 192.168.0.40
+access-list split-tunnel standard permit host 192.168.0.41
+access-list split-tunnel standard permit host 192.168.0.42
+access-list split-tunnel standard permit host 192.168.0.47
+access-list split-tunnel standard permit host 192.168.0.48
+access-list split-tunnel standard permit host 192.168.0.49
+access-list split-tunnel standard permit host 192.168.0.120
+access-list split-tunnel standard permit host 192.168.0.46
+access-list split-tunnel standard permit host 10.0.4.150
+access-list split-tunnel standard permit 10.223.2.0 255.255.255.0
+access-list split-tunnel standard permit host 192.168.0.121
+access-list SDCFW01 extended permit ip object-group mgmtLocal object-group SDCFW01
+access-list ABC-Prod-L2L extended permit ip object-group LOCALvpn object-group ABC-Prod
+access-list EWJ-Prod extended permit ip object-group vpnLocal object-group EWJ-Prod
+access-list FWTERM01 extended permit ip object-group vpnLocal object-group FWTERM01
+access-list SDCTERM extended permit ip object-group vpnLocal object-group SDCTERM
+access-list FWSHARED01 extended permit ip object-group vpnLocal object-group FWSHARED01
+access-list DB-Prod-L2L extended permit ip object-group LOCALvpn object-group DB-Prod
+access-list LLB-Prod-L2L extended permit ip object-group LOCALvpn object-group LLB-Prod
+access-list NF-Prod-L2L extended permit ip object-group LOCALvpn object-group NF-Prod
+access-list SWA-Prod-L2L extended permit ip object-group LOCALvpn object-group SWA-Prod
+access-list TRN-Prod-L2L extended permit ip object-group LOCALvpn object-group TRN-Prod
+access-list TMXFW01-L2L extended permit ip object-group tmxInternal object-group wdcMgmt
+access-list Support extended permit ip object-group Support object-group vpnLocal
+access-list Support extended permit ip object-group vpnLocal object-group Support
+access-list noNAT extended permit ip object-group adminHosts object-group SDCFW01
+access-list noNAT extended permit ip object-group adminHosts object-group ABC-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group ADR-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group AFS-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group AND-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group APW-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group ATG-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group BLK-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group BM-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group DB-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group DW-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group DWR-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group FEL-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group GK-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group HFA-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group HMC-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group KAL-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group KMP-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group LLB-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group LNG-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group MB-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group NF-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group PA-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group PAM-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group PC-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group RAT-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group SAV-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group SDS-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group SPG-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group SW-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group SWA-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group TRN-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group UFA-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group ULT-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group RAC-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group LES-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group ZUR-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group EWJ-Prod
+access-list noNAT extended permit ip object-group adminHosts object-group FWTERM01
+access-list noNAT extended permit ip object-group adminHosts object-group SDCTERM
+access-list noNAT extended permit ip object-group adminHosts object-group FWSHARED01
+access-list noNAT extended permit ip object-group adminHosts object-group internalNetworks
+access-list noNAT extended permit ip object-group internalNetworks object-group adminHosts
+pager lines 24
+logging enable
+logging timestamp
+logging buffer-size 1000000
+mtu External 1500
+mtu Internal 1500
+ip local pool cvpnLocal 172.30.230.10-172.30.231.254 mask 255.255.254.0
+failover
+failover lan unit secondary
+failover lan interface fail-link GigabitEthernet0/3
+failover interface ip fail-link 1.1.1.1 255.255.255.0 standby 1.1.1.2
+icmp unreachable rate-limit 1 burst-size 1
+icmp permit any Internal
+asdm image disk0:/asdm-621.bin
+no asdm history enable
+arp timeout 14400
+global (External) 1 interface
+nat (Internal) 0 access-list noNAT
+nat (Internal) 1 10.24.74.9 255.255.255.255
+route External 0.0.0.0 0.0.0.0 66.133.106.1 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+ldap attribute-map ActiveDirectory
+  map-name  memberOf IETF-Radius-Class
+dynamic-access-policy-record DfltAccessPolicy
+ action terminate
+dynamic-access-policy-record VPN-SysAdmin
+ description "System Admin Dynamic Access Policy"
+ network-acl SysAdmin
+ priority 10
+dynamic-access-policy-record VPN-TMX-Internal
+ description "Catch-all Dynamic Access Policy for users not in other groups"
+ network-acl NoAccess
+ priority 100
+dynamic-access-policy-record VPN-ABC-NonProd
+ description "ABC NonProd Dynamic Access Policy"
+ network-acl ABC-NonProd
+ priority 20
+dynamic-access-policy-record VPN-ABC-Prod
+ description "ABC Prod Dynamic Access Policy"
+ network-acl ABC-Prod
+ priority 21
+dynamic-access-policy-record VPN-ADR-NonProd
+ description "ADR NonProd Dynamic Access Policy"
+ network-acl ADR-NonProd
+ priority 22
+dynamic-access-policy-record VPN-ADR-Prod
+ description "ADR Prod Dynamic Access Policy"
+ network-acl ADR-Prod
+ priority 23
+dynamic-access-policy-record VPN-AFS-NonProd
+ description "AFS NonProd Dynamic Access Policy"
+ network-acl AFS-NonProd
+ priority 24
+dynamic-access-policy-record VPN-AFS-Prod
+ description "AFS Prod Dynamic Access Policy"
+ network-acl AFS-Prod
+ priority 25
+dynamic-access-policy-record VPN-AND-NonProd
+ description "AND NonProd Dynamic Access Policy"
+ network-acl AND-NonProd
+ priority 26
+dynamic-access-policy-record VPN-AND-Prod
+ description "AND Prod Dynamic Access Policy"
+ network-acl AND-Prod
+ priority 27
+dynamic-access-policy-record VPN-APW-NonProd
+ description "APW NonProd Dynamic Access Policy"
+ network-acl APW-NonProd
+ priority 28
+dynamic-access-policy-record VPN-APW-Prod
+ description "APW Prod Dynamic Access Policy"
+ network-acl APW-Prod
+ priority 29
+dynamic-access-policy-record VPN-ATG-NonProd
+ description "ATG NonProd Dynamic Access Policy"
+ network-acl ATG-NonProd
+ priority 30
+dynamic-access-policy-record VPN-ATG-Prod
+ description "ATG Prod Dynamic Access Policy"
+ network-acl ATG-Prod
+ priority 31
+dynamic-access-policy-record VPN-BLK-NonProd
+ description "BLK NonProd Dynamic Access Policy"
+ network-acl BLK-NonProd
+ priority 32
+dynamic-access-policy-record VPN-BLK-Prod
+ description "BLK Prod Dynamic Access Policy"
+ network-acl BLK-Prod
+ priority 33
+dynamic-access-policy-record VPN-BM-NonProd
+ description "BM NonProd Dynamic Access Policy"
+ network-acl BM-NonProd
+ priority 34
+dynamic-access-policy-record VPN-BM-Prod
+ description "BM Prod Dynamic Access Policy"
+ network-acl BM-Prod
+ priority 35
+dynamic-access-policy-record VPN-DB-NonProd
+ description "DB NonProd Dynamic Access Policy"
+ network-acl DB-NonProd
+ priority 36
+dynamic-access-policy-record VPN-DB-Prod
+ description "DB Prod Dynamic Access Policy"
+ network-acl DB-Prod
+ priority 37
+dynamic-access-policy-record VPN-DW-NonProd
+ description "DW NonProd Dynamic Access Policy"
+ network-acl DW-NonProd
+ priority 38
+dynamic-access-policy-record VPN-DW-Prod
+ description "DW Prod Dynamic Access Policy"
+ network-acl DW-Prod
+ priority 39
+dynamic-access-policy-record VPN-DWR-NonProd
+ description "DWR NonProd Dynamic Access Policy"
+ network-acl DWR-NonProd
+ priority 40
+dynamic-access-policy-record VPN-DWR-Prod
+ description "DWR Prod Dynamic Access Policy"
+ network-acl DWR-Prod
+ priority 41
+dynamic-access-policy-record VPN-FC-NonProd
+ description "FC NonProd Dynamic Access Policy"
+ network-acl FC-NonProd
+ priority 42
+dynamic-access-policy-record VPN-FC-Prod
+ description "FC Prod Dynamic Access Policy"
+ priority 43
+dynamic-access-policy-record VPN-FEL-NonProd
+ description "FEL NonProd Dynamic Access Policy"
+ network-acl FEL-NonProd
+ priority 44
+dynamic-access-policy-record VPN-FEL-Prod
+ description "FEL Prod Dynamic Access Policy"
+ network-acl FEL-Prod
+ priority 45
+dynamic-access-policy-record VPN-GK-NonProd
+ description "GK NonProd Dynamic Access Policy"
+ network-acl GK-NonProd
+ priority 46
+dynamic-access-policy-record VPN-GK-Prod
+ description "GK Prod Dynamic Access Policy"
+ network-acl GK-Prod
+ priority 47
+dynamic-access-policy-record VPN-HFA-NonProd
+ description "HFA NonProd Dynamic Access Policy"
+ network-acl HFA-NonProd
+ priority 48
+dynamic-access-policy-record VPN-HFA-Prod
+ description "HFA Prod Dynamic Access Policy"
+ network-acl HFA-Prod
+ priority 49
+dynamic-access-policy-record VPN-HMC-NonProd
+ description "HMC NonProd Dynamic Access Policy"
+ network-acl HMC-NonProd
+ priority 50
+dynamic-access-policy-record VPN-HMC-Prod
+ description "HMC Prod Dynamic Access Policy"
+ network-acl HMC-Prod
+ priority 51
+dynamic-access-policy-record VPN-KAL-NonProd
+ description "KAL NonProd Dynamic Access Policy"
+ network-acl KAL-NonProd
+ priority 52
+dynamic-access-policy-record VPN-KAL-Prod
+ description "KAL Prod Dynamic Access Policy"
+ network-acl KAL-Prod
+ priority 53
+dynamic-access-policy-record VPN-KMP-NonProd
+ description "KMP NonProd Dynamic Access Policy"
+ network-acl KMP-NonProd
+ priority 54
+dynamic-access-policy-record VPN-KMP-Prod
+ description "KMP Prod Dynamic Access Policy"
+ network-acl KMP-Prod
+ priority 55
+dynamic-access-policy-record VPN-LES-NonProd
+ description "LES NonProd Dynamic Access Policy"
+ network-acl LES-NonProd
+ priority 56
+dynamic-access-policy-record VPN-LES-Prod
+ description "LES Prod Dynamic Access Policy"
+ network-acl LES-Prod
+ priority 57
+dynamic-access-policy-record VPN-LLB-NonProd
+ description "LLB NonProd Dynamic Access Policy"
+ network-acl LLB-NonProd
+ priority 58
+dynamic-access-policy-record VPN-LLB-Prod
+ description "LLB Prod Dynamic Access Policy"
+ network-acl LLB-Prod
+ priority 59
+dynamic-access-policy-record VPN-LNG-NonProd
+ description "LNG NonProd Dynamic Access Policy"
+ network-acl LNG-NonProd
+ priority 60
+dynamic-access-policy-record VPN-LNG-Prod
+ description "LNG Prod Dynamic Access Policy"
+ network-acl LNG-Prod
+ priority 61
+dynamic-access-policy-record VPN-MB-NonProd
+ description "MB NonProd Dynamic Access Policy"
+ network-acl MB-NonProd
+ priority 62
+dynamic-access-policy-record VPN-MB-Prod
+ description "MB Prod Dynamic Access Policy"
+ network-acl MB-Prod
+ priority 63
+dynamic-access-policy-record VPN-NF-NonProd
+ description "NF NonProd Dynamic Access Policy"
+ network-acl NF-NonProd
+ priority 64
+dynamic-access-policy-record VPN-NF-Prod
+ description "NF Prod Dynamic Access Policy"
+ network-acl NF-Prod
+ priority 65
+dynamic-access-policy-record VPN-PA-NonProd
+ description "PA NonProd Dynamic Access Policy"
+ network-acl PA-NonProd
+ priority 66
+dynamic-access-policy-record VPN-PA-Prod
+ description "PA Prod Dynamic Access Policy"
+ network-acl PA-Prod
+ priority 67
+dynamic-access-policy-record VPN-PAM-NonProd
+ description "PAM NonProd Dynamic Access Policy"
+ network-acl PAM-NonProd
+ priority 68
+dynamic-access-policy-record VPN-PAM-Prod
+ description "PAM Prod Dynamic Access Policy"
+ network-acl PAM-Prod
+ priority 69
+dynamic-access-policy-record VPN-PC-NonProd
+ description "PC NonProd Dynamic Access Policy"
+ network-acl PC-NonProd
+ priority 70
+dynamic-access-policy-record VPN-PC-Prod
+ description "PC Prod Dynamic Access Policy"
+ network-acl PC-Prod
+ priority 71
+dynamic-access-policy-record VPN-RAC-NonProd
+ description "RAC NonProd Dynamic Access Policy"
+ network-acl RAC-NonProd
+ priority 72
+dynamic-access-policy-record VPN-RAC-Prod
+ description "RAC Prod Dynamic Access Policy"
+ network-acl RAC-Prod
+ priority 73
+dynamic-access-policy-record VPN-RAT-NonProd
+ description "RAT NonProd Dynamic Access Policy"
+ network-acl RAT-NonProd
+ priority 74
+dynamic-access-policy-record VPN-RAT-Prod
+ description "RAT Prod Dynamic Access Policy"
+ network-acl RAT-Prod
+ priority 75
+dynamic-access-policy-record VPN-SAV-NonProd
+ description "SAV NonProd Dynamic Access Policy"
+ network-acl SAV-NonProd
+ priority 76
+dynamic-access-policy-record VPN-SAV-Prod
+ description "SAV Prod Dynamic Access Policy"
+ network-acl SAV-Prod
+ priority 77
+dynamic-access-policy-record VPN-SDS-NonProd
+ description "SDS NonProd Dynamic Access Policy"
+ network-acl SDS-NonProd
+ priority 78
+dynamic-access-policy-record VPN-SDS-Prod
+ description "SDS Prod Dynamic Access Policy"
+ network-acl SDS-Prod
+ priority 79
+dynamic-access-policy-record VPN-SPG-NonProd
+ description "SPG NonProd Dynamic Access Policy"
+ network-acl SPG-NonProd
+ priority 80
+dynamic-access-policy-record VPN-SPG-Prod
+ description "SPG Prod Dynamic Access Policy"
+ network-acl SPG-Prod
+ priority 81
+dynamic-access-policy-record VPN-SW-NonProd
+ description "SW NonProd Dynamic Access Policy"
+ network-acl SW-NonProd
+ priority 82
+dynamic-access-policy-record VPN-SW-Prod
+ description "SW Prod Dynamic Access Policy"
+ network-acl SW-Prod
+ priority 83
+dynamic-access-policy-record VPN-SWA-NonProd
+ description "SWA NonProd Dynamic Access Policy"
+ network-acl SWA-NonProd
+ priority 84
+dynamic-access-policy-record VPN-SWA-Prod
+ description "SWA Prod Dynamic Access Policy"
+ network-acl SWA-Prod
+ priority 85
+dynamic-access-policy-record VPN-TMXDEMO-NonProd
+ description "TMXDEMO NonProd Dynamic Access Policy"
+ network-acl TMXDEMO-NonProd
+ priority 86
+dynamic-access-policy-record VPN-TMXDEMO-Prod
+ description "TMXDEMO Prod Dynamic Access Policy"
+ network-acl TMXDEMO-Prod
+ priority 87
+dynamic-access-policy-record VPN-TRN-NonProd
+ description "TRN NonProd Dynamic Access Policy"
+ network-acl TRN-NonProd
+ priority 88
+dynamic-access-policy-record VPN-TRN-Prod
+ description "TRN Prod Dynamic Access Policy"
+ network-acl TRN-Prod
+ priority 89
+dynamic-access-policy-record VPN-UFA-NonProd
+ description "UFA NonProd Dynamic Access Policy"
+ network-acl UFA-NonProd
+ priority 90
+dynamic-access-policy-record VPN-UFA-Prod
+ description "UFA Prod Dynamic Access Policy"
+ network-acl UFA-Prod
+ priority 91
+dynamic-access-policy-record VPN-ULT-NonProd
+ description "ULT NonProd Dynamic Access Policy"
+ network-acl ULT-NonProd
+ priority 92
+dynamic-access-policy-record VPN-ULT-Prod
+ description "ULT Prod Dynamic Access Policy"
+ network-acl ULT-Prod
+ priority 93
+dynamic-access-policy-record VPN-ZUR-NonProd
+ description "ZUR NonProd Dynamic Access Policy"
+ network-acl ZUR-NonProd
+ priority 94
+dynamic-access-policy-record VPN-ZUR-Prod
+ description "ZUR Prod Dynamic Access Policy"
+ network-acl ZUR-Prod
+ priority 95
+dynamic-access-policy-record VPN-Support
+ description "Support Dynamic Access Policy"
+ network-acl Support
+ priority 12
+dynamic-access-policy-record VPN-EWJ-Prod
+ description "EWJ Prod Dynamic Access Policy"
+ network-acl EWJ-Prod
+ priority 97
+dynamic-access-policy-record VPN-EWJ-NonProd
+ description "EWJ NonProd Dynamic Access Policy"
+ network-acl EWJ-Prod
+ priority 96
+dynamic-access-policy-record VPN-DBA
+ description "Database Admin Dynamic Access Policy"
+ network-acl DBA
+ priority 11
+aaa-server TMXldap protocol ldap
+aaa-server TMXldap (External) host 208.177.140.31
+ ldap-base-dn dc=tmx,dc=com
+ ldap-scope subtree
+ ldap-naming-attribute sAMAccountName
+ ldap-login-password *
+ ldap-login-dn cn=ldapuser,cn=users,dc=tmx,dc=com
+ server-type microsoft
+aaa-server TMXldap (External) host 208.177.140.30
+ ldap-base-dn dc=tmx,dc=com
+ ldap-scope subtree
+ ldap-naming-attribute sAMAccountName
+ ldap-login-password *
+ ldap-login-dn cn=ldapuser,cn=users,dc=tmx,dc=com
+ server-type microsoft
+aaa authentication ssh console LOCAL
+aaa authentication serial console LOCAL
+no snmp-server location
+no snmp-server contact
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+service resetoutside
+crypto ipsec transform-set 3desmd5 esp-3des esp-md5-hmac
+crypto ipsec transform-set 3dessha esp-3des esp-sha-hmac
+crypto ipsec transform-set aes256 esp-aes-256 esp-sha-hmac
+crypto ipsec security-association lifetime seconds 28800
+crypto ipsec security-association lifetime kilobytes 4608000
+crypto dynamic-map cvpn 1 set transform-set 3desmd5
+crypto dynamic-map cvpn 1 set security-association lifetime seconds 28800
+crypto dynamic-map cvpn 1 set security-association lifetime kilobytes 4608000
+crypto dynamic-map cvpn 1 set reverse-route
+crypto map vpn 1 match address SDCFW01
+crypto map vpn 1 set peer 66.133.118.5
+crypto map vpn 1 set transform-set 3desmd5
+crypto map vpn 2 match address ABC-Prod-L2L
+crypto map vpn 2 set peer 66.91.146.82
+crypto map vpn 2 set transform-set 3desmd5
+crypto map vpn 3 match address BM-Prod
+crypto map vpn 3 set peer 66.133.106.36
+crypto map vpn 3 set transform-set 3desmd5
+crypto map vpn 4 match address DB-Prod-L2L
+crypto map vpn 4 set peer 64.147.152.20
+crypto map vpn 4 set transform-set 3desmd5
+crypto map vpn 5 match address DW-Prod
+crypto map vpn 5 set peer 66.133.106.33
+crypto map vpn 5 set transform-set 3desmd5
+crypto map vpn 7 match address FEL-Prod
+crypto map vpn 7 set peer 66.50.200.252
+crypto map vpn 7 set transform-set 3desmd5
+crypto map vpn 8 match address GK-Prod
+crypto map vpn 8 set peer 208.138.39.196
+crypto map vpn 8 set transform-set 3desmd5
+crypto map vpn 9 match address HFA-Prod
+crypto map vpn 9 set peer 64.207.230.226
+crypto map vpn 9 set transform-set 3desmd5
+crypto map vpn 10 match address HMC-Prod
+crypto map vpn 10 set peer 66.133.106.73
+crypto map vpn 10 set transform-set 3desmd5
+crypto map vpn 11 match address KAL-Prod
+crypto map vpn 11 set peer 64.251.64.108
+crypto map vpn 11 set transform-set 3desmd5
+crypto map vpn 12 match address KMP-Prod
+crypto map vpn 12 set peer 66.133.106.13
+crypto map vpn 12 set transform-set 3desmd5
+crypto map vpn 13 match address LLB-Prod-L2L
+crypto map vpn 13 set peer 216.151.52.73
+crypto map vpn 13 set transform-set 3desmd5
+crypto map vpn 14 match address LNG-Prod
+crypto map vpn 14 set peer 66.135.104.202
+crypto map vpn 14 set transform-set 3desmd5
+crypto map vpn 15 match address NF-Prod-L2L
+crypto map vpn 15 set peer 63.85.29.20
+crypto map vpn 15 set transform-set 3desmd5
+crypto map vpn 16 match address PAM-Prod
+crypto map vpn 16 set peer 216.58.237.196
+crypto map vpn 16 set transform-set 3desmd5
+crypto map vpn 17 match address PC-Prod
+crypto map vpn 17 set peer 216.223.62.203
+crypto map vpn 17 set transform-set 3desmd5
+crypto map vpn 18 match address RAT-Prod
+crypto map vpn 18 set peer 66.133.106.30
+crypto map vpn 18 set transform-set 3desmd5
+crypto map vpn 19 match address SW-Prod
+crypto map vpn 19 set peer 65.122.158.242
+crypto map vpn 19 set transform-set 3desmd5
+crypto map vpn 20 match address SWA-Prod-L2L
+crypto map vpn 20 set peer 70.164.26.131
+crypto map vpn 20 set transform-set 3desmd5
+crypto map vpn 21 match address TMXDEMO-Prod
+crypto map vpn 21 set peer 66.133.106.11
+crypto map vpn 21 set transform-set 3desmd5
+crypto map vpn 22 match address TRN-Prod-L2L
+crypto map vpn 22 set peer 198.80.251.6
+crypto map vpn 22 set transform-set 3desmd5
+crypto map vpn 23 match address ULT-Prod
+crypto map vpn 23 set peer 65.160.54.36
+crypto map vpn 23 set transform-set 3desmd5
+crypto map vpn 24 match address LES-Prod
+crypto map vpn 24 set peer 66.39.171.8
+crypto map vpn 24 set transform-set 3desmd5
+crypto map vpn 25 match address EWJ-Prod
+crypto map vpn 25 set peer 65.255.109.3
+crypto map vpn 25 set transform-set 3desmd5
+crypto map vpn 26 match address FWTERM01
+crypto map vpn 26 set peer 66.133.106.55
+crypto map vpn 26 set transform-set 3desmd5
+crypto map vpn 27 match address SDCTERM
+crypto map vpn 27 set peer 66.133.118.55
+crypto map vpn 27 set transform-set 3desmd5
+crypto map vpn 28 match address FWSHARED01
+crypto map vpn 28 set peer 66.133.106.7
+crypto map vpn 28 set transform-set 3desmd5
+crypto map vpn 29 match address TMXFW01-L2L
+crypto map vpn 29 set peer 208.177.140.5
+crypto map vpn 29 set transform-set 3desmd5
+crypto map vpn 1000 ipsec-isakmp dynamic cvpn
+crypto map vpn interface External
+crypto ca trustpoint customers.trustpoint
+ enrollment terminal
+ fqdn customers.tomax.com
+ subject-name CN=customers.tomax.com,OU=Hosting,O=Tomax Corporation,C=US,St=Utah,L=Salt Lake City
+ serial-number
+ keypair customers.trustpoint
+ crl configure
+crypto ca certificate map DefaultCertificateMap 1000
+ subject-name attr ea co tmx.com
+crypto ca certificate chain customers.trustpoint
+ certificate ca 50ae530d2e7387954d67ed62213414a0
+    30820403 308202eb a0030201 02021050 ae530d2e 7387954d 67ed6221 3414a030
+    0d06092a 864886f7 0d010105 0500303b 31133011 060a0992 268993f2 2c640119
+    1603636f 6d311330 11060a09 92268993 f22c6401 19160374 6d78310f 300d0603
+    55040313 066c6461 70303130 1e170d30 39313131 37313931 3431375a 170d3134
+    31313137 31393233 34335a30 3b311330 11060a09 92268993 f22c6401 19160363
+    6f6d3113 3011060a 09922689 93f22c64 01191603 746d7831 0f300d06 03550403
+    13066c64 61703031 30820122 300d0609 2a864886 f70d0101 01050003 82010f00
+    3082010a 02820101 00a220db 0cd7b975 8b4f970b 23d34847 1c02cb04 2c9b9670
+    3055c274 3c05759e 13c3f36d c410394a 21d99166 a1176457 504c0061 73f5f7e2
+    2e491107 3fd20f3e 5af4f5c0 30ea113c 044ce4ac c5e85ddd 08a1886b fe4ac224
+    6e7d0370 9c41abcc 3ab01f50 d7667350 6c9bdac5 a64a2192 a17a79f6 a5c85abf
+    0c226845 9f784fc1 eef59081 f6001291 2dec2b6a c785c682 188212dd 671f8104
+    af5525a6 8ff1957e 5a654e62 ba43abe3 4f6e6efb 42c671ab f136ccff afb6951c
+    73f02523 997cc3ee 856d87cb 3a16fc71 7fa78d90 8b955c48 9ce23665 46e5d790
+    287af242 749ca632 eaa1799e 9539230b c54e9d78 2b82d2b1 774ee0f1 6ba601d5
+    a2ed7415 ef4a9b75 83020301 0001a382 01013081 fe301306 092b0601 04018237
+    14020406 1e040043 0041300b 0603551d 0f040403 02018630 0f060355 1d130101
+    ff040530 030101ff 301d0603 551d0e04 160414e9 cb4156dc 5e36dff0 d5608c17
+    8f00880e b9bc8130 71060355 1d1f046a 30683066 a064a062 862e6874 74703a2f
+    2f6c6461 7030312e 746d782e 636f6d2f 43657274 456e726f 6c6c2f6c 64617030
+    31283129 2e63726c 86306669 6c653a2f 2f5c5c6c 64617030 312e746d 782e636f
+    6d5c4365 7274456e 726f6c6c 5c6c6461 70303128 31292e63 726c3012 06092b06
+    01040182 37150104 05020301 00013023 06092b06 01040182 37150204 16041466
+    34cfd71c 84092e20 d9babde9 92154fa5 55670730 0d06092a 864886f7 0d010105
+    05000382 01010064 a2516bf0 5697567f 4cae8c27 e6a00a41 8bd644f2 e46b035a
+    5af2b72d 650f3cef 6bad5f4f db78f658 6d324003 baddab43 6551175a b36ca991
+    5e17254e 37772196 25a353cd 02258494 9aa1b2ee 8a0a142c d29a5469 40a14318
+    bd37d859 7454ac01 00980980 c9974e4f 64da7d9b b8222f88 4b8d39f7 2d29105e
+    f2c4f202 669bd1a0 90731cc6 ae5a109e 3bc162eb ea7d9f62 e30e8ae9 61664a4c
+    e772dcd1 cb5d42c0 fba6285a 64085567 60cacab2 0c232eb0 e5472485 62badc13
+    efffa750 8e56f090 ec4fa327 031af9c4 a381c048 46ee69e5 1d2061bc 9b6e260a
+    db2412d7 717774c8 52b39a6a befdcb1d b642875f 4801183d 12c67778 705cd0f4
+    c0559378 bf0382
+  quit
+ certificate 15845bf7000200000170
+    30820451 30820339 a0030201 02020a15 845bf700 02000001 70300d06 092a8648
+    86f70d01 01050500 303b3113 3011060a 09922689 93f22c64 01191603 636f6d31
+    13301106 0a099226 8993f22c 64011916 03746d78 310f300d 06035504 0313066c
+    64617030 31301e17 0d303931 31313832 30323835 355a170d 31303131 31383230
+    33383535 5a308181 310b3009 06035504 06130255 53310d30 0b060355 04081304
+    55746168 31173015 06035504 07130e53 616c7420 4c616b65 20436974 79311a30
+    18060355 040a1311 546f6d61 7820436f 72706f72 6174696f 6e311030 0e060355
+    040b1307 486f7374 696e6731 1c301a06 03550403 13136375 73746f6d 6572732e
+    746f6d61 782e636f 6d30819f 300d0609 2a864886 f70d0101 01050003 818d0030
+    81890281 8100c2f1 965e07ae 5cecaba2 49e6d8c2 75d52496 96b07d1f 88b6acd7
+    c8640956 92696aad 489249a9 e4d1e67c c1da4aef 0893feb8 e9c7f9b4 56176f55
+    628a7550 6b901036 86c9d16e 2afe643f 16b3268d dce47db2 75d9c0d3 ce0235a2
+    94dfcfe3 99df7fba ff793132 42a45e89 258fbca4 f5cdd100 b533803d 93c10b5c
+    18d525df a7bd0203 010001a3 82019230 82018e30 0e060355 1d0f0101 ff040403
+    0205a030 1e060355 1d110417 30158213 63757374 6f6d6572 732e746f 6d61782e
+    636f6d30 1d060355 1d0e0416 0414dbe7 9abdbe9e e35c8bdd 005dc906 25b575c0
+    eea7301f 0603551d 23041830 168014e9 cb4156dc 5e36dff0 d5608c17 8f00880e
+    b9bc8130 71060355 1d1f046a 30683066 a064a062 862e6874 74703a2f 2f6c6461
+    7030312e 746d782e 636f6d2f 43657274 456e726f 6c6c2f6c 64617030 31283129
+    2e63726c 86306669 6c653a2f 2f5c5c6c 64617030 312e746d 782e636f 6d5c4365
+    7274456e 726f6c6c 5c6c6461 70303128 31292e63 726c3081 a806082b 06010505
+    07010104 819b3081 98304906 082b0601 05050730 02863d68 7474703a 2f2f6c64
+    61703031 2e746d78 2e636f6d 2f436572 74456e72 6f6c6c2f 6c646170 30312e74
+    6d782e63 6f6d5f6c 64617030 31283229 2e637274 304b0608 2b060105 05073002
+    863f6669 6c653a2f 2f5c5c6c 64617030 312e746d 782e636f 6d5c4365 7274456e
+    726f6c6c 5c6c6461 7030312e 746d782e 636f6d5f 6c646170 30312832 292e6372
+    74300d06 092a8648 86f70d01 01050500 03820101 008c95e2 e7f410e7 64e5c1e5
+    12fd943e 458f6cc5 f9dcc6f0 5158bef4 cc1f25f9 b66688c6 ac3ddbef 9b55e912
+    2a2388f6 b48d536b e9c25592 3d88a05f 3c95248e 38b04bd8 c99b95d8 fc037030
+    a4bd7b58 ab1e1b14 55cda21e 45146c63 4a992fc0 71c05de7 3e3abe48 d9f67826
+    f96d7a10 c0c6004a d2c92a82 16f9f612 23654974 2fd83da8 ae78e4c9 a0626b91
+    7e0c9caa d9b78876 86d776fc d9f305a4 3dbc8ba5 82be55a3 996b12e5 666b44e7
+    eebd7914 914ed15a e5ed2762 d2dd785e 30b5023a 39e5c9fa 67d353ff 816ee3a9
+    da448ab2 c979fbc8 f0c709c8 116dde23 7da0317a 506d5dd6 f934863a 3ebebf81
+    f7f40c46 9c12d494 a36a775e 042b303d 5802bfeb f1
+  quit
+crypto isakmp enable External
+crypto isakmp policy 1
+ authentication pre-share
+ encryption 3des
+ hash md5
+ group 2
+ lifetime 86400
+crypto isakmp policy 2
+ authentication pre-share
+ encryption 3des
+ hash sha
+ group 2
+ lifetime 86400
+crypto isakmp policy 3
+ authentication pre-share
+ encryption aes-256
+ hash sha
+ group 2
+ lifetime 86400
+crypto isakmp policy 4
+ authentication pre-share
+ encryption 3des
+ hash md5
+ group 1
+ lifetime 86400
+telnet timeout 5
+ssh scopy enable
+ssh 0.0.0.0 0.0.0.0 External
+ssh timeout 30
+console timeout 30
+management-access Internal
+threat-detection basic-threat
+threat-detection statistics access-list
+no threat-detection statistics tcp-intercept
+ntp server 10.24.74.9 source Internal
+ssl trust-point customers.trustpoint External
+ssl certificate-authentication interface External port 443
+ssl certificate-authentication interface fail-link port 443
+ssl certificate-authentication interface Internal port 443
+webvpn
+ enable External
+ svc image disk0:/anyconnect-win-2.4.0202-k9.pkg 1
+ svc image disk0:/anyconnect-macosx-i386-2.3.2016-k9.pkg 2
+ svc image disk0:/anyconnect-linux-2.4.0202-k9.pkg 3
+ svc enable
+ tunnel-group-list enable
+group-policy tomax internal
+group-policy tomax attributes
+ vpn-idle-timeout 300
+ vpn-session-timeout none
+ vpn-tunnel-protocol IPSec svc
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value split-tunnel
+ split-dns value tomax.com
+username tedwards-911 password LslmvJR81N9iWhVM encrypted
+username tedwards-911 attributes
+ memberof local-SysAdmin
+username jhood-911 password 6ZR6pw6d713pT3A5 encrypted
+username jhood-911 attributes
+ memberof local-SysAdmin
+username evaughn-911 password .aa2.Rl6.JvM2NpV encrypted
+username evaughn-911 attributes
+ memberof local-SysAdmin
+username sevens-911 password VBm/8dsk/sPd9eys encrypted
+username sevens-911 attributes
+ memberof local-SysAdmin
+username jmalouf-911 password Rs5//M/tlXRHTt1U encrypted
+username jmalouf-911 attributes
+ memberof local-SysAdmin
+username jchurch-911 password vxu/X.YUFe6zzmEu encrypted
+username jchurch-911 attributes
+ memberof local-SysAdmin
+username dhatch-911 password do5toeueXk9O.8P2 encrypted
+username dhatch-911 attributes
+ memberof local-SysAdmin
+username root password GTJgz2A4EQd0h6TQ encrypted privilege 15
+tunnel-group tomax type remote-access
+tunnel-group tomax general-attributes
+ address-pool cvpnLocal
+ authentication-server-group TMXldap LOCAL
+ authorization-server-group TMXldap
+ default-group-policy tomax
+tunnel-group tomax webvpn-attributes
+ authentication aaa certificate
+ group-alias Customers enable
+tunnel-group tomax ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.118.5 type ipsec-l2l
+tunnel-group 66.133.118.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.106.36 type ipsec-l2l
+tunnel-group 66.133.106.36 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.106.33 type ipsec-l2l
+tunnel-group 66.133.106.33 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.106.73 type ipsec-l2l
+tunnel-group 66.133.106.73 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.106.30 type ipsec-l2l
+tunnel-group 66.133.106.30 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.106.11 type ipsec-l2l
+tunnel-group 66.133.106.11 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.106.55 type ipsec-l2l
+tunnel-group 66.133.106.55 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.118.55 type ipsec-l2l
+tunnel-group 66.133.118.55 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.106.7 type ipsec-l2l
+tunnel-group 66.133.106.7 ipsec-attributes
+ pre-shared-key *
+tunnel-group 64.147.152.20 type ipsec-l2l
+tunnel-group 64.147.152.20 ipsec-attributes
+ pre-shared-key *
+tunnel-group 12.36.12.147 type ipsec-l2l
+tunnel-group 12.36.12.147 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.50.200.252 type ipsec-l2l
+tunnel-group 66.50.200.252 ipsec-attributes
+ pre-shared-key *
+tunnel-group 208.138.39.196 type ipsec-l2l
+tunnel-group 208.138.39.196 ipsec-attributes
+ pre-shared-key *
+tunnel-group 64.207.230.226 type ipsec-l2l
+tunnel-group 64.207.230.226 ipsec-attributes
+ pre-shared-key *
+tunnel-group 64.251.64.108 type ipsec-l2l
+tunnel-group 64.251.64.108 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.106.13 type ipsec-l2l
+tunnel-group 66.133.106.13 ipsec-attributes
+ pre-shared-key *
+tunnel-group 216.151.52.73 type ipsec-l2l
+tunnel-group 216.151.52.73 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.135.104.202 type ipsec-l2l
+tunnel-group 66.135.104.202 ipsec-attributes
+ pre-shared-key *
+tunnel-group 63.85.29.20 type ipsec-l2l
+tunnel-group 63.85.29.20 ipsec-attributes
+ pre-shared-key *
+tunnel-group 216.58.237.196 type ipsec-l2l
+tunnel-group 216.58.237.196 ipsec-attributes
+ pre-shared-key *
+tunnel-group 216.223.62.203 type ipsec-l2l
+tunnel-group 216.223.62.203 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.122.158.242 type ipsec-l2l
+tunnel-group 65.122.158.242 ipsec-attributes
+ pre-shared-key *
+tunnel-group 70.164.26.131 type ipsec-l2l
+tunnel-group 70.164.26.131 ipsec-attributes
+ pre-shared-key *
+tunnel-group 198.80.251.6 type ipsec-l2l
+tunnel-group 198.80.251.6 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.160.54.36 type ipsec-l2l
+tunnel-group 65.160.54.36 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.255.109.3 type ipsec-l2l
+tunnel-group 65.255.109.3 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.91.146.82 type ipsec-l2l
+tunnel-group 66.91.146.82 ipsec-attributes
+ pre-shared-key *
+tunnel-group 208.177.140.5 type ipsec-l2l
+tunnel-group 208.177.140.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.39.171.8 type ipsec-l2l
+tunnel-group 66.39.171.8 ipsec-attributes
+ pre-shared-key *
+tunnel-group-map enable rules
+tunnel-group-map DefaultCertificateMap 1000 tomax
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect rsh
+  inspect rtsp
+  inspect esmtp
+  inspect sqlnet
+  inspect skinny
+  inspect sunrpc
+  inspect xdmcp
+  inspect sip
+  inspect netbios
+  inspect tftp
+  inspect icmp
+policy-map type inspect dns migrated_dns_map_1
+ parameters
+  message-length maximum 512
+!
+service-policy global_policy global
+prompt hostname context
+Cryptochecksum:a0d49c27f503b49ce8efeae03da3df27
+: end

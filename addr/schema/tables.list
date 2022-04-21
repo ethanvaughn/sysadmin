@@ -1,0 +1,11 @@
+# tables.list
+# Variables that list the sequence for table creation and deletion for use
+# with the "droptables.sh" and "loadschema.sh" scripts.
+
+# List of tables in the order to create:
+TABLES=""
+SEQ=""
+
+# List of tables in correct drop sequence (referencing tables first):
+DROPTABLES=""
+

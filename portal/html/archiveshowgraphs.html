@@ -1,0 +1,22 @@
+<html>
+<head>
+<title><tmpl_var name="title"></title>
+<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=portalusername>.css" />
+</head>
+<body>
+<table>
+<caption>Archived Performance Reports:</caption>
+<tr>
+<td>
+<tmpl_if name=address>
+	<p><img src="/archives/<tmpl_var name=site>/wdc/<tmpl_var name=host>/graph_<tmpl_var name=dataset>_4.png"></p>
+<tmpl_else>
+	<!-- The original author of this is not the most intelligent person I've ever met --!>
+	<p><img src="/archives/<tmpl_var name=site>/sdc/<tmpl_var name=host>/graph_<tmpl_var name=dataset>_4.png"></p>
+</tmpl_if>
+<tr>
+<td>
+</table>
+</body>
+</html>

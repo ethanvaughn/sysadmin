@@ -1,0 +1,40 @@
+
+
+How to Create the tmxaudit RPM
+==============================================================================
+
+
+1.	Copy the tmxaudit RPM project to the rpmbuild dir of the build host.
+
+		scp -r tmxaudit-client/ tmxaudit.spec user@box:rpmbuild/tmxaudit
+
+
+2.	Login to the build host and change to the rpmbuild/tmxaudit/ dir.
+
+
+3.	Check the current version in the spec file.
+
+		head tmxaudit.spec | grep 
+		Version: 1.0.2
+
+
+4.	Name the source directory accordingly.
+
+		mv tmxaudit-client/ tmxaudit-1.0.2
+
+
+5.	Strip the CVS/ cruft:
+
+		find -type d | grep CVS | xargs rm -rf 
+
+
+6.	Create the tar file.
+
+		tar czf tmxaudit-1.0.2.tar.gz tmxaudit-1.0.2/
+		
+
+7.	Run the rpmbuild command.
+
+		rpmbuild -ba tmxaudit.spec
+
+

@@ -1,0 +1,45 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+<tmpl_include name = "../tmpl/ack_css.tmpl">
+
+<!--
+<div class="nav">
+	<table>
+	<tr>
+		<td><a class="button" href="iptype">IP Address Type Maint</a></td>
+	</tr>
+	</table>
+</div>
+-->
+
+<div class="subtitle">
+	<h1><tmpl_var name="subtitle"></h1>
+	<tmpl_include name = "../tmpl/infopanel.tmpl">
+	<h4 id=dateline><tmpl_var name=current_time> (<tmpl_var name=username>)</h4>
+</div>
+
+<div class="content">
+
+
+<form action='<tmpl_var name=cgi>' method='post'>
+	<input type=hidden name='action' value='ack'>
+	<input type=hidden name='username' value='<tmpl_var name="username">'>
+	<table class=list>
+		<tr><td colspan=8><h3>Unacknowledged Problems<h3></td></tr>
+		<tr>
+			<th>ACK</th>
+			<th>Cat</th>
+			<th>Severity</th>
+			<th>Hostname</th>
+			<th>Description</th>
+			<th>IP Address</th>
+			<th>Service</th>
+			<th>Additional Info</th>
+		</tr>
+		<tmpl_var name=problem_rows>
+	</table>
+	<tmpl_unless name=hide_ack_button><p><input type=submit value='Acknowledge Selected Problems'></p></tmpl_unless>
+</form>
+
+</div>
+
+<tmpl_include name = "../tmpl/footer.tmpl">

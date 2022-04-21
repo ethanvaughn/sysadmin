@@ -1,0 +1,5 @@
+# This is not a script. You must source these commands from your shell.
+# eg. $>. domino-preinstall
+trap DEBUG
+unset tmxaudit_DO_NOT_UNSET_THIS_FUNCTION
+unset cmd

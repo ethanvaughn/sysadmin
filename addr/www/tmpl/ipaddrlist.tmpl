@@ -1,0 +1,80 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+
+<div id="nav">
+	<a class="button" href='<tmpl_var name="navback_controller">?<tmpl_var name="navback_action">'>&larr; Back to <tmpl_var name="navback_title"></a>
+	<tmpl_if name="ADMIN">
+		<a class="button" href='subnet?action=detailnew'>Add New Subnet</a>
+		<a class="button" href="iptype">IP Address Type Maint</a>
+	</tmpl_if>
+</div>
+
+<div id="subtitle">
+	<h1><tmpl_var name="subtitle"></h1>
+	<tmpl_if name="ADMIN">
+		<a class="button" href='ipaddr?action=detailnew&subnet_id=<tmpl_var name="subnet_id">'>Add New IP Address</a>
+	</tmpl_if>
+	<a class="button" href='ipaddr?action=list'>Full IP List</a>
+</div>
+
+<div class="notebox">
+	<tmpl_if name="msg">
+		<div class="message">
+		<tmpl_var name="msg">
+		</div>
+	</tmpl_if>
+
+
+	<tmpl_if name='subnet_id'>
+	<form method="POST" action="subnet">
+<!--		<input type="hidden" name="action" value="update"> --> 
+		<input type="hidden" name="id" value="<tmpl_var name='subnet_id'>">
+
+		<table>	
+		<tr>
+			<td>Net:</td>
+			<td><input style="width: 350px;" type="text" name="net" value="<tmpl_var name='subnet_net'>"></td>
+		</tr>
+		<tr>
+			<td>Mask:</td>
+			<td><input style="width: 350px;" type="text" name="mask" value="<tmpl_var name='subnet_mask'>"></td><td>/<tmpl_var name='subnet_cidr'></td>
+		</tr>
+		<tr>
+			<td>Comment:</td>
+			<td><input style="width: 350px;" type="text" name="comment" value="<tmpl_var name='subnet_comment'>"></td>
+		</tr>
+		<tr>
+			<td>VLAN:</td>
+			<td><input style="width: 350px;" type="text" name="vlan" value="<tmpl_var name='subnet_vlan'>"></td>
+		</tr>
+		</table>
+
+		<tmpl_if name="ADMIN">
+		<div class="buttonrow" style="width:764px">
+			<button tabindex=300 title="Update subnet assignments." name="action" value="update">Update</button>
+<!--			<button tabindex=300 title="Cancel subnet changes." name="action" value="detail">Cancel</button> -->
+		</div>
+		</tmpl_if>
+	</form>
+	</tmpl_if>
+</div>
+
+
+<div id="content">
+	<table class="list">
+	<thead>
+	<tr>
+	    <th>Address</th>
+	    <th>Type</th>
+	    <th>Comment</th>
+	    <th>Item</th>
+	    <th>Dev Comment</th>
+	    <th>X</th>
+	</tr>
+	</thead>
+
+	<tmpl_var name="iplist">
+
+	</table>
+</div>
+
+<tmpl_include name = "../tmpl/footer.tmpl">

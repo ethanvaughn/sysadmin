@@ -1,0 +1,14 @@
+dn: dc=tomax,dc=com
+dc: tomax
+objectClass: top
+objectClass: domain
+
+dn: ou=People,dc=tomax,dc=com
+ou: People
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Group,dc=tomax,dc=com
+ou: Group
+objectClass: top
+objectClass: organizationalUnit

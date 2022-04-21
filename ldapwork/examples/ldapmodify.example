@@ -1,0 +1,10 @@
+dn: uid=evaughn,ou=People,dc=tomax,dc=com
+changetype: modify
+replace: cn
+cn: adminUser
+#-
+#add: title
+#title: Grand Poobah
+#-
+#delete: loginShell 
+#-

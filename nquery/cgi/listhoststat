@@ -1,0 +1,43 @@
+#!/usr/bin/perl
+
+use FindBin qw( $Bin );
+use lib "$Bin/..";
+
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+
+use lib::statusdat;
+
+use strict;
+
+
+#---- main -------------------------------------------------------------------
+
+#----- Globals
+my $q = new CGI;
+
+# Our output is ASCII :
+print "Content-type: text/plain\n\n";
+
+
+# Get the list and print
+my @list = ();
+if ($q->param( 'host' ) ) {
+	@list = lib::statusdat::getStatusByHost( $q->param( 'host' ) );
+} else {
+	@list = lib::statusdat::getStatus();
+}
+
+foreach my $rhash (@list) {
+	print "$rhash->{firstline}\n";
+	foreach my $key (keys( %$rhash )) {
+		if ($key ne "firstline" and $key ne "lastline") {
+			print "$key=$rhash->{$key}\n";
+		}
+	}
+	print "$rhash->{lastline}\n";
+	print "\n";
+}
+
+
+exit (0);

@@ -1,0 +1,169 @@
+
+!
+version 12.0
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname tmx3548-2nd-Serv
+!
+enable secret 5 $1$Rpia$uzyo8tS8837s6NpAh7Etc/
+!
+!
+!
+!
+!
+!
+ip subnet-zero
+ip name-server 172.21.159.10
+ip name-server 172.21.159.11
+!
+!
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+ description Commontime Server on the tmxdmz
+ switchport access vlan 101
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface FastEthernet0/25
+!
+interface FastEthernet0/26
+!
+interface FastEthernet0/27
+ description Llunker Server on tmxdmz
+ switchport access vlan 101
+!
+interface FastEthernet0/28
+ description tmx-busvr port 1
+ shutdown
+ duplex half
+ speed 100
+ port group 1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/29
+!
+interface FastEthernet0/30
+!
+interface FastEthernet0/31
+!
+interface FastEthernet0/32
+!
+interface FastEthernet0/33
+!
+interface FastEthernet0/34
+ description tmx-busvr port 2
+ duplex half
+ speed 100
+ port group 1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/35
+!
+interface FastEthernet0/36
+ description tmx-busvr port 3
+ shutdown
+ duplex half
+ speed 100
+ port group 1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/37
+!
+interface FastEthernet0/38
+!
+interface FastEthernet0/39
+!
+interface FastEthernet0/40
+!
+interface FastEthernet0/41
+!
+interface FastEthernet0/42
+!
+interface FastEthernet0/43
+!
+interface FastEthernet0/44
+!
+interface FastEthernet0/45
+!
+interface FastEthernet0/46
+!
+interface FastEthernet0/47
+!
+interface FastEthernet0/48
+!
+interface GigabitEthernet0/1
+ description - Uplink to tmx3750 gig eth 1/0/26
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/2
+!
+interface VLAN1
+ ip address 172.21.159.7 255.255.0.0
+ no ip directed-broadcast
+ no ip route-cache
+!
+ip default-gateway 172.21.159.1
+!
+line con 0
+ exec-timeout 0 0
+ transport input none
+ stopbits 1
+line vty 0 4
+ password 1tomaxIV
+ login
+line vty 5 15
+ password 1tomaxIV
+ login
+!
+end

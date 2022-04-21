@@ -1,0 +1,7 @@
+authclient README
+
+The authclient checks the tmxaudit user's directory on the authhost machine for a tar file containing the passwd, shadow, and group snippets that contain the centrally-admin'd accounts. Once downloaded the client creates a rotated backup of the existing files, cuts the local portion from them, then appends the central accounts to the end.
+
+Also included in the tar file is a set of emergency files that contain the default root account along with the user accounts of the sysadmin group. This is used as a contingency if the login test fails to authenticate the known test account.
+
+

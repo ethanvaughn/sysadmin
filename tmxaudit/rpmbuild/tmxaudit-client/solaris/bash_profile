@@ -1,0 +1,16 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+
+export PATH
+unset USERNAME
+
+export TERM=xterm
+export PS1='[\u@\h \W]\$ '

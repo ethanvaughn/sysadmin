@@ -1,0 +1,45 @@
+<html>
+<head>
+<meta http-equiv="Set-Cookie" content="tomaxportalusername=;expires=now; path=/">
+<meta http-equiv="Set-Cookie" content="tomaxportalpassword=;expires=now; path=/">
+<meta http-equiv="Set-Cookie" content="tomaxportalcustomer=;expires=now; path=/">
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<title>Portal</title>
+<link rel="stylesheet" type="text/css" href="./css/portal.css" />
+<SCRIPT>
+function setFocus() 
+{ 
+	document.authenticate.username.focus()
+}
+</SCRIPT>
+</head>
+<body onLoad=setFocus() style="text-align:center; background-color:#F0F0F0;">
+	
+	<div id="login">
+	<form action="index.pl" method="post" name="authenticate" id="authenticate">
+	<table style="width:517px; margin:100px auto 10px auto;">
+  		<tr>
+    		<td><img src="images/login_banner.gif" alt="Welcome to the Tomax Hosting Portal." style="border-bottom:4px solid #cccccc;" /></td>
+  		</tr>
+  		<tr class="fieldpanel">
+    		<td>
+				<table align="center" style="width:50%; margin:20px auto 30px auto; border:none;">
+					<tr>
+					  <td><label>Username</label></td>
+					  <td><label>Password</label></td>
+			  		</tr>
+					<tr>
+						<td><input type="text" name="username" /></td>
+						<td><input type="password" name="password" /></td>
+						<td><input type="submit" name="submit" class="submit" value="Login"/></td>
+					</tr>
+			  </table>
+		</td>
+ 		</tr>
+	</table>
+				<img src="images/tomax.gif" alt="Tomax Corporation" class="tmxlogo" />
+	</form>
+	</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+
+use FindBin qw( $Bin );
+use lib "$Bin/..";
+
+use lib::objectcache;
+
+use strict;
+
+
+
+#----- Main ------------------------------------------------------------------
+
+my $servlist = lib::objectcache::getServiceRecHash();
+
+# Our output is ASCII :
+print "Content-type: text/plain\n\n";
+
+foreach my $key (keys( %$servlist )) {
+	print "$key\n";
+}
+
+
+exit (0);

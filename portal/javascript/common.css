@@ -1,0 +1,50 @@
+body {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 14px;
+	margin: 0px;
+	min-width: 30em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0px;
+}
+h2, h3, h4, h5, h6 {
+	font-family: Optima, Verdana, sans-serif;
+	margin: 1em -10px 0.5em -10px;
+}
+h2 { margin-top: 1.5em; }
+h1 {
+	font-size: 22px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding: 5px 10px 5px 10px;
+	color: #fff;
+	text-shadow: #8760c1 0px 0px 5px;
+}
+p {
+	margin-top: 0px;
+	margin-bottom: 1em;
+	text-align: justify;
+	max-width: 40em;
+}
+li p {
+	margin-bottom: 0.75em;
+}
+br.clear {
+	clear: both;
+	margin: 0px;
+}
+
+td.caption {
+	font-size: 12px;
+	text-align: center;
+}
+#copyright {
+	margin-bottom: 1em;
+	text-align: center;
+	font-size: 11px;
+}
+
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:active { background-color: #ffd700; }

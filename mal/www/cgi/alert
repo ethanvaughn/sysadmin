@@ -1,0 +1,113 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::mal;
+
+use strict;
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "alert";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+#---- Main -------------------------------------------------------------------
+
+						#DEBUG
+						print STDERR "cgi/main: ACTION=$ACTION\n";
+						foreach my $key (keys( %$vars )) {
+							print STDERR "mal:nagios: $key=$vars->{$key}\n";
+						};
+
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- alert --------------------------
+if ($ACTION eq "alert") {
+	# Check for required POST data:
+	my @missingFields;
+	push( @missingFields, "hostname" )    if (!$vars->{hostname});
+	push( @missingFields, "servicename" ) if (!$vars->{servicename});
+	push( @missingFields, "ip" )          if (!$vars->{ip});
+	push( @missingFields, "event_time" )  if (!$vars->{event_time});
+	push( @missingFields, "level" )       if (!$vars->{level});
+	push( @missingFields, "msg" )         if (!$vars->{msg});
+
+	if ($#missingFields >= 0) {
+		$msg = "\nMissing required data in mal::alert. ACTION=[$ACTION]\nThe following POST fields are required:\n";
+		foreach (@missingFields) {
+			$msg .= "\n    " . $_;
+		}
+		$msg .= "\n\n";
+		
+		print STDERR $msg;
+
+		print $cgi->header( 'text/plain' );
+		print $msg;
+		exit (1);
+	}
+
+	# Process the record:
+	lib::mal::insertRec( $dbh, $vars );
+	my $errstr = $dbh->errstr;
+	if ($errstr) {
+		print $cgi->header( 'text/plain' );
+		foreach my $key (keys( %$vars )) {
+			print "mal:nagios: $key=$vars->{$key}\n";
+		};
+		print $errstr . "\n";
+		exit (1);
+	}
+	
+	# DEBUG: 
+	print $cgi->header( 'text/plain' );
+	foreach my $key (keys( %$vars )) {
+		print "mal:nagios: $key=$vars->{$key}\n";
+	};
+
+
+
+
+	
+#---- unknown --------------------------
+} else {
+	print $cgi->header( 'text/plain' );
+	print STDERR "Unknown ACTION in mal::nagios. ACTION=[$ACTION]\n";
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+
+exit (0);

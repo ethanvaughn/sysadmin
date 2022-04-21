@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title><tmpl_var name=title></title>
+	<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+	<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=username>.css" />
+</head>
+<body>
+
+<table style="widgth:99%">
+<caption>Credit Card View Log</caption>
+<thead>
+<tr>
+	<th>Time</th>
+	<th>Status</th>
+	<th>Login ID</th>
+	<th>Card ID</th>
+</tr>
+</thead>
+<tmpl_loop name="cclog">
+<tr class='<TMPL_IF NAME="__odd__">altrow</tmpl_if>'>
+	<td><tmpl_var name="time"></td>
+	<td><tmpl_var name="state"></td>
+	<td><tmpl_var name="user_name"></td>
+	<td><tmpl_var name="card_id"></td>
+</tr>
+</tmpl_loop>
+</table> 
+
+
+</body>
+</html>

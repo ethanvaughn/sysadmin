@@ -1,0 +1,241 @@
+<html>
+<head>
+<title>Performance Report List</title>
+<link rel="stylesheet" type="text/css" href="/portal/css/portal.css" />
+<link rel="stylesheet" type="text/css" href="/portal/css/<tmpl_var name=customer_css>.css" />
+<script type="text/javascript">
+	function check_normal(x)
+	{
+		if (document.getElementById(x).bgColor == '#ffa500')
+				document.getElementById(x).bgColor='white';
+		else
+				document.getElementById(x).bgColor='#ffa500';
+		
+	}
+	function check_alt(x)
+	{
+		if (document.getElementById(x).bgColor == '#ffa500')
+				document.getElementById(x).bgColor='#efefef';
+		else
+				document.getElementById(x).bgColor='#ffa500';
+		
+	}
+	function checkbox(x)
+	{
+		var base = 'checkbox_';
+		var checkbox_id = base + x;
+		if (document.getElementById(checkbox_id).checked == false)
+				document.getElementById(checkbox_id).checked = true;
+		else
+				document.getElementById(checkbox_id).checked = false;
+	}
+</script>
+</head>
+<body>
+<form action="<tmpl_var name=cgi>" method='post'>
+<input type=hidden name='step' value='1'>
+<table>
+	<tr class="caption">
+		<td class="reports">Print Reports (All Times In MDT)</td>
+		<td align="right"><button id="submitgraphic" type="submit">Submit</button>
+	</tr>
+</table>
+<table>
+	<tr border="1" color="white">
+		<td bgcolor="black"><font color="white"><strong>From:</strong></font></td>
+		<td bgcolor="black"><font color="white"><strong>Month: </strong></font>
+			<select name=f_month class='select_dropdown'>
+				<option value=0>January</option>
+				<option value=1>February</option>
+				<option value=2>March</option>
+				<option value=3>April</option>
+				<option value=4>May</option>
+				<option value=5>June</option>
+				<option value=6>July</option>
+				<option value=7>August</option>
+				<option value=8>September</option>
+				<option value=9>October</option>
+				<option value=10>November</option>
+				<option value=11>December</option>
+			</select>
+		</td>
+		<td bgcolor="black"><font color="white"><strong>Day:</strong></font>
+			<select name=f_day class='select_dropdown'>
+				<option value=1>1</option>
+				<option value=2>2</option>
+				<option value=3>3</option>
+				<option value=4>4</option>
+				<option value=5>5</option>
+				<option value=6>6</option>
+				<option value=7>7</option>
+				<option value=8>8</option>
+				<option value=9>9</option>
+				<option value=10>10</option>
+				<option value=11>11</option>
+				<option value=12>12</option>
+				<option value=13>13</option>
+				<option value=14>14</option>
+				<option value=15>15</option>
+				<option value=16>16</option>
+				<option value=17>17</option>
+				<option value=18>18</option>
+				<option value=19>19</option>
+				<option value=20>20</option>
+				<option value=21>21</option>
+				<option value=22>22</option>
+				<option value=23>23</option>
+				<option value=24>24</option>
+				<option value=25>25</option>
+				<option value=26>26</option>
+				<option value=27>27</option>
+				<option value=28>28</option>
+				<option value=29>29</option>
+				<option value=30>30</option>
+				<option value=31>31</option>
+			</select>
+		</td>
+		<td bgcolor="black"><font color="white"><strong>Hour:</strong></font>
+			<select name=f_hour class='select_dropdown'>
+				<option value=0>12:00 AM</option>
+				<option value=1>1:00 AM</option>
+				<option value=2>2:00 AM</option>
+				<option value=3>3:00 AM</option>
+				<option value=4>4:00 AM</option>
+				<option value=5>5:00 AM</option>
+				<option value=6>6:00 AM</option>
+				<option value=7>7:00 AM</option>
+				<option value=8>8:00 AM</option>
+				<option value=9>9:00 AM</option>
+				<option value=10>10:00 AM</option>
+				<option value=11>11:00 AM</option>
+				<option value=12>12:00 PM</option>
+				<option value=13>1:00 PM</option>
+				<option value=14>2:00 PM</option>
+				<option value=15>3:00 PM</option>
+				<option value=16>4:00 PM</option>
+				<option value=17>5:00 PM</option>
+				<option value=18>6:00 PM</option>
+				<option value=19>7:00 PM</option>
+				<option value=20>8:00 PM</option>
+				<option value=21>9:00 PM</option>
+				<option value=22>10:00 PM</option>
+				<option value=23>11:00 PM</option>
+			</select>
+		</td>
+		<td bgcolor="black"><font color="white"><strong>Year:</strong></font>
+			<select name=f_year><tmpl_loop name=year>
+				<option value='<tmpl_var name=value>' <tmpl_if name=current_year>selected</tmpl_if>><tmpl_var name=display></option></tmpl_loop>
+			</select>
+		</td>
+	</tr>
+	<tr border="1" color="white">
+		<td bgcolor="black"><font color="white"><strong>To:</strong></font></td>
+		<td bgcolor="black"><font color="white"><strong>Month: </strong></font>
+			<select name=t_month class='select_dropdown'>
+				<option value=0>January</option>
+				<option value=1>February</option>
+				<option value=2>March</option>
+				<option value=3>April</option>
+				<option value=4>May</option>
+				<option value=5>June</option>
+				<option value=6>July</option>
+				<option value=7>August</option>
+				<option value=8>September</option>
+				<option value=9>October</option>
+				<option value=10>November</option>
+				<option value=11>December</option>
+			</select>
+		</td>
+		<td bgcolor="black"><font color="white"><strong>Day:</strong></font>
+			<select name=t_day class='select_dropdown'>
+				<option value=1>1</option>
+				<option value=2>2</option>
+				<option value=3>3</option>
+				<option value=4>4</option>
+				<option value=5>5</option>
+				<option value=6>6</option>
+				<option value=7>7</option>
+				<option value=8>8</option>
+				<option value=9>9</option>
+				<option value=10>10</option>
+				<option value=11>11</option>
+				<option value=12>12</option>
+				<option value=13>13</option>
+				<option value=14>14</option>
+				<option value=15>15</option>
+				<option value=16>16</option>
+				<option value=17>17</option>
+				<option value=18>18</option>
+				<option value=19>19</option>
+				<option value=20>20</option>
+				<option value=21>21</option>
+				<option value=22>22</option>
+				<option value=23>23</option>
+				<option value=24>24</option>
+				<option value=25>25</option>
+				<option value=26>26</option>
+				<option value=27>27</option>
+				<option value=28>28</option>
+				<option value=29>29</option>
+				<option value=30>30</option>
+				<option value=31>31</option>
+			</select>
+		</td>
+		<td bgcolor="black"><font color="white"><strong>Hour:</strong></font>
+			<select name=t_hour class='select_dropdown'>
+				<option value=0>12:00 AM</option>
+				<option value=1>1:00 AM</option>
+				<option value=2>2:00 AM</option>
+				<option value=3>3:00 AM</option>
+				<option value=4>4:00 AM</option>
+				<option value=5>5:00 AM</option>
+				<option value=6>6:00 AM</option>
+				<option value=7>7:00 AM</option>
+				<option value=8>8:00 AM</option>
+				<option value=9>9:00 AM</option>
+				<option value=10>10:00 AM</option>
+				<option value=11>11:00 AM</option>
+				<option value=12>12:00 PM</option>
+				<option value=13>1:00 PM</option>
+				<option value=14>2:00 PM</option>
+				<option value=15>3:00 PM</option>
+				<option value=16>4:00 PM</option>
+				<option value=17>5:00 PM</option>
+				<option value=18>6:00 PM</option>
+				<option value=19>7:00 PM</option>
+				<option value=20>8:00 PM</option>
+				<option value=21>9:00 PM</option>
+				<option value=22>10:00 PM</option>
+				<option value=23>11:00 PM</option>
+			</select>
+		</td>
+		<td bgcolor="black"><font color="white"><strong>Year:</strong></font>
+			<select name=t_year><tmpl_loop name=year>
+				<option value='<tmpl_var name=value>' <tmpl_if name=current_year>selected</tmpl_if>><tmpl_var name=display></option></tmpl_loop>
+			</select>
+		</td>
+	</tr>
+</table>
+<table>
+	<tr border="1" color="white">
+		<td colspan=2 bgcolor=black>&nbsp;</td>
+	</tr>
+	<tr border="1" color="white">
+		<td bgcolor="black"><font color="white"><strong>Graph Name</strong></font></td>
+		<td bgcolor="black"><font color="white"><strong>Selected</strong></font></td>
+	</tr><tmpl_loop name=graphs>
+	<tr id='<tmpl_var name=gid>' <tmpl_if name="__odd__">bgcolor=#efefef</tmpl_if>>
+		<!-- <tmpl_var name=id> <tmpl_var name=parent_id> !-->
+		<td onclick="check_<tmpl_if name="__odd__">alt<tmpl_else>normal</tmpl_if>(<tmpl_var name=gid>);checkbox(<tmpl_var name=gid>);"><tmpl_var name=name></td>
+		<td><input type=checkbox id='checkbox_<tmpl_var name=gid>' name='graph' value='<tmpl_var name=gid>' class='checkbox' onclick="check_<tmpl_if name="__odd__">alt<tmpl_else>normal</tmpl_if>(<tmpl_var name=gid>)"></td>
+	</tr></tmpl_loop>
+</table>
+<table>
+	<tr class="caption">
+		<td class="reports">Print Reports (All Times are in MDT)</td>
+		<td align="right"><button id="submitgraphic" type="submit">Submit</button>
+	</tr>
+</table>
+</form>
+</body>
+</html>

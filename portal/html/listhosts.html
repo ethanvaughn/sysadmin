@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title><tmpl_var name=title></title>
+<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=desc>.css" />
+<script language="JavaScript" type="text/javascript" src="../javascript/source/org/tool-man/core.js"></script>
+<script language="JavaScript" type="text/javascript" src="../javascript/source/org/tool-man/events.js"></script>
+<script language="JavaScript" type="text/javascript" src="../javascript/source/org/tool-man/css.js"></script>
+<script language="JavaScript" type="text/javascript" src="../javascript/source/org/tool-man/coordinates.js"></script>
+<script language="JavaScript" type="text/javascript" src="../javascript/source/org/tool-man/drag.js"></script>
+<script language="JavaScript" type="text/javascript" src="../javascript/source/org/tool-man/dragsort.js"></script>
+<script language="JavaScript" type="text/javascript" src="../javascript/source/org/tool-man/cookies.js"></script>
+
+<script language="JavaScript" type="text/javascript"><!--
+        var dragsort = ToolMan.dragsort()
+        var junkdrawer = ToolMan.junkdrawer()
+
+        window.onload = function() {
+                junkdrawer.restoreListOrder("numeric")
+
+                dragsort.makeListSortable(document.getElementById("numeric"),
+                                verticalOnly, saveOrder)
+        }
+
+        function verticalOnly(item) {
+                item.toolManDragGroup.verticalOnly()
+        }
+
+        function speak(id, what) {
+                var element = document.getElementById(id);
+                element.innerHTML = 'Clicked ' + what;
+        }
+
+        function saveOrder(item) {
+                var group = item.toolManDragGroup
+                var list = group.element.parentNode
+                var id = list.getAttribute("id")
+                if (id == null) return
+                group.register('dragend', function() {
+                        ToolMan.cookies().set("list-" + id,
+                                        junkdrawer.serializeList(list), 365)
+                })
+        }
+
+        //-->
+</script>
+
+
+</head>
+<body>
+<div class="caption">Server Status</div>
+<div class="server_name_col">
+	<div class="status">Service</div><div class="status">Host</div>
+	&nbsp;Server
+</div>
+<br />
+
+
+
+<ul id="numeric" class="dragdrop">
+	<tmpl_loop name=dataset>
+		<li class="dragdrop" itemID="<tmpl_var name=__counter__>">
+			<table width="100%" class="dragdrop"><tr><td width="60%">
+				<a class="info" href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()"><tmpl_var name=description><span>Hostname: <tmpl_var name=hostname><br>IP Address: <tmpl_var name=ip_address></span></a></td><td width="20%" align="center">
+				<tmpl_if name=host_up>
+					<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+					<img src="../images/up.gif" border="0" title='<tmpl_var name=hostname> is up'/></a>
+					<tmpl_if name=host_maintenance>
+						<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+						<img src="../images/maintenance.gif" border="0" title='<tmpl_var name=hostname> is in maintenance' /></a>
+					</tmpl_if>
+				</tmpl_if>
+				<tmpl_if name=host_critical>
+					<tmpl_if name=host_ack>
+						<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+						<img src="../images/criticalack.gif" border="0" title='<tmpl_var name=hostname> is critical and has been acknowledged' /></a>
+					<tmpl_else>
+						<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+						<img src="../images/critical.gif" border="0" title='<tmpl_var name=hostname> is critical' /></a>
+					</tmpl_if>
+					<tmpl_if name=host_maintenance>
+						<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+						<img src="../images/maintenance.gif" border="0" title='<tmpl_var name=hostname> is in maintenance' /></a>
+					</tmpl_if>
+				</tmpl_if>
+				</td><td width="20%" align="center">
+				<tmpl_if name=service_up>
+					<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+					<img src="../images/up.gif" border="0" title='<tmpl_var name=hostname> services are up' /></a>
+					<tmpl_if name=serv_maintenance>
+						<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+						<img src="../images/maintenance.gif" border="0" title='<tmpl_var name=hostname> has one or more services in maintenance' /></a>
+					</tmpl_if>
+				</tmpl_if>
+				<tmpl_if name=service_warning>
+					<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+					<img src="../images/warning.gif" border="0" title='<tmpl_var name=hostname> has one or more services that are warning' /></a>
+					<tmpl_if name=serv_maintenance>
+						<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+						<img src="../images/maintenance.gif" border="0" title='<tmpl_var name=hostname> has one or more services in maintenance' /></a>
+					</tmpl_if>
+				</tmpl_if>
+				<tmpl_if name=service_critical>
+					<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+					<img src="../images/critical.gif" border="0" title='<tmpl_var name=hostname> has one or more services that are critical' /></a>
+					<tmpl_if name=serv_maintenance>
+						<a href='listhoststat.pl?host=<tmpl_var name=hostname>&description=<tmpl_var name=description>&address=<tmpl_var name=ip_address>' target="information" onClick="window.location.reload()">
+						<img src="../images/maintenance.gif" border="0" title='<tmpl_var name=hostname> has one or more services in maintenance' /></a>
+					</tmpl_if>
+				</tmpl_if>
+				</td>
+			</tr>
+		</table>
+	</li>
+	</tmpl_loop>
+</ul>
+</body>
+</html>

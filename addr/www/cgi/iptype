@@ -1,0 +1,174 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::vo;
+use lib::ip;
+use www::cgi::vl;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $vars = $cgi->Vars;
+my $msg;
+my $errnav = "iptype";
+my $remote_user = $cgi->remote_user;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+#----- updateDB --------------------------------------------------------------
+sub updateDB {
+	if ($ACTION eq "add") {
+		lib::ip::addIpType( $dbh, $vars );
+	} else {
+		lib::ip::updateIpType( $dbh, $vars );
+	}
+	www::cgi::helpers::chkDB( $dbh );
+	$dbh->commit;
+}
+
+
+
+#---- Main -------------------------------------------------------------------
+
+						#DEBUG
+						#print STDERR "iptype: ACTION=$ACTION\n";
+						#foreach my $key (keys( %$vars )) {
+						#	print STDERR "ipaddr: $key=$vars->{$key}\n";
+						#};
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- list --------------------------
+if ($ACTION eq "list") {
+	$htmlview = www::cgi::vl::view_iptypelist( $dbh, $vars, "ADD" );
+
+
+#---- detail --------------------------
+} elsif ($ACTION eq "detail") {
+	$htmlview = www::cgi::vl::view_iptypelist( $dbh, $vars );
+
+
+#---- detailnew --------------------------
+#Not Needed. this is handled with action list:
+#} elsif ($ACTION eq "detailnew") {
+#	$htmlview = www::cgi::vl::view_iptype( $dbh, $vars, "ADD" );
+
+
+#---- add --------------------------
+} elsif ($ACTION eq "add") {
+	# Short circuit if not admin acct
+	if ($remote_user ne 'admin') {
+		$htmlview = www::cgi::vl::view_iptypelist( $dbh, $vars, "ADD" );
+		print $cgi->header;
+		print $htmlview->output;
+		exit 0;
+	}
+	
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{name}) {
+		$msg = "Name field is required.";
+		$htmlview = www::cgi::vl::view_iptypelist( $dbh, $vars, "ADD" );
+	} else {
+		updateDB();
+		# Clear the post vars for subsequent add.
+		$cgi->delete_all();
+		$htmlview = www::cgi::vl::view_iptypelist( $dbh, $vars, "ADD" );
+	}
+
+
+#---- update --------------------------
+} elsif ($ACTION eq "update") {
+	# Short circuit if not admin acct
+	if ($remote_user ne 'admin') {
+		$htmlview = www::cgi::vl::view_iptypelist( $dbh, $vars, "ADD" );
+		print $cgi->header;
+		print $htmlview->output;
+		exit 0;
+	}
+
+	if (!$cgi->param( 'id' )) {
+		$msg = "CGI: $errnav: missing param 'id' for ACTION: [$ACTION]\n";
+		$msg .= "Please contact SysAdmin.\n";
+		www::cgi::helpers::exitonerr( $errnav, $msg );
+	}
+
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{name}) {
+		$msg = "Name field is required.";
+		$htmlview = www::cgi::vl::view_iptypelist( $dbh, $vars );
+	} else {
+		updateDB();
+		$htmlview = www::cgi::vl::view_iptypelist( $dbh, $vars, "ADD" );
+	}
+
+
+#----- del -----------------------------
+} elsif ($ACTION eq "del") {
+	if ($remote_user ne 'admin') {
+		$htmlview = www::cgi::vl::view_iptypelist( $dbh, $vars, "ADD" );
+		print $cgi->header;
+		print $htmlview->output;
+		exit 0;
+	}
+
+	if (!$cgi->param( 'id' )) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'id' for ACTION: [$ACTION]\n" );
+	}
+	lib::ip::delIpType( $dbh, $cgi->param( 'id' ) );
+	$dbh->commit;
+	$htmlview = www::cgi::vl::view_iptypelist( $dbh, $vars, "ADD" );
+
+
+#---- unknown --------------------------
+} else {
+	www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: Unknow action value [$ACTION].\n" );
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+# Misc. message to display. Useful for debugging or status messages.
+if ($msg) {
+	$htmlview->param( msg => $msg );
+}
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

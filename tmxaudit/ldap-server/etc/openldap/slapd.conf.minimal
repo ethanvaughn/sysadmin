@@ -1,0 +1,5 @@
+database bdb
+suffix "dc=tomax,dc=com"
+rootdn "cn=Manager,dc=tomax,dc=com"
+rootpw secret
+directory /var/lib/ldap

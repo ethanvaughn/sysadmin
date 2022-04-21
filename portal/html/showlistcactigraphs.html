@@ -1,0 +1,50 @@
+<html>
+<head>
+<title><tmpl_var name="title"></title>
+<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=desc>.css" />
+</head>
+<body>
+<form action="submitgraphchoice.pl">
+<table>
+	<tr class="caption">
+		<td class="reports">Print Reports</td>
+		<td align="right"><button id="submitgraphic" type="submit">Submit</button>
+	</tr>
+</table>
+<table>
+	<tr border="1" color="white">
+		<td bgcolor="black"><font color="white"><strong>Time period</strong></font></td>
+		<td bgcolor="black"><font color="white"><strong>Server</strong></font></td>
+	</tr>
+<tmpl_loop name=dataset>
+	<tr class='<TMPL_IF NAME="__odd__">altrow</tmpl_if>'>
+		<td>
+			<select name="graph_<tmpl_var name=__counter__>" class="graphselection">
+				<tmpl_if name=location>
+				<option value="">Select...</option>
+				<option value="west_<tmpl_var name=gid>_1">Daily</option>
+				<option value="west_<tmpl_var name=gid>_2">Weekly</option>
+				<option value="west_<tmpl_var name=gid>_3">Monthly</option>
+				<option value="west_<tmpl_var name=gid>_4">Yearly</option>
+				<tmpl_else>
+				<option value="">Select...</option>
+				<option value="south_<tmpl_var name=gid>_1">Daily</option>
+				<option value="south_<tmpl_var name=gid>_2">Weekly</option>
+				<option value="south_<tmpl_var name=gid>_3">Monthly</option>
+				<option value="south_<tmpl_var name=gid>_4">Yearly</option>
+				</tmpl_if>
+			</select>
+		</td>
+		<td>
+			<tmpl_var name=name>
+		</td>
+	</tr>
+</tmpl_loop>
+	<tr class="caption">
+		<td align="right" colspan="2"><button id="submitgraphic" type="submit">Submit</button>
+	</tr>
+</table>
+</form>
+</body>
+</html>

@@ -1,0 +1,509 @@
+Building configuration...
+
+Current configuration : 10161 bytes
+!
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+service password-encryption
+!
+hostname dwstack
+!
+enable secret 5 $1$ZFsM$7UZzDUfsofXUdELZHQSnd/
+!
+no aaa new-model
+switch 1 provision ws-c3750g-24t
+switch 2 provision ws-c3750g-24t
+switch 3 provision ws-c3750g-24t
+switch 4 provision ws-c3750g-24t
+switch 5 provision ws-c3750g-24t
+ip subnet-zero
+ip routing
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+no file verify auto
+spanning-tree mode pvst
+no spanning-tree optimize bpdu transmission
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+interface GigabitEthernet1/0/1
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/2
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/3
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/4
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/5
+ description L29U03 fe1 Megapath 1800
+ switchport access vlan 209
+ duplex full
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/6
+ description L29U29 fe1 Megapath cisco 1800
+ switchport access vlan 209
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/7
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/8
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/9
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/10
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/11
+ switchport access vlan 211
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/12
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/13
+ switchport access vlan 209
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/14
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/15
+ description NewEdge Router
+ switchport access vlan 209
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/16
+ switchport access vlan 209
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/17
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/18
+ description NewEdge Router alcohost330771
+ switchport access vlan 209
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/19
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/20
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/21
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/22
+ switchport access vlan 209
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/23
+ switchport access vlan 212
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/24
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/1
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/2
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/3
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/4
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/5
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/6
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/7
+ switchport access vlan 211
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/8
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/9
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/10
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/11
+ switchport access vlan 211
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/12
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/13
+ switchport access vlan 211
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/14
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/15
+ switchport access vlan 211
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/16
+ switchport access vlan 212
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/17
+ switchport access vlan 212
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/18
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/19
+ switchport access vlan 209
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/20
+ switchport access vlan 212
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/21
+ switchport access vlan 211
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/22
+ switchport access vlan 212
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/23
+ switchport access vlan 211
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/24
+ switchport access vlan 212
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/1
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/2
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/3
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/4
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/5
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/6
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/7
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/8
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/9
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/10
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/11
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/12
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/13
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/14
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/15
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/16
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/17
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/18
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/19
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/20
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/21
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/22
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/23
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/24
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/1
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/2
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/3
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/4
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/5
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/6
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/7
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/8
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/9
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/10
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/11
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/12
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/13
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/14
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/15
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/16
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/17
+ description SVS Router L30U03
+ switchport access vlan 209
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/18
+ description SVS Router L30U05
+ switchport access vlan 209
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/19
+ switchport access vlan 210
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/20
+ switchport access vlan 211
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/21
+ switchport access vlan 210
+!
+interface GigabitEthernet4/0/22
+ switchport access vlan 212
+!
+interface GigabitEthernet4/0/23
+ switchport access vlan 212
+!
+interface GigabitEthernet4/0/24
+ switchport access vlan 210
+!
+interface GigabitEthernet5/0/1
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/2
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/3
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/4
+ switchport access vlan 213
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/5
+!
+interface GigabitEthernet5/0/6
+!
+interface GigabitEthernet5/0/7
+!
+interface GigabitEthernet5/0/8
+!
+interface GigabitEthernet5/0/9
+!
+interface GigabitEthernet5/0/10
+!
+interface GigabitEthernet5/0/11
+!
+interface GigabitEthernet5/0/12
+!
+interface GigabitEthernet5/0/13
+!
+interface GigabitEthernet5/0/14
+!
+interface GigabitEthernet5/0/15
+!
+interface GigabitEthernet5/0/16
+!
+interface GigabitEthernet5/0/17
+!
+interface GigabitEthernet5/0/18
+!
+interface GigabitEthernet5/0/19
+!
+interface GigabitEthernet5/0/20
+!
+interface GigabitEthernet5/0/21
+!
+interface GigabitEthernet5/0/22
+!
+interface GigabitEthernet5/0/23
+!
+interface GigabitEthernet5/0/24
+ switchport access vlan 209
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan209
+ no ip address
+!
+interface Vlan210
+ description DW
+ no ip address
+!
+interface Vlan211
+ description DB
+ no ip address
+!
+interface Vlan213
+ description SN
+ no ip address
+!
+interface Vlan214
+ description HMC
+ no ip address
+!
+ip classless
+no ip http server
+ip http secure-server
+!
+!
+control-plane
+!
+!
+line con 0
+line vty 0 4
+ no login
+line vty 5 15
+ no login
+!
+end

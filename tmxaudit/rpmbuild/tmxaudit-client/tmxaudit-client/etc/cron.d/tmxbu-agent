@@ -1,0 +1,1 @@
+15 1 * * * root /u01/app/adminscripts/tmxbu-agent.sh /u01/app/adminscripts/bu.list  &> /dev/null

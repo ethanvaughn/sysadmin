@@ -1,0 +1,6 @@
+dn: cn=games,ou=Group,dc=tomax,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: games
+userPassword: {crypt}x
+gidNumber: 20

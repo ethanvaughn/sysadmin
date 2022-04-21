@@ -1,0 +1,18 @@
+<html>
+<head>
+<title><tmpl_var name=title></title>
+<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=desc>.css" />
+</head>
+<body>
+<table>
+<caption>Performance Reports:</caption>
+<tmpl_loop name=dataset>
+<tr>
+<td>
+	<img src='/graphs/<tmpl_var name=address>/<tmpl_var name=graph>'><br /><br />
+</td>
+</tr>
+</tmpl_loop>
+</body>
+</html>

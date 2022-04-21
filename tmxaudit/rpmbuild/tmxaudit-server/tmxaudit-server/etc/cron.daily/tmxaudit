@@ -1,0 +1,5 @@
+#!/bin/bash
+# cron.daily/tmxaudit
+
+# Clean the client host backups:
+/u01/app/adminscripts/clientbu-reaper.sh &> /tmp/clientbu-reaper.log

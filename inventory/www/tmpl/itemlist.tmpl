@@ -1,0 +1,48 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+
+<div id="nav">
+	<tmpl_if name="ADMIN">
+		<a class="button" href="main?action=detailnew">Add New Item</a>
+		<a class="button" href="company">Company Maint</a>
+		<a class="button" href="property">Property Maint</a>
+		<a class="button" href="template">Template Maint</a>
+	</tmpl_if>
+</div>
+
+<div id="subtitle">
+	<h1><tmpl_var name="subtitle"></h1>
+	<a class="button" href="full?action=csv">Download Full CSV</a>
+</div>
+
+<div class="notebox" style="width:782px;">
+	<span style="">Template:</span><tmpl_var name='select_tmpl'>
+</div>
+	
+<div id="content">
+	<table class="list">
+	<thead>
+	<tr>
+		<tmpl_loop name="listheaderloop">
+			<th><tmpl_var name="field_label"></th>
+		</tmpl_loop>
+		<tmpl_if name="ADMIN">
+		    <th>X</th>
+		</tmpl_if>
+	</tr>
+	</thead>
+
+	<tmpl_var name="listrows">
+	
+	</table>
+</div>
+
+
+<tmpl_if name="msg">
+	<div>
+	<tmpl_var name="msg">
+	</div>
+</tmpl_if>
+
+
+
+<tmpl_include name = "../tmpl/footer.tmpl">

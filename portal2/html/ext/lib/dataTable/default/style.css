@@ -1,0 +1,66 @@
+/* Complete Rewrite of dataTable Style */
+
+.dataTables_wrapper{
+	position: relative;
+	clear: both;
+	padding: 6px 6px 42px;
+}
+
+.dataTables_length{
+	width: 40%;
+	float: left;
+}
+
+.dataTables_filter {
+	width: 50%;
+	float: right;
+	text-align: right;
+}
+
+.dataTables_info {
+	width: 220px;
+	float: left;
+	margin: 12px 0;
+	font-size: 0.9em;
+}
+
+.dataTables_paginate {
+	width: 44px;
+	* width: 50px;
+/*	width: auto; */
+	float: right;
+	text-align: right;
+}
+
+.paging_full_numbers {
+	width: 460px;
+	height: 22px;
+	line-height: 22px;
+	font-size: 0.9em;
+	margin: 12px 0;
+}
+	.paging_full_numbers span.paginate_button,
+		.paging_full_numbers span.paginate_active {
+		border: 1px solid #aaa;
+		-webkit-border-radius: 5px;
+		-moz-border-radius: 5px;
+		padding: 2px 5px;
+		margin: 0 3px;
+		cursor: pointer;
+		*cursor: hand;
+	}
+	.paging_full_numbers span.paginate_button {
+		background-color: #8BB4CC;
+	}
+	.paging_full_numbers span.paginate_button:hover {
+		background-color: #154663;
+		color: white;
+	}
+	.paging_full_numbers span.paginate_active {
+		background-color: #407899;
+		color: white;
+	}
+
+
+
+

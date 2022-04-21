@@ -1,0 +1,9 @@
+This directory contains the original CAB files (.exe) and the cabextract executable rpm for Linux. I've left it all here for the curious (and clinically insane).
+
+For convenience I've created the mscorettf.tar file which contains all the previously extracted .TTF files, so you don't need to bother with the insanity.
+
+To install:
+
+1. Extract the mscorettf.tar file into the jre/lib/fonts/ directory.
+
+

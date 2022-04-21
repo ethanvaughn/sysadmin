@@ -1,0 +1,49 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+
+<div id="nav">
+	<td><a class="button" href="main?action=history">History</a></td>
+</div>
+
+<div id="subtitle">
+	<h1><tmpl_var name="subtitle"></h1>
+	<div><tmpl_var name="user"></div>
+</div>
+
+<div id="content">
+<form id="ackform" action='<tmpl_var name="cgi">' method='post'>
+	<input type=hidden name='action' value='close'>
+	<div class="buttonrow"><input type=button value='Select All' onclick="checkAll( 'ackform' )"><input type=submit value='Close Selected Alerts'></div>
+	<table class=list>
+	<thead>
+	<tr>
+		<th>Close</th>
+		<th>Hostname</th>
+		<th>Level</th>
+		<th>IP Address</th>
+		<th>Service Name</th>
+		<th>Event Time</th>
+	</tr>
+	</thead>
+	<tmpl_loop name="listloop">
+	<input type=hidden name='status' value='<tmpl_var name="status">'>
+	<input type=hidden name='username' value='<tmpl_var name="username">'>
+	<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+		<td>
+		<input type=checkbox name='id-<tmpl_var name="id">' value='<tmpl_var name="id">'>
+		</td>
+		<td><tmpl_var name="hostname"></td>
+		<td><tmpl_var name="level"></td>
+		<td><tmpl_var name="ip"></td>
+		<td><tmpl_var name="servicename"></td>
+		<td><tmpl_var name="event_time"></td>
+	</tr>
+	<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+		<td style="background:white"></td><td colspan=5><tmpl_var name="msg"></td>
+    </tr>
+	</tmpl_loop>
+	</table>
+	<div class="buttonrow"><input type=button value='Select All' onclick="checkAll()"><input type=submit value='Close Selected Alerts'></div>
+</form>
+</div>
+
+<tmpl_include name = "../tmpl/footer.tmpl">

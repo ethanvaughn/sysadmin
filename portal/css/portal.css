@@ -1,0 +1,242 @@
+body {
+	font:normal 9pt Arial, Helvetica, sans-serif;
+	margin: 0px;
+}
+
+table {
+	border-collapse:collapse;
+	/*padding: 5px;*/
+	width:100%;
+}
+
+thead {
+	margin:0px;
+	padding:0px;
+}
+
+td {
+	font:normal 9pt Arial, Helvetica, sans-serif;
+
+}
+th {
+	background-color:#000000;
+	color:#fff;
+	font:bold 9pt Arial, Helvetica, sans-serif;
+	text-align:center;
+	border-right:2px solid #fff;
+	border-top:2px solid #fff;
+	border-bottom:2px solid #fff;
+}
+#ip_address {
+	font:bold 6pt Arial, Helvetica, sans-serif;
+	margin-left: 10px;
+}
+
+.altrow {
+	background-color: #efefef;
+}
+.portal ul {
+/*	padding:10px 0px 0px 15px;*/
+	margin-left:0px;
+}
+.portal li {
+	list-style-image: url(../images/arrow.gif);
+	list-style-type: none;	
+	list-style-position: outside;
+	margin:0px;
+	padding:0px;
+}
+
+img.updating {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.image {
+	vertical-align: middle;
+}
+
+div.scroll {
+	overflow: auto;
+}
+
+
+.srvername {
+	color:#CE0000;
+	font:bold 10pt Arial, Helvetica, sans-serif;
+}
+/*Wrapper*/
+
+#wrapper {
+	width:100%;
+	padding:0px;
+	margin:0px;
+}
+
+#bannerLeft {
+	float:left;
+}
+#bannerRight {
+	float:right;
+}
+
+#navlinks {
+	float:left;
+	padding:5px 5px 0px 25px;
+	}
+#logout {
+	float:right;
+	text-align:right;
+	padding:5px 20px 0px 5px;
+	width:250px;
+	color:#FFCC00;
+	font-size:8pt
+}
+/*Icons*/
+
+.homeicon {
+	background:url(../images/homeicon.gif) no-repeat -3px 13px;
+}
+.logouticon {
+	background:url(../images/logouticon.gif) no-repeat 2px 18px;
+}
+.performanceicon {
+	background:url(../images/perfrprtsicon.gif) no-repeat -1px 14px;
+}
+.archivedperformance {
+	background:url(../images/archive.gif) no-repeat -1px 14px;
+}
+.legendicon {
+	background:url(../images/legend.gif) no-repeat -1px 14px;
+}
+.serviceicon {
+	background:url(../images/servicedeskicon.gif) no-repeat -1px 13px;
+}
+
+/*Login Page*/
+
+.fieldpanel {
+	background:url(../images/login_bg.gif) repeat-x;
+	height:95px;
+	width:100%;
+}
+.tmxlogo	{
+	text-align:center;
+}
+#login table {
+	border-bottom:2px solid #fff;
+	border-right:2px solid #fff;
+	border-left:2px solid #bababa;
+	border-top:2px solid #bababa;
+}
+label {
+	font:bold 9pt Arial, Helvetica, sans-serif;
+	color:#FFFFFF;
+}
+input {
+	font:bold 9pt Arial, Helvetica, sans-serif;
+	color:#999999;
+	height:28px;
+	padding:6px 0px 2px 3px;
+	margin:3px 3px 0px 0px;
+	border-top: 1px solid #B0B3A7;
+  	border-right: 2px solid #E9EDDD;
+  	border-bottom: 2px solid #E9EDDD;
+  	border-left: 1px solid #B0B3A7;
+}
+input.submit {
+	color:#215d7b;
+  float:right;
+	text-align:center;
+	padding:3px;
+	font:bold 8pt Arial, Helvetica, sans-serif;
+	background-color:#CCCCCC;
+	border-bottom:2px solid #bababa;
+	border-right:2px solid #bababa;
+	border-left:2px solid #fff;
+	border-top:2px solid #fff;
+}
+input.graphselect{
+	color:black;
+	text-align:center;
+	padding:3px;
+	font:bold 8pt Arial, Helvetica, sans-serif;
+	background-color:#CCCCCC;
+	border-bottom:2px solid #bababa;
+	border-right:2px solid #bababa;
+	border-left:2px solid #fff;
+	border-top:2px solid #fff;
+}
+
+input.select_dropdown{
+	color:black;
+	text-align:center;
+	padding:3px;
+	font:bold 8pt Arial, Helvetica, sans-serif;
+	background-color:#CCCCCC;
+	border-bottom:2px solid #bababa;
+	border-right:2px solid #bababa;
+	border-left:2px solid #fff;
+	border-top:2px solid #fff;
+}
+
+input.checkbox{
+	height:14px;
+	width:14px;
+}
+
+#submitgraphic {
+	display: block;
+	width: 76px;
+	height: 23px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent url(../images/submit.gif) no-repeat top left;
+	text-indent: -1000em;
+	vertical-align: middle;
+	cursor: pointer; /* hand-shaped cursor */
+	cursor: hand; /* IE 5.x */
+}
+
+.reports {
+	font:bold 11pt arial, helvetica, sans-serif;
+}
+
+select {
+	border: 1px solid black;
+	font-size: 11px;
+}
+
+input.minutes, input.seconds {
+	font: 8pt Arial, Helvetica, sans-serif;
+	background: transparent;
+	color:white;
+	text-align: right;
+	height:10pt;
+	border: none;
+	width: 11px;
+}
+
+.graphselection {
+}
+
+.dragdrop {
+	cursor: move;
+	margin-left: 0px;
+	padding: 0px 0px 0px 0px;
+}
+
+.dragdrop li {
+	list-style-type: none;
+	margin-left: 0px;
+}
+
+.dragdrop table {
+	border-width: 1px 1px 1px 1px;
+	border-style: solid solid solid solid;
+	border-color: #E3E3E3 #E3E3E3 #E3E3E3 #E3E3E3;
+	border-collapse: collapse;
+	background-color: white;
+}

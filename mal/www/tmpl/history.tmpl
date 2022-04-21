@@ -1,0 +1,42 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+
+<div id="nav">
+	<td><a class="button" href='main?action=list'>&larr; Back to Alerts</a></td>
+</div>
+
+<div id="subtitle">
+	<h1><tmpl_var name="subtitle"></h1>
+	<div><tmpl_var name="user"></div>
+</div>
+
+<div id="content">
+	<table>
+	<thead>
+	<tr>
+		<th width=100px>Hostname</th>
+		<th width=50px>Level</th>
+		<th width=100px>IP Address</th>
+		<th width=100px>Service Name</th>
+		<th width=100px>Event Time</th>
+		<th width=100px>User</th>
+		<th width=100px>Closed</th>
+	</tr>
+	</thead>
+	<tmpl_loop name="listloop">
+	<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+		<td><tmpl_var name="hostname"></td>
+		<td><tmpl_var name="level"></td>
+		<td><tmpl_var name="ip"></td>
+		<td><tmpl_var name="servicename"></td>
+		<td><tmpl_var name="event_time"></td>
+		<td><tmpl_var name="username"></td>
+		<td><tmpl_var name="status"></td>
+	</tr>
+	<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+		<td colspan=7><pre><tmpl_var name="msg"><br/><tmpl_var name="id"></pre></td>
+    </tr>
+	</tmpl_loop>
+	</table>
+</div>
+
+<tmpl_include name = "../tmpl/footer.tmpl">

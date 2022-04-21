@@ -1,0 +1,387 @@
+Current configuration : 9609 bytes
+!
+version 12.1
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+service password-encryption
+!
+hostname tmx3750
+!
+enable secret 5 $1$KDc9$kaIzr3zu6bKZUK5xm2Omz0
+!
+ip subnet-zero
+ip routing
+!
+!
+no errdisable detect cause gbic-invalid
+spanning-tree mode pvst
+no spanning-tree optimize bpdu transmission
+spanning-tree extend system-id
+!
+!
+interface GigabitEthernet1/0/1
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/2
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/3
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/4
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/5
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/6
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/7
+ description Imaging VLAN
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/8
+ description Imaging VLAN
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/9
+ description Imaging VLAN
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/10
+ description Imaging VLAN
+ switchport access vlan 800
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/11
+ description Imaging VLAN
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/12
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/13
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/14
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/15
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/16
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/17
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/18
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/19
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/20
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/21
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/22
+ description Port Monitor Port
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/23
+ description Audix Server
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/24
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/25
+ description - XO Gig Line to DataCenter
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet1/0/26
+ description - Uplink (Not in use)
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet1/0/27
+ description - Uplink from tmx3548-3rd1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet1/0/28
+ description - Uplink from tmx3548-3rd2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet2/0/1
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/2
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/3
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/4
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/5
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/6
+ description Uplink from tmx3324-GL
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/7
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/8
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/9
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/10
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/11
+ description BMP DSL MODEM
+ switchport access vlan 104
+ switchport mode access
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/12
+ description Llunker Server on LLB vlan
+ switchport access vlan 105
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/13
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/14
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/15
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/16
+ switchport access vlan 103
+ switchport mode access
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/17
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/18
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/19
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/20
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/21
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/22
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/23
+ description trainapp server
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/24
+ description traindb server
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/25
+ description - Uplink from tmx3548-3rd3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet2/0/26
+ description XO Gig Line to SDC
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ speed nonegotiate
+!
+interface GigabitEthernet2/0/27
+ no ip address
+!
+interface GigabitEthernet2/0/28
+ no ip address
+!
+interface Vlan1
+ ip address 172.21.159.1 255.255.0.0
+!
+interface Vlan103
+ description TMXCUST VLAN Gateway
+ ip address 192.168.12.1 255.255.255.0
+ ip access-group tmxCust in
+ shutdown
+!
+interface Vlan105
+ description LLBean VLAN Gateway
+ ip address 192.168.16.1 255.255.255.0
+ ip access-group LLB-in in
+ ip access-group LLB-out out
+!
+interface Vlan851
+ description CODEV VLAN Gateway
+ ip address 192.168.17.1 255.255.255.0
+ ip access-group CODEV-out out
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 172.21.156.5
+ip route 192.168.10.0 255.255.255.0 172.21.159.2
+ip http server
+!
+ip access-list extended CODEV-out
+ remark permit traffic to pix (T19U13)
+ permit ip any host 172.21.156.5
+ remark 10.0.0.0/8 - deny access to private ip range
+ deny   ip any 10.0.0.0 0.255.255.255
+ permit tcp 172.21.0.0 0.0.255.255 192.168.17.0 0.0.0.255 eq www
+ permit tcp 172.21.0.0 0.0.255.255 192.168.17.0 0.0.0.255 eq 22
+ permit icmp 172.21.0.0 0.0.255.255 192.168.17.0 0.0.0.255
+ deny   ip 172.21.0.0 0.0.255.255 192.168.17.0 0.0.0.255
+ permit ip any any
+ip access-list extended LLB-out
+ remark control access between Llunker and tmx-internal
+ permit icmp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 22
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq ftp-data
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq ftp
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 1526
+ permit ip host 172.21.159.176 host 192.168.16.5
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 5801
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 5802
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 5803
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 5804
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 5805
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 5806
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 5807
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 7777
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 7778
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 7779
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 7780
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 7781
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 7782
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 8188
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 8189
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 8190
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 8990
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 16010
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 16109
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 17774
+ remark control access between Llunker and LL Bean
+ permit icmp 172.16.248.0 0.0.7.255 192.168.16.0 0.0.0.255
+ permit ip 172.16.248.0 0.0.7.255 192.168.16.0 0.0.0.255
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 6353
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 5901
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 1156
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 1810
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 9081
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 50000
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 60000
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 16009
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 16666
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 8920
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 16029
+ permit tcp 172.21.0.0 0.0.255.255 192.168.16.0 0.0.0.255 eq 15002
+ip access-list extended tmxCust
+ remark permit traffic to pix (T19U13)
+ permit ip any host 172.21.156.5
+ remark 172.21.0.0/16 - deny access to tomax internal network
+ deny   ip any 172.21.0.0 0.0.255.255
+ remark 192.168.0.0/16 - deny access to private ip range
+ deny   ip any 192.168.0.0 0.0.255.255
+ remark 10.0.0.0/8 - deny access to private ip range
+ deny   ip any 10.0.0.0 0.255.255.255
+ permit ip any any
+!
+snmp-server community tomaxtest RO
+snmp-server community tMxsNMp RO
+snmp-server host 172.21.160.123 tMxsNMp
+!
+line con 0
+line vty 0 4
+ password 7 1420320507013822222E3A36
+ login
+line vty 5 15
+ password 7 03337B050D0A3345480F1006
+ login
+ transport input none
+!
+!
+monitor session 1 source interface Gi1/0/25
+monitor session 1 destination interface Gi1/0/9
+end

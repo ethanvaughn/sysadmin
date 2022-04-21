@@ -1,0 +1,7 @@
+root:x:0:
+at:x:544:
+sysadmin:x:40000:
+sysdba:x:40001:
+root:x:0:
+tomax:x:100:
+dba:x:101:

@@ -1,0 +1,84 @@
+#!/usr/bin/perl
+
+#########################################################################################
+# Name: 	aliases
+# Purpose: 	generates a list for /etc/aliases from the on-call DB
+#
+# $Id: aliases,v 1.2 2008/01/04 04:29:18 jkruse Exp $
+# $Date: 2008/01/04 04:29:18 $
+#
+#########################################################################################
+
+use strict;
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use lib::oncallapi;
+
+my %groups;
+
+my $rs = lib::oncallapi::getGroupMemberEmailAndPager();
+if (ref($rs) eq 'ARRAY') {
+	# $rs is an array ref containing all of the contacts and their respective group memberships
+	my $content; # String that will be printed out at the end
+	foreach my $rec (@$rs) {
+		my %contact;
+		$contact{email} = $rec->{email};
+		$contact{pager} = $rec->{pager};
+		$contact{name} = $rec->{contact_name};
+		if (exists($groups{$rec->{group_name}})) {
+			# $groups{$rec->{group_name}} is an array ref
+			# So yes this is nasty but it saves us the trouble
+			# of having to dereference this array and assign it
+			# to a variable.
+			push(@{$groups{$rec->{group_name}}},\%contact);
+		} else {
+			my @list;
+			push(@list,\%contact);
+			$groups{$rec->{group_name}} = \@list;
+		}
+	}
+	my @groups = sort(keys(%groups));
+	foreach my $group (@groups) {
+		my $members = $groups{$group};
+		my $email_alias = sprintf('%s-email:',$group);
+		my $pager_alias = sprintf('%s-pager:',$group);
+		my $comment = sprintf('#%s:',$group);
+		foreach my $contact (@$members) {
+			# Sanity check -- our /etc/aliases would blow up if the contact somehow loses his/her email/pager address,
+			# so check for it here
+			if (exists($contact->{email}) && exists($contact->{pager})) {
+				$email_alias.= $contact->{email}.',';
+				$pager_alias.= $contact->{pager}.',';
+				$comment.= $contact->{name}.',';
+			}
+		}
+		# Remove trailing commas left by the loop
+		chop($email_alias);
+		chop($pager_alias);
+		chop($comment);
+		# Append a carriage return 
+		$email_alias.= "\r\n";
+		$pager_alias.= "\r\n";
+		$comment.= "\r\n";
+		# And append it to our output
+		$content.= $comment;
+		$content.= $email_alias;
+		$content.= $pager_alias;
+	}
+	# Now each entry in %groups is a list of all of the members
+	printContent(\$content);
+} else {
+	my $error = sprintf('!%s!',lib::oncallapi::dberr());
+	printContent(\$error);
+}
+
+sub printContent {
+	my $content = shift;
+	print 'Content-type: text/plain',"\n\n";
+	if (ref($content) eq 'SCALAR') {
+		print $$content;
+	} else {
+		print '!UNKNOWN ERROR!';
+	}
+}

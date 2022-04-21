@@ -1,0 +1,14 @@
+<html>
+<head>
+<title>Performance Report List</title>
+<link rel="stylesheet" type="text/css" href="/portal/css/portal.css" />
+<link rel="stylesheet" type="text/css" href="/portal/css/<tmpl_var name=customer_css>.css" />
+</head>
+<body>
+<!-- <tmpl_var name=cgi> !-->
+<tmpl_loop name=images>
+ <img src='/portal/bin/loader.cgi?cgi=graph_image.php&action=zoom&local_graph_id=<tmpl_var name=id>&rra_id=0&view_type=tree&graph_start=<tmpl_var name=from>&graph_end=<tmpl_var name=to>&graph_height=120&graph_width=500&title_font_size=11' border='0' alt='Custom Graph Report'>
+ <br>
+</tmpl_loop>
+</body>
+</html>

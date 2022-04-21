@@ -1,0 +1,272 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::company;
+use lib::vo;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+my $errnav = "company";
+my $remote_user = $cgi->remote_user;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+
+#----- viewCompany ----------------------------------------------------------
+# Parameters: none.
+# Load and display the companylist.tmpl
+sub viewCompany {
+	my $ADD = shift;
+
+	# Load list data:
+	my $list = lib::company::getCompanyList( $dbh ); 
+	www::cgi::helpers::chkDB( $dbh );
+	# Put the list into "loop" format:
+	my @data;
+	foreach my $rec (sort keys( %$list )) {
+		push( @data, $list->{$rec} );
+	}
+
+	$htmlview = HTML::Template->new( filename => "../tmpl/companylist.tmpl", loop_context_vars => 1 );
+	$htmlview->param( tabmenu  => $tabmenu );
+	$htmlview->param( subtitle => "Company Maintenance" );
+	$htmlview->param( user     => $remote_user );
+	$htmlview->param( ADMIN    => $remote_user ) if ($remote_user eq "admin");
+
+	$htmlview->param( listloop => \@data );
+
+	# Load add/update form info
+	if ($ADD) {
+		$htmlview->param( ADD           => "ADD" );
+		$htmlview->param( navback       => $vars->{navback} ) if ($vars->{navback});
+		$htmlview->param( navbackaction => $vars->{navbackaction} ) if ($vars->{navbackaction});
+		$htmlview->param( navbackid     => $vars->{navbackid} ) if ($vars->{navbackid});
+		$htmlview->param( navbackdescr  => $vars->{navbackdescr} ) if ($vars->{navbackdescr});
+		$htmlview->param( name          => $vars->{name} ) if ($vars->{name});
+		$htmlview->param( code          => $vars->{code} ) if ($vars->{code});
+	} else {
+		if (!$cgi->param( 'id' )) {
+			www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'id' for ACTION: [$ACTION]\n" );
+		}
+		my $rec = lib::company::getCompanyById( $dbh, $cgi->param( 'id' ) ); 
+		www::cgi::helpers::chkDB( $dbh );
+		$htmlview->param( id       => $rec->{id} );
+		$htmlview->param( name     => $rec->{name} );
+		$htmlview->param( code     => $rec->{code} );
+	}
+
+	$htmlview->param( msg => $msg ) if $msg;
+
+	print $cgi->header;
+	print $htmlview->output;
+	exit (0);
+}
+
+
+
+
+#---- Main -------------------------------------------------------------------
+
+#DEBUG
+print STDERR "company: ACTION=$ACTION\n";
+foreach my $key (keys( %$vars )) {
+	print STDERR "company: $key=$vars->{$key}\n";
+};
+
+
+# Set up the tabmenu:
+$tabmenu = www::cgi::helpers::gen_tabmenu( "INV" );
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- list --------------------------
+if ($ACTION eq "list") {
+	viewCompany( "ADD" );
+
+
+#----- detail -----------------------------
+} elsif ($ACTION eq "detail") {
+	viewCompany();
+	
+
+#----- detailnew --------------------------
+} elsif ($ACTION eq "detailnew") {
+	viewCompany( "ADD" );
+
+
+#----- update -----------------------------
+} elsif ($ACTION eq "update") {
+	if (!$cgi->param( 'id' )) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'id' for ACTION: [$ACTION]\n" );
+	}
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{name}) {
+		$msg = "Name field is required.";
+		viewCompany();
+	}
+	
+	if (!$vars->{code}) {
+		$msg = "Code field is required.";
+		viewCompany();
+	}
+	
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	if (!lib::company::updateCompany( $dbh, $vars )) {
+		$msg = $dbh->errstr;
+		if ($msg =~ /duplicate.*unique.*name/) {
+			$msg = "The company name '$vars->{name}' already exists.<br/>Please choose a new company name.";
+		} elsif ($msg =~ /duplicate.*unique.*code/) {
+			$msg = "The company code '$vars->{code}' already exists.<br/>Please choose a new company code.";
+		} else {
+			$msg = "Unable to update company.<br/>Please contact administrator.";
+			print STDERR "Updating company: $vars->{name}, $vars->{code}, id=$vars->{id}\n";
+			$dbh->rollback;
+			www::cgi::helpers::exitonerr( "$errnav?action=detail&id=" . $vars->{id}, $msg );
+		}
+		$dbh->rollback;
+		viewCompany();
+	}
+	$dbh->commit;
+	# Reset the form variables and show add form again:
+	$cgi->delete( "name" );
+	$cgi->delete( "code" );
+	viewCompany();
+
+
+
+
+#----- add -----------------------------
+} elsif ($ACTION eq "add") {
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{name}) {
+		$msg = "Name field is required.";
+		viewCompany( "ADD" );
+	}
+
+	if (!$vars->{code}) {
+		$msg = "Code field is required.";
+		viewCompany( "ADD" );
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	# Update the database
+	if (!lib::company::addCompany( $dbh, $vars )) {
+		$msg = $dbh->errstr;
+		if ($msg =~ /duplicate.*unique.*name/) {
+			$msg = "The company name '$vars->{name}' already exists.<br/>Please choose a new company name.";
+		} elsif ($msg =~ /duplicate.*unique.*code/) {
+			$msg = "The company code '$vars->{code}' already exists.<br/>Please choose a new company code.";
+		} else {
+			$msg = "Unable to add company.<br/>Please contact administrator.";
+			print STDERR "Adding company: $vars->{name}, $vars->{code}, id=$vars->{id}\n";
+			$dbh->rollback;
+			www::cgi::helpers::exitonerr( "$errnav", $msg );
+		}
+		$dbh->rollback;
+		viewCompany( "ADD" );
+	}
+	$dbh->commit;
+	# Reset the form variables and show add form again:
+	$cgi->delete( "name" );
+	$cgi->delete( "code" );
+	viewCompany( "ADD" );
+
+
+
+
+#----- del -----------------------------
+} elsif ($ACTION eq "del") {
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	if (!$cgi->param( 'id' )) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'id' for ACTION: [$ACTION]\n" );
+	}
+	
+	if (!lib::company::delCompanyById( $dbh, $cgi->param( 'id' ) )) {
+		$msg = $dbh->errstr;
+		if ($msg =~ /violates foreign key constraint/) {
+			$msg = "The company record cannot be deleted until all referencing items are removed or reassigned.";
+		}
+		$dbh->rollback;
+	}
+
+	viewCompany( "ADD" );
+	
+
+
+
+#---- unknown --------------------------
+} else {
+	www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: Unknow action value [$ACTION].\n" );
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+# Misc. message to display. Useful for debugging or status messages.
+if ($msg) {
+	$htmlview->param( msg => $msg );
+}
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

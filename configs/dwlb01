@@ -1,0 +1,808 @@
+!Generated on 01/07/2010 16:55:30
+!Active version: sg0810106
+
+configure
+
+
+!*************************** GLOBAL ***************************
+  username admin des-password wamebe3gbhggdgmfjaaaebgfbehe3ehh superuser
+
+  snmp community public read-only
+
+  ip route 0.0.0.0 0.0.0.0 10.24.82.1 1
+
+!************************* INTERFACE *************************
+interface  1/1
+  bridge vlan 210
+
+interface  1/2
+  bridge vlan 212
+
+interface Ethernet-Mgmt
+  admin-shutdown
+
+!************************** CIRCUIT **************************
+circuit VLAN212
+
+  ip address 10.24.82.161 255.255.255.224
+
+circuit VLAN210
+
+  ip address 10.24.82.5 255.255.255.128
+
+!************************** SERVICE **************************
+service U16U18
+  ip address 10.24.82.169
+  keepalive type none
+  active
+
+service U16U18-1111
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 1111
+  active
+
+service U16U18-16009
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service U16U18-16091
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 16091
+  active
+
+service U16U18-16109
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service U16U18-4001
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 4001
+  active
+
+service U16U18-4015
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 4015
+  active
+
+service U16U18-4025
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 4025
+  active
+
+service U16U18-4035
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 4035
+  active
+
+service U16U18-4045
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 4045
+  active
+
+service U16U18-4046
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 4046
+  active
+
+service U16U18-8888
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 8888
+  active
+
+service U16U18-8990
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service U16U18-9015
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 9015
+  active
+
+service U16U18-9045
+  ip address 10.24.82.169
+  keepalive type tcp
+  keepalive port 9045
+  active
+
+service dw01
+  ip address 10.24.82.164
+  keepalive type none
+  active
+
+service dw01-13401
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 13401
+  active
+
+service dw01-1810
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 1810
+  active
+
+service dw01-1811
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 1811
+  active
+
+service dw01-3060
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 3060
+  active
+
+service dw01-3065
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 3065
+  active
+
+service dw01-389
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service dw01-4445
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 4445
+  active
+
+service dw01-626
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 626
+  active
+
+service dw01-688
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 688
+  active
+
+service dw01-7777
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service dw01-7778
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service dw01-7779
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service dw01-7780
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service dw01-7781
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 7781
+  active
+
+service dw01-7782
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 7782
+  active
+
+service dw01-7784
+  ip address 10.24.82.164
+  keepalive type tcp
+  keepalive port 7784
+  active
+
+service dw02
+  ip address 10.24.82.165
+  keepalive type none
+  active
+
+service dw02-13401
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 13401
+  active
+
+service dw02-1810
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 1810
+  active
+
+service dw02-1811
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 1811
+  active
+
+service dw02-3060
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 3060
+  active
+
+service dw02-3065
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 3065
+  active
+
+service dw02-389
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service dw02-4445
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 4445
+  active
+
+service dw02-626
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 626
+  active
+
+service dw02-688
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 688
+  active
+
+service dw02-7777
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service dw02-7778
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service dw02-7779
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service dw02-7780
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service dw02-7781
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 7781
+  active
+
+service dw02-7782
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 7782
+  active
+
+service dw02-7784
+  ip address 10.24.82.165
+  keepalive type tcp
+  keepalive port 7784
+  active
+
+service dw03
+  ip address 10.24.82.168
+  keepalive type none
+  active
+
+service dw03-23
+  ip address 10.24.82.168
+  keepalive type tcp
+  keepalive port 23
+  active
+
+service dw03-631
+  ip address 10.24.82.168
+  keepalive type tcp
+  keepalive port 631
+  active
+
+service dw04
+  ip address 10.24.82.170
+  keepalive type none
+  active
+
+service dw04-16091
+  ip address 10.24.82.170
+  keepalive type tcp
+  keepalive port 16091
+  active
+
+service dw04-16109
+  ip address 10.24.82.170
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service dw04-8990
+  ip address 10.24.82.170
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service t16u20
+  ip address 10.24.82.166
+  keepalive type none
+  active
+
+service u16u22
+  ip address 10.24.82.167
+  keepalive type none
+  active
+
+service u16u22-old
+  ip address 10.24.82.171
+  keepalive type none
+  active
+
+!*************************** OWNER ***************************
+owner APP
+
+  content 13401
+    vip address 10.24.82.48
+    protocol tcp
+    port 13401
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw02-13401
+    add service dw01-13401
+    active
+
+  content 1810
+    vip address 10.24.82.48
+    protocol tcp
+    port 1810
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw02-1810
+    add service dw01-1810
+    active
+
+  content 1811
+    protocol tcp
+    vip address 10.24.82.48
+    port 1811
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw02-1811
+    add service dw01-1811
+    active
+
+  content 3060
+    vip address 10.24.82.48
+    protocol tcp
+    port 3060
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw02-3060
+    add service dw01-3060
+    active
+
+  content 3065
+    vip address 10.24.82.48
+    protocol tcp
+    port 3065
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw01-3065
+    add service dw02-3065
+    active
+
+  content 389
+    vip address 10.24.82.48
+    protocol tcp
+    port 389
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw01-389
+    add service dw02-389
+    active
+
+  content 4445
+    vip address 10.24.82.48
+    protocol tcp
+    port 4445
+    advanced-balance sticky-srcip
+    flow-timeout-multiplier 1125
+    add service dw01-4445
+    add service dw02-4445
+    active
+
+  content 626
+    vip address 10.24.82.48
+    protocol tcp
+    port 626
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw01-626
+    add service dw02-626
+    active
+
+  content 688
+    vip address 10.24.82.48
+    protocol tcp
+    port 688
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw02-688
+    add service dw01-688
+    active
+
+  content 7777
+    vip address 10.24.82.48
+    protocol tcp
+    port 7777
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw02-7777
+    add service dw01-7777
+    active
+
+  content 7778
+    vip address 10.24.82.48
+    port 7778
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw02-7778
+    add service dw01-7778
+    active
+
+  content 7779
+    protocol tcp
+    vip address 10.24.82.48
+    port 7779
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw02-7779
+    add service dw01-7779
+    active
+
+  content 7780
+    vip address 10.24.82.48
+    protocol tcp
+    port 7780
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw02-7780
+    add service dw01-7780
+    active
+
+  content 7781
+    vip address 10.24.82.48
+    protocol tcp
+    port 7781
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw01-7781
+    add service dw02-7781
+    active
+
+  content 7782
+    protocol tcp
+    vip address 10.24.82.48
+    port 7782
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw01-7782
+    add service dw02-7782
+    active
+
+  content 7784
+    vip address 10.24.82.48
+    protocol tcp
+    port 7784
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw01-7784
+    add service dw02-7784
+    active
+
+owner NAT
+
+  content U16U18
+    vip address 10.24.82.56
+    flow-timeout-multiplier 1125
+    add service U16U18
+    active
+
+  content dw01
+    vip address 10.24.82.51
+    flow-timeout-multiplier 1125
+    add service dw01
+    active
+
+  content dw02
+    vip address 10.24.82.54
+    flow-timeout-multiplier 1125
+    add service dw02
+    active
+
+  content dw03
+    vip address 10.24.82.55
+    flow-timeout-multiplier 1125
+    add service dw03
+    active
+
+  content dw04
+    vip address 10.24.82.50
+    flow-timeout-multiplier 1125
+    add service dw04
+    active
+
+  content t16u20
+    vip address 10.24.82.52
+    flow-timeout-multiplier 1125
+    add service t16u20
+
+  content u16u22
+    vip address 10.24.82.43
+    flow-timeout-multiplier 1125
+    add service u16u22
+    active
+
+  content u16u22-old
+    vip address 10.24.82.41
+    add service u16u22-old
+    flow-timeout-multiplier 1125
+    active
+
+owner POS
+
+  content 1111
+    vip address 10.24.82.45
+    protocol tcp
+    port 1111
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-1111
+    active
+
+  content 16009
+    vip address 10.24.82.45
+    protocol tcp
+    port 16009
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-16009
+    active
+
+  content 16091
+    protocol tcp
+    vip address 10.24.82.45
+    port 16091
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-16091
+    add service dw04-16091
+    active
+
+  content 16109
+    vip address 10.24.82.45
+    protocol tcp
+    port 16109
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-16109
+    add service dw04-16109
+    active
+
+  content 23
+    vip address 10.24.82.45
+    protocol tcp
+    port 23
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw03-23
+    active
+
+  content 4001
+    vip address 10.24.82.45
+    protocol tcp
+    port 4001
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-4001
+    active
+
+  content 4015
+    vip address 10.24.82.45
+    port 4015
+    protocol tcp
+    flow-timeout-multiplier 1125
+    add service U16U18-4015
+    active
+
+  content 4025
+    vip address 10.24.82.45
+    protocol tcp
+    port 4025
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-4025
+    active
+
+  content 4035
+    vip address 10.24.82.45
+    protocol tcp
+    port 4035
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-4035
+    active
+
+  content 4045
+    vip address 10.24.82.45
+    protocol tcp
+    port 4045
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-4045
+    active
+
+  content 4046
+    vip address 10.24.82.45
+    protocol tcp
+    port 4046
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-4046
+    active
+
+  content 631
+    vip address 10.24.82.45
+    protocol tcp
+    port 631
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dw03-631
+    active
+
+  content 8888
+    vip address 10.24.82.45
+    protocol tcp
+    port 8888
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-8888
+    active
+
+  content 8990
+    vip address 10.24.82.45
+    protocol tcp
+    port 8990
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-8990
+    add service dw04-8990
+    active
+
+  content 9015
+    vip address 10.24.82.45
+    port 9015
+    protocol tcp
+    flow-timeout-multiplier 1125
+    add service U16U18-9015
+    active
+
+  content 9045
+    vip address 10.24.82.45
+    port 9045
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service U16U18-9045
+    active
+
+!*************************** GROUP ***************************
+group APP
+  vip address 10.24.82.48
+  flow-timeout-multiplier 1125
+  add service dw01
+  add service dw02
+  active
+
+group POS
+  vip address 10.24.82.45
+  flow-timeout-multiplier 1125
+  add service U16U18
+  add service dw03
+  add service dw04
+  active
+
+group U16U18
+
+group dw01
+  vip address 10.24.82.51
+  flow-timeout-multiplier 1125
+
+group dw03
+  vip address 10.24.82.55
+  flow-timeout-multiplier 1125
+
+group t16u20
+  vip address 10.24.82.52
+  flow-timeout-multiplier 1125
+  add service t16u20
+
+group u16u22
+  vip address 10.24.82.43
+  add service u16u22
+  active
+
+group u16u22-old
+  vip address 10.24.82.41
+  add service u16u22-old
+  flow-timeout-multiplier 1125
+  active

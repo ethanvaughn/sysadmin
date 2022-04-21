@@ -1,0 +1,367 @@
+!Generated on 07/24/2009 10:48:14
+!Active version: sg0810002
+
+configure
+
+
+!*************************** GLOBAL ***************************
+  username admin des-password wamebe3gbhggdgmfjaaaebgfbehe3ehh superuser 
+
+  snmp community public read-only 
+
+  ip route 0.0.0.0 0.0.0.0 10.24.83.1 1 
+
+!************************* INTERFACE *************************
+interface  1/1
+  bridge vlan 215 
+
+interface  1/2
+  bridge vlan 217 
+
+interface Ethernet-Mgmt
+  admin-shutdown 
+
+!************************** CIRCUIT **************************
+circuit VLAN217
+
+  ip address 10.24.83.188 255.255.255.224 
+    ip virtual-router 101 priority 101 preempt 
+    ip virtual-router 102 
+    ip redundant-interface 101 10.24.83.161 
+    ip redundant-interface 102 10.24.83.162 
+    ip critical-service 101 FAILOVER 
+    ip critical-service 102 FAILOVER 
+
+circuit VLAN215
+
+  ip address 10.24.83.5 255.255.255.128 
+    ip virtual-router 1 priority 101 preempt 
+    ip virtual-router 2 priority 101 preempt 
+    ip virtual-router 3 priority 101 preempt 
+    ip virtual-router 4 priority 101 preempt 
+    ip virtual-router 5 priority 101 preempt 
+    ip redundant-vip 1 10.24.83.50 
+    ip redundant-vip 2 10.24.83.30 
+    ip redundant-vip 3 10.24.83.31 
+    ip redundant-vip 4 10.24.83.32 
+    ip redundant-vip 5 10.24.83.34 
+    ip critical-service 1 FAILOVER 
+    ip critical-service 2 FAILOVER 
+    ip critical-service 3 FAILOVER 
+    ip critical-service 4 FAILOVER 
+    ip critical-service 5 FAILOVER 
+
+!************************** SERVICE **************************
+service FAILOVER 
+  ip address 10.24.83.8 
+  keepalive frequency 2 
+  keepalive maxfailure 2 
+  keepalive retryperiod 2 
+  keepalive type script ap-kal-pinglist "10.24.83.1 10.24.83.190" 
+  active 
+
+service X16U30 
+  ip address 10.24.83.165 
+  keepalive type none 
+  active 
+
+service Y16U12 
+  ip address 10.24.83.166 
+  keepalive type none 
+  active 
+
+service Y16U12-3060 
+  ip address 10.24.83.166 
+  keepalive type tcp 
+  keepalive port 3060 
+  keepalive tcp-close fin 
+  active 
+
+service Y16U12-3061 
+  ip address 10.24.83.166 
+  keepalive type tcp 
+  keepalive port 3061 
+  keepalive tcp-close fin 
+  active 
+
+service Y16U12-7778 
+  ip address 10.24.83.166 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service Y16U12-7779 
+  ip address 10.24.83.166 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service Y16U12-7780 
+  ip address 10.24.83.166 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service Y16U12-8000 
+  ip address 10.24.83.166 
+  keepalive type tcp 
+  keepalive port 8000 
+  active 
+
+service Y16U15 
+  ip address 10.24.83.167 
+  keepalive type none 
+  active 
+
+service Y16U15-3060 
+  ip address 10.24.83.167 
+  keepalive type tcp 
+  keepalive port 3060 
+  keepalive tcp-close fin 
+  active 
+
+service Y16U15-3061 
+  ip address 10.24.83.167 
+  keepalive type tcp 
+  keepalive port 3061 
+  keepalive tcp-close fin 
+  active 
+
+service Y16U15-7778 
+  ip address 10.24.83.167 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service Y16U15-7779 
+  ip address 10.24.83.167 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service Y16U15-7780 
+  ip address 10.24.83.167 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service Y16U15-8000 
+  ip address 10.24.83.167 
+  keepalive type tcp 
+  keepalive port 8000 
+  active 
+
+service Y16U21 
+  ip address 10.24.83.169 
+  keepalive type none 
+  active 
+
+service Y16U21-16002 
+  ip address 10.24.83.169 
+  keepalive type tcp 
+  keepalive port 16002 
+  active 
+
+service Y16U21-16010 
+  ip address 10.24.83.169 
+  keepalive type tcp 
+  keepalive port 16010 
+  active 
+
+service Y16U21-8990 
+  ip address 10.24.83.169 
+  keepalive type tcp 
+  keepalive port 8990 
+  active 
+
+service Y16U27 
+  ip address 10.24.83.171 
+  keepalive type none 
+  active 
+
+service Y16U27-16002 
+  ip address 10.24.83.171 
+  keepalive type tcp 
+  keepalive port 16002 
+  active 
+
+service Y16U27-16010 
+  ip address 10.24.83.171 
+  keepalive type tcp 
+  keepalive port 16010 
+  active 
+
+service Y16U27-8990 
+  ip address 10.24.83.171 
+  keepalive type tcp 
+  keepalive port 8990 
+  active 
+
+service bjm01 
+  ip address 10.24.83.170 
+  keepalive type none 
+  active 
+
+!*************************** OWNER ***************************
+owner APP 
+
+  content 3060 
+    vip address 10.24.83.50 
+    protocol tcp 
+    port 3060 
+    add service Y16U12-3060 
+    add service Y16U15-3060 
+    active 
+
+  content 3061 
+    vip address 10.24.83.50 
+    port 3061 
+    protocol tcp 
+    add service Y16U12-3061 
+    add service Y16U15-3061 
+    active 
+
+  content 7778 
+    vip address 10.24.83.50 
+    protocol tcp 
+    port 7778 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service Y16U12-7778 
+    add service Y16U15-7778 
+    active 
+
+  content 7779 
+    vip address 10.24.83.50 
+    port 7779 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service Y16U12-7779 
+    add service Y16U15-7779 
+    active 
+
+  content 7780 
+    vip address 10.24.83.50 
+    protocol tcp 
+    port 7780 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service Y16U12-7780 
+    add service Y16U15-7780 
+    active 
+
+  content 8000 
+    vip address 10.24.83.50 
+    protocol tcp 
+    port 8000 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service Y16U12-8000 
+    add service Y16U15-8000 
+    active 
+
+owner NAT 
+
+  content X16U30 
+    add service X16U30 
+    vip address 10.24.83.30 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content Y16U12 
+    add service Y16U12 
+    vip address 10.24.83.31 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content Y16U15 
+    add service Y16U15 
+    vip address 10.24.83.32 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content Y16U21 
+    add service Y16U21 
+    vip address 10.24.83.34 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content Y16U27 
+    add service Y16U27 
+    vip address 10.24.83.22 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content bjm01 
+    add service bjm01 
+    vip address 10.24.83.35 
+    flow-timeout-multiplier 1125 
+    active 
+
+owner POS 
+
+  content 16002 
+    vip address 10.24.83.55 
+    protocol tcp 
+    port 16002 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service Y16U21-16002 
+    add service Y16U27-16002 
+    active 
+
+  content 16010 
+    vip address 10.24.83.55 
+    port 16010 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service Y16U21-16010 
+    add service Y16U27-16010 
+    active 
+
+  content 8990 
+    vip address 10.24.83.55 
+    protocol tcp 
+    port 8990 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service Y16U21-8990 
+    add service Y16U27-8990 
+    active 
+
+!*************************** GROUP ***************************
+group POS 
+  vip address 10.24.83.55 
+  flow-timeout-multiplier 1125 
+  add service Y16U21 
+  add service Y16U27 
+  active 
+
+group X16U30 
+  vip address 10.24.83.30 
+  add service X16U30 
+  flow-timeout-multiplier 1125 
+  active 
+
+group Y16U12 
+  vip address 10.24.83.31 
+  add service Y16U12 
+  flow-timeout-multiplier 1125 
+  active 
+
+group Y16U15 
+  vip address 10.24.83.32 
+  add service Y16U15 
+  flow-timeout-multiplier 1125 
+  active 
+
+group bjm01 
+  vip address 10.24.83.35 
+  add service bjm01 
+  flow-timeout-multiplier 1125 
+  active 

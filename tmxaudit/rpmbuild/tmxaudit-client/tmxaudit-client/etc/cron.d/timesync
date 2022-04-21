@@ -1,0 +1,1 @@
+0 */4 * * * root /u01/app/adminscripts/timesync.sh &> /dev/null

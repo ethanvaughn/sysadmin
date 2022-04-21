@@ -1,0 +1,45 @@
+#!/usr/bin/perl
+
+use FindBin qw( $Bin );
+use lib "$Bin/..";
+
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+
+use lib::hostgroup;
+
+use strict;
+
+
+#---- main -------------------------------------------------------------------
+
+#----- Globals
+my $q = new CGI;
+my @hosts = ();
+
+# Our output is ASCII :
+print "Content-type: text/plain\n\n";
+
+my %criteria = ();
+
+# Gather criteria from query_string: 
+if ($q->param( 'cust' )) {
+	$criteria{'cust'} = $q->param( 'cust' );
+}
+
+if ($q->param( 'ip' )) {
+	$criteria{'ip'} = $q->param( 'ip' );
+}
+
+if ($q->param( 'info' )) {
+	$criteria{'info'} = $q->param( 'info' );
+}
+
+# Get the list and print
+foreach (lib::hostgroup::listHosts( \%criteria )) {
+	print;
+	print "\n";
+}
+
+
+exit (0);

@@ -1,0 +1,62 @@
+
+
+html, body {
+	background:#fff;
+	color:#000;
+	font-size:100%;
+	}
+	
+body {
+	font-size:0.8em;
+	}
+
+p {
+	font:1.1em tahoma, sans-serif;
+	letter-spacing:1px;
+	line-height:150%;
+	margin:0 0 1em 0;
+	}
+
+.clear {
+	clear:both;
+	}
+
+
+
+#events {
+	width:500px;
+	float:left;
+	}
+	
+#events label, #events legend {
+	display:block;
+	font:1em "courier new", monospace;
+	line-height:150%;
+	}
+	
+#events legend {
+	font-weight:bold;
+	}
+	
+#events label span {
+	display:block;
+	float:left;
+	text-align:right;
+	width:140px;
+	}
+
+#events input {
+	width:300px;
+	margin:0 0 0 10px;
+	font:1em "courier new", monospace;
+	}
+
+#events input#score {
+	width:100%;
+	margin:0;
+	}
+
+
+
+
+

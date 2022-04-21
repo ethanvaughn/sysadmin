@@ -1,0 +1,52 @@
+<TMPL_INCLUDE NAME = "../tmpl/header.tmpl">
+
+<p>Change/Update Password</p>
+<p>The strength of your password must conform to the following minimums: </p>
+<ul>
+	<li>Must be different than your previous passord.</li>
+	<li>Once changed, you cannot change your password again for at least 14 days.</li>
+	<li>Minimum 8 characters in length.</li>
+	<li>Must contain at least 2 character groups (lower, capital, numbers, punctuation).</li>
+	<li>Cannot contain dictionary words.</li>
+	<li>Cannot contain your username, first, or last name.</li>
+	<li>Cannot use keyboard sequences (eg. qwerty, 12345, etc.).</li>
+</ul>
+<p>In addition, do not use personal information like birthdate, SSN, children's names, pet's names, phone number, etc.</p>
+
+<TMPL_IF NAME="msg">
+	<div>
+	<TMPL_VAR NAME="msg">
+	</div>
+</TMPL_IF>
+
+<form action="changepass" method="POST">
+<table>
+<tr>
+	<td>Enter Login Name :</td>      
+	<td><input type="text" name="username" size="20" value="<TMPL_VAR NAME='username'>"><td> 
+</tr>
+<tr>
+	<td>Enter Current Password :</td>
+	<td><input type="password" name="oldpass" size="20" value="<TMPL_VAR NAME='oldpass'>"></td>
+</tr>
+<tr>
+	<td>Enter New Password :</td>    
+	<td><input type="password" name="newpass" size="20"></td>
+</tr>
+<tr>
+	<td>Please Retype Password :</td>        
+	<td><input type="password" name="retyped" size="20"></td>                                  
+</tr>
+</table>
+<input type="submit" value="OK">
+</form>
+
+<TMPL_IF NAME="debug">
+	<div>
+	DEBUG:<br>
+	<TMPL_VAR NAME="debug">
+	</div>
+</TMPL_IF>
+
+
+<TMPL_INCLUDE NAME = "../tmpl/footer.tmpl">

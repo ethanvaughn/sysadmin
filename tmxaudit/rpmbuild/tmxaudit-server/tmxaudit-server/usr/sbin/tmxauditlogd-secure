@@ -1,0 +1,99 @@
+#!/usr/bin/perl
+
+# Daemon process to read the /var/log/secure.fifo named pipe and split each message 
+# into a /var/log/{ipaddr}/secure logfile based on ipaddress of the remote
+# log client. 
+# 
+# The local host's information goes to the standard /var/log/secure file.
+#
+# Requirements:
+# 1. Create /var/log/secure.fifo named pipe (eg. mkfifo).
+# 2. Modify /etc/syslog.conf to log authpriv to /var/log/secure.fifo rather
+#    than the standard /var/log/secure file.
+#
+use POSIX qw(setsid);	# for daemonizing.
+use Sys::Syslog;		# log any messages since stdout is flushed.
+use strict;
+
+# Flush the buffer to prepare for daemonizing
+$| = 1;
+
+# Store the local machine's hostname to use as a special case:
+my $localbox=`hostname`;
+
+# Daemonize the program
+init_daemon();
+
+# Main program loop:
+while( 1 ) {
+#	sleep( 5 );
+#	print( "Stuff logged at " . time . "\n" );
+	openlog( 'tmxauditlogd-secure', 'cons,pid', 'user' );
+#	syslog( 'info', 'this is another test' );
+#	syslog( 'mail|warning', 'this is a better test: %d', time );
+
+	my $securefifo = "/var/log/secure.fifo";
+	my $err = "";
+	open( SECURE, "< $securefifo" )
+		or $err = "Unable to open file $securefifo for reading: $!\n";
+	if ($err) {
+		syslog( "info", "%s", $err ); 
+		closelog();
+		exit( 1 );
+	}
+
+	# Since SECURE is a fifo, this is an infinite loop too. Do we need the 
+	# "while(1)" up top as well??
+	# For efficiency, should we leave every file open (how? array of fp?) until 
+	# we receive a kill sig? (SIGHUP?)
+	while (<SECURE>) {
+		# get the ipaddr/hostname of the syslog entry:
+		my @line = split( /\s+/ );
+		my $ipaddr = $line[3];
+
+		# if the value is the local box' hostname save to std /var/log/secure, 
+		# otherwise save to /var/log/{ipaddr}/secure:
+		my $logdir = "/var/log";
+		if ($ipaddr != $localbox) {
+			$logdir = $logdir . "/" . $ipaddr;
+		}
+
+		if (! -d $logdir) {
+			`mkdir -p $logdir`;
+		}
+
+		open( LOG, ">>$logdir/secure" );
+		print LOG $_;
+		close( LOG );
+#		open( FILE, ">>$line[3].secure.log" ) or
+#			print "ERROR: unable to open file $line[3].log for writing: $!\n";
+#		print FILE $_;
+#		close FILE;
+	}
+
+	closelog();	
+	
+#	$loopcnt++;
+#	if ($loopcnt > 5) {
+#		exit( 0 );
+#	}
+}
+
+
+#----- init_daemon -----------------------------------------------------------
+sub init_daemon {
+	chdir '/' or die "Can't chdir to /: $!";
+	umask 0;
+	open STDIN, '/dev/null' or die "Can't read /dev/null: $!";
+	open STDOUT, '>/dev/null' or die "Can't write to /dev/null: $!";
+	open STDERR, '>/dev/null' or die "Can't write to /dev/null: $!";
+	defined( my $pid = fork ) or die "Can't fork: $!";
+	
+	openlog( 'tmxauditlogd-secure', 'cons,pid', 'user' );
+	syslog( "info", "Service started with pid %s.", $pid );
+	closelog();
+
+	exit if $pid;
+	setsid or die "Can't start a new session: $!";
+}
+

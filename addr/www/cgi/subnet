@@ -1,0 +1,165 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::vo;
+use lib::sn;
+use www::cgi::vl;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "detailnew";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+my $errnav = "subnet";
+my $remote_user = $cgi->remote_user;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+
+#----- updateDB --------------------------------------------------------------
+sub updateDB {
+	my $rec;
+	my $subnet_id;	
+
+	if ($ACTION eq "add") {
+		lib::sn::addSn( $dbh, $vars );
+		
+		$rec = lib::sn::getSnByNet( $dbh, $vars->{net} );
+		$subnet_id = $rec->{id};
+	} else {
+		lib::sn::updateSn( $dbh, $vars );
+		$subnet_id = $vars->{id};
+	}
+	www::cgi::helpers::chkDB( $dbh );
+	$dbh->commit;
+}
+
+
+
+
+#---- Main -------------------------------------------------------------------
+
+						#DEBUG
+					   #print STDERR "subnet: ACTION=$ACTION\n";
+					   #foreach my $key (keys( %$vars )) {
+					   #	print STDERR "subnet: $key=$vars->{$key}\n";
+					   #};
+
+
+# Set up the tabmenu:
+$tabmenu = www::cgi::helpers::gen_tabmenu( "ADDR" );
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- detail --------------------------
+if ($ACTION eq "detail") {
+	$htmlview = www::cgi::vl::view_subnet( $dbh, $vars );
+
+
+#---- detailnew --------------------------
+} elsif ($ACTION eq "detailnew") {
+	$htmlview = www::cgi::vl::view_subnet( $dbh, $vars, "ADD" );
+
+
+#---- add --------------------------
+} elsif ($ACTION eq "add") {
+	# Short circuit if not admin acct
+	if ($remote_user ne 'admin') {
+		$htmlview = www::cgi::vl::view_subnet( $dbh, $vars, "ADD" );
+		print $cgi->header;
+		print $htmlview->output;
+		exit 0;
+	}
+
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{net}) {
+		$msg = "Net field is required.";
+		$htmlview = www::cgi::vl::view_subnet( $dbh, $vars, "ADD" );
+	} else {
+		updateDB();
+		# Clear the post vars for subsequent add.
+		$cgi->delete_all();		
+		$htmlview = www::cgi::vl::view_subnet( $dbh, $vars, "ADD" );
+	}
+
+
+#---- update --------------------------
+} elsif ($ACTION eq "update") {
+	# Short circuit if not admin acct
+	if ($remote_user ne 'admin') {
+		$htmlview = www::cgi::vl::view_subnet( $dbh, $vars, "ADD" );
+		print $cgi->header;
+		print $htmlview->output;
+		exit 0;
+	}
+
+	if (!$cgi->param( 'id' )) {
+		$msg = "CGI: $errnav: missing param 'id' for ACTION: [$ACTION]\n";
+		$msg .= "Please contact SysAdmin.\n";
+		www::cgi::helpers::exitonerr( $errnav, $msg );
+	}
+
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{net}) {
+		$msg = "Net field is required.";
+		$htmlview = www::cgi::vl::view_subnet( $dbh, $vars );
+	} else {
+		updateDB();
+		$htmlview = www::cgi::vl::view_ipaddrlist( $dbh, $vars );
+	}
+
+
+#---- unknown --------------------------
+} else {
+	www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: Unknow action value [$ACTION].\n" );
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+# Misc. message to display. Useful for debugging or status messages.
+if ($msg) {
+	$htmlview->param( msg => $msg );
+}
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

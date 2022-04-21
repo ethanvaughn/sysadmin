@@ -1,0 +1,7 @@
+AuthName "Inventory System Login (use guest)"
+AuthType Basic
+AuthUserFile /u01/app/common/www/.roll.htpasswd
+AuthGroupFile /dev/null
+require valid-user
+
+ErrorDocument 401 /common/401

@@ -1,0 +1,7 @@
+dn: cn=sysadmin,ou=Group,dc=tomax,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: sysadmin
+userPassword: {crypt}x
+gidNumber: 60000
+ 

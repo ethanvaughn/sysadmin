@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+use FindBin qw( $Bin );
+use lib "$Bin/..";
+
+#use CGI;
+#use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+
+use lib::hostgroup;
+
+use strict;
+
+
+#---- main -------------------------------------------------------------------
+
+#----- Globals
+#my $q = new CGI;
+
+# Our output is ASCII :
+print "Content-type: text/plain\n\n";
+
+# Print a list of all customers:
+foreach (lib::hostgroup::listCusts()) {
+	print;
+	print "\n";
+}
+
+
+exit (0);

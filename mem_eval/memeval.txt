@@ -1,0 +1,74 @@
+Latest Memory Footprint Findings
+
+Since our meeting last week, i have been experimenting with different methods of interpreting the JPOS memory usage stats. After gathering a week's worth of data, the numbers are settling down and i believe we're seeing useful figures.
+
+Since the shared lib component becomes a significant factor only when a large number of processes are running, the RSS numbers reported by the ps command can be used directly to determine the footprint of all JPOS processes except "otxserv" and the few situations where more than 8-10 "txrep" processes are running.
+
+I have written a series of shell scripts that display the JPOS processes much like the "tmxsrvc -ps" command, but also showing the VSZ and RSS for each.
+
+    ps_crdtmon.sh
+    ps_otranpost.sh
+    ps_otxserv.sh
+    ps_posapisrv.sh
+    ps_txrep.sh
+
+The "pos_footprint.pl" command will take the output from each of the "ps_*" commands and sum them up like so:
+
+    20051128 15:15:01
+       crdtmon:     2     30096
+     otranpost:     1       828
+       otxserv:    35   1452640
+     posapisrv:     1     41508
+         txrep:     3     18788
+                _____ _________ ____________________
+                   42   1543860 [mem+swp:   1501056]
+
+The memory size is in kB. This is merely the total footprint of the RSS for the current JPOS processes (note that in this example the total RSS for just these JPOS procs is slighly greater than total memory used).
+
+
+In an effort to find out true[r] footprint of the "otxserv" process, i've written a two-step diagnostic. The first step is to gather a sample of snapshots showing the number of "otxserv" processes along with the current system memory usage. The second step finds the average memory per process by subtracting the min usage from the max usage and then dividing by max number of processes. Since this is an averaging algorithm, the result becomes more accurate as the number of samples grows through time.
+
+I report average RSS per process as a sanity check.
+
+Here are some examples of the output:
+
+LLBean Jpos01:
+
+	Min/Max
+	 0   253  68022848    268865.01
+	58     3   6673680   2224560.00
+
+	Avg Mem/Proc: [    33718.88]
+	Avg RSS/Proc: [    39055.13]
+
+
+LLBean Jpos02:
+
+	Min/Max
+	  3     5   1948236    389647.20
+	102     1   3593164   3593164.00
+
+	Avg Mem/Proc: [    31407.03]
+	Avg RSS/Proc: [    39269.76]
+
+
+Happy Harry's:
+
+	Min/Max
+	130     1    876540    876540.00
+	452     1   1740828   1740828.00
+
+	Avg Mem/Proc: [     1912.14]
+	Avg RSS/Proc: [     9438.86]
+
+
+
+Note that the HH size per proc of ~2 mB is in line with benchmarks running registers manually from a local sandbox environment. This is also consistent with the ability for the HH pos server to run nearly 500 registers without breaking 2 gB, whereas the LLBean servers break 2 gB around 55-60 registers. This has to do with JPOS client features being used in each particular store. eg. LLBean uses ThinPOS data entry and other features, whereas HH runs plain old registers.
+
+
+At any rate, these tools should allow us to begin to put together models of the different JPOS profiles in use by our current customers to allow for better confidence when estimating server resources.
+
+Please let me know if you find any holes in the analysis above. If all seems ok, we can formalize these tools and come up with a way to deploy them generally.
+
+Thanks for your help. Sorry this email is so lengthy.
+

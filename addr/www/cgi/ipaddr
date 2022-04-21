@@ -1,0 +1,210 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::vo;
+use lib::ip;
+use www::cgi::vl;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $vars = $cgi->Vars;
+my $msg;
+my $errnav = "subnet";
+my $remote_user = $cgi->remote_user;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+#----- updateDB --------------------------------------------------------------
+sub updateDB {
+	my $rec;
+
+	my $ipaddr_id;
+	if ($ACTION eq "add") {
+		# Check to make sure this address doesn't already exist:
+		$rec = lib::ip::getIpByAddr( $dbh, $vars->{ipaddr} );
+		if ($rec->{id}) {
+			www::cgi::helpers::exitonerr( "ipaddr", "The address [" . $vars->{ipaddr} . "] already exists." ); 
+		}
+
+		# If adminip checked, make sure this item doesn't already have an adminip:
+#		my $adminiplist;
+#		if (defined( $vars->{adminip} )) {
+#			$adminiplist = lib::ip::getAdminIp( $dbh, $vars->{item_id} );
+#		}
+#		if ($adminiplist) {
+#			www::cgi::helpers::exitonerr( "ipaddr", "The item [" . $vars->{item_id} . "] already has Admin IP assigned." ); 
+#		}
+
+		lib::ip::addIp( $dbh, $vars );
+
+		$rec = lib::ip::getIpByAddr( $dbh, $vars->{ipaddr} );
+		$ipaddr_id = $rec->{id};
+	} else {
+		lib::ip::updateIp( $dbh, $vars );
+		$ipaddr_id = $vars->{id};
+	}
+	www::cgi::helpers::chkDB( $dbh );
+
+	lib::ip::setTypeLink( $dbh, $ipaddr_id, $vars->{type} );
+	www::cgi::helpers::chkDB( $dbh );
+	
+	$dbh->commit;
+}
+
+
+
+#---- Main -------------------------------------------------------------------
+
+						#DEBUG
+#						print STDERR "ipaddr: ACTION=$ACTION\n";
+#						foreach my $key (keys( %$vars )) {
+#							print STDERR "ipaddr: $key=$vars->{$key}\n";
+#						};
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- list --------------------------
+if ($ACTION eq "list") {
+	$htmlview = www::cgi::vl::view_ipaddrlist( $dbh, $vars );
+
+
+#---- detail --------------------------
+} elsif ($ACTION eq "detail") {
+	$htmlview = www::cgi::vl::view_ipaddr( $dbh, $vars );
+
+
+#---- detailnew --------------------------
+} elsif ($ACTION eq "detailnew") {
+	$htmlview = www::cgi::vl::view_ipaddr( $dbh, $vars, "ADD" );
+	
+	
+#---- add --------------------------
+} elsif ($ACTION eq "add") {
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{ipaddr}) {
+		$msg = "IP Address field is required.";
+		$htmlview = www::cgi::vl::view_ipaddr( $dbh, $vars, "ADD" );
+	} else {
+		updateDB();
+		# Clear the post vars for subsequent add.
+		my $listtype = "";
+		$listtype = $vars->{listtype} if ($vars->{listtype});
+		my $subnet_id = "";
+		$subnet_id = $vars->{subnet_id} if ($vars->{subnet_id});
+		$cgi->delete_all();
+		$vars->{id} = $subnet_id if ($subnet_id);
+		$vars->{listtype} = $listtype if ($listtype);
+
+		if ($subnet_id) {
+			$htmlview = www::cgi::vl::view_ipaddrlist( $dbh, $vars );
+		} else {
+			$htmlview = www::cgi::vl::view_ipaddr( $dbh, $vars, "ADD" );
+		}
+	}
+
+
+#---- update --------------------------
+} elsif ($ACTION eq "update") {
+	if (!$cgi->param( 'id' )) {
+		$msg = "CGI: $errnav: missing param 'id' for ACTION: [$ACTION]\n";
+		$msg .= "Please contact SysAdmin.\n";
+		www::cgi::helpers::exitonerr( $errnav, $msg );
+	}
+
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	my $navback;
+	push( @$navback, "ipaddr" );
+	push( @$navback, "action=list" );
+	push( @$navback, "Title" );
+
+	if (!$vars->{ipaddr}) {
+		$msg = "IP Address field is required.";
+		$htmlview = www::cgi::vl::view_ipaddr( $dbh, $vars );
+	} else {
+		updateDB();
+		# Reset the vars for the list display:
+		if ($vars->{subnet_id}) {
+			$vars->{id} = $vars->{subnet_id};
+		}
+		if ($vars->{listtype} && $vars->{listtype} eq "FULL" ) {
+			# Remove the subnet id so we return back to the full list:
+			delete( $vars->{id} );
+		}
+		$htmlview = www::cgi::vl::view_ipaddrlist( $dbh, $vars );
+	}
+
+
+
+#----- del -----------------------------
+} elsif ($ACTION eq "del") {
+	if (!$cgi->param( 'id' )) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'id' for ACTION: [$ACTION]\n" );
+	}
+	lib::ip::delIp( $dbh, $cgi->param( 'id' ) );
+	$dbh->commit;
+
+	# Reset the vars for the list display:
+	if ($vars->{subnet_id}) {
+		$vars->{id} = $vars->{subnet_id};
+	}
+	if ($vars->{listtype} && $vars->{listtype} eq "FULL" ) {
+		# Remove the subnet id so we return back to the full list:
+		delete( $vars->{id} );
+	}	
+	$htmlview = www::cgi::vl::view_ipaddrlist( $dbh, $vars );
+
+
+#---- unknown --------------------------
+} else {
+	www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: Unknow action value [$ACTION].\n" );
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+# Misc. message to display. Useful for debugging or status messages.
+if ($msg) {
+	$htmlview->param( msg => $msg );
+}
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

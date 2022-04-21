@@ -1,0 +1,10 @@
+
+
+
+* Thu 27 Jul 2006 Ethan Vaughn
+
+In order to keep these as somewhat stand-alone scripts, we will copy/paste the 
+http connection functions rather than splitting into a separate module. Think
+of it as "statically linked".
+
+

@@ -1,0 +1,397 @@
+: Saved
+:
+ASA Version 7.0(6)
+!
+terminal width 160
+hostname demofw01
+domain-name tomax.com
+enable password mYeNr0cSeWbBfOBq encrypted
+no names
+dns-guard
+!
+interface Ethernet0/0
+ nameif External
+ security-level 0
+ ip address 66.133.106.11 255.255.254.0
+!
+interface Ethernet0/1
+ nameif Internal
+ security-level 100
+ ip address 10.24.74.161 255.255.255.224
+!
+interface Ethernet0/2
+ no nameif
+ no security-level
+ no ip address
+!
+interface Ethernet0/2.1
+ vlan 410
+ nameif demoDMZ1
+ security-level 100
+ ip address 10.24.74.225 255.255.255.224
+!
+interface Ethernet0/2.2
+ vlan 411
+ nameif hostingDMZ
+ security-level 100
+ ip address 10.24.73.225 255.255.255.224
+!
+interface Management0/0
+ nameif Mgmt
+ security-level 100
+ ip address 10.24.50.5 255.255.255.0
+ management-only
+!
+passwd iUv7bRNeILfdnTK7 encrypted
+ftp mode passive
+clock timezone MST -7
+object-group network vpnLocal
+ network-object 10.24.74.160 255.255.255.224
+ network-object host 10.24.74.230
+object-group network vpnRemote
+ network-object host 10.24.74.9
+ network-object host 10.24.74.10
+ network-object host 10.24.74.12
+ network-object host 10.24.74.13
+ network-object host 10.24.74.14
+ network-object host 10.24.74.19
+ network-object host 10.24.74.20
+ network-object 172.30.230.0 255.255.254.0
+object-group network demo10
+ network-object host 66.133.106.19
+object-group service demo10Ports tcp
+ port-object eq www
+ port-object eq sqlnet
+object-group network demo11
+ network-object host 66.133.106.20
+object-group service demo11Ports tcp
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7711
+ port-object eq 8990
+ port-object eq 8991
+ port-object eq 8992
+ port-object eq 16009
+ port-object eq 16109
+ port-object eq 16110
+ port-object eq 16111
+ port-object eq 7779
+ port-object eq 3060
+ port-object eq 16004
+ port-object eq 8993
+ port-object eq 16112
+ port-object eq 16012
+ port-object eq 8994
+ port-object eq 16113
+ port-object eq 16013
+ port-object eq 7780
+ port-object eq 16001
+ port-object eq 8995
+ port-object eq 16114
+ port-object eq 16014
+ port-object eq 8996
+ port-object eq 16015
+ port-object eq 16115
+ port-object eq 8997
+ port-object eq 16016
+ port-object eq 16116
+ port-object eq 8998
+ port-object eq 16017
+ port-object eq 16117
+ port-object eq www
+ port-object eq 81
+ port-object eq 7781
+ port-object eq 7782
+ port-object eq 12407
+ port-object eq 8080
+ port-object eq 1099
+ port-object eq 16464
+ port-object eq 16565
+ port-object eq 16666
+ port-object eq 16767
+ port-object eq 16868
+ port-object eq sqlnet
+ port-object eq telnet
+object-group network demo12
+ network-object host 66.133.106.21
+object-group service demo12Ports tcp
+ port-object eq www
+ port-object eq 7779
+ port-object eq 7778
+ port-object eq 9081
+ port-object eq 81
+ port-object eq 8082
+ port-object eq 7780
+ port-object eq 8380
+ port-object eq 8888
+ port-object eq 8180
+ port-object eq 8480
+ port-object eq 8580
+ port-object eq 8080
+object-group network demo13
+ network-object host 66.133.106.22
+object-group service demo13Ports tcp
+ port-object eq www
+ port-object eq 9080
+ port-object eq 7777
+ port-object eq 7780
+ port-object eq 6668
+ port-object eq 8480
+object-group service u19u31Ports tcp
+ port-object eq 9080
+ port-object eq 9085
+object-group network u19u31
+ network-object host 66.133.106.23
+object-group network demo10Int
+ network-object host 10.24.74.170
+object-group service demo10IntPorts tcp
+ port-object eq sqlnet
+object-group network HallmarkNAT
+ network-object host 66.133.106.71
+object-group service HallmarkPorts tcp
+ port-object eq 7778
+ port-object eq 1522
+ port-object eq 8990
+object-group network KalTireNAT
+ network-object host 66.133.106.72
+object-group service KalTirePorts tcp
+ port-object eq 1099
+ port-object eq 7780
+ port-object eq 33658
+ port-object eq www
+ port-object eq 7779
+ port-object eq 7778
+ port-object eq 9081
+ port-object eq 81
+ port-object eq 8082
+ port-object eq 8380
+ port-object eq 8888
+ port-object eq 8180
+ port-object eq 8480
+ port-object eq 8580
+ port-object eq 8080
+ port-object eq 8280
+ port-object eq 8991
+ port-object eq 8950
+ port-object eq 8680
+ port-object eq 16009
+ port-object eq 16110
+ port-object eq 8951
+object-group network asteriskLocal
+ network-object host 10.24.73.230
+ network-object host 10.24.73.232
+object-group network asteriskRemote
+ network-object 208.72.186.128 255.255.255.240
+ network-object 208.72.190.128 255.255.255.240
+ network-object 72.55.158.128 255.255.255.128
+object-group service asteriskPorts tcp-udp
+ port-object eq 4569
+ port-object range 8000 8010
+object-group network asteriskNAT
+ network-object host 66.133.106.58
+object-group service asteriskPorts1 tcp-udp
+ port-object eq sip
+ port-object range 8000 8010
+ port-object range 8000 8020
+object-group network cvpnDMZ
+ network-object 10.200.5.0 255.255.255.0
+object-group network demoDMZ1
+ network-object host 10.24.74.230
+object-group network portalLocal
+ network-object host 10.24.73.231
+object-group network portalNAT
+ network-object host 66.133.106.59
+object-group network pivotlinkRemote
+ network-object 72.5.220.0 255.255.254.0
+ network-object 69.90.134.96 255.255.255.224
+ network-object 67.152.57.128 255.255.255.224
+ network-object 71.216.187.245 255.255.255.255
+ network-object 71.216.187.246 255.255.255.255
+object-group network KalTireNAT1
+ network-object host 66.133.106.182
+object-group service KalTirePorts1 tcp
+ port-object eq 8080
+ port-object eq 1527
+ port-object eq 8000
+object-group service demovmPorts tcp
+ port-object eq 8080
+ port-object eq 8180
+ port-object eq 8280
+ port-object eq 8380
+ port-object eq 8480
+ port-object eq 8580
+ port-object eq 8680
+ port-object eq 5444
+object-group network demoVM
+ network-object host 66.133.106.180
+object-group network wdcTest
+ network-object 10.10.10.0 255.255.255.0
+ network-object 172.33.132.0 255.255.255.0
+access-list noNAT extended permit ip object-group vpnLocal object-group vpnRemote
+access-list noNAT extended permit ip object-group demoDMZ1 object-group cvpnDMZ
+access-list noNAT extended permit ip object-group vpnLocal object-group wdcTest
+access-list tmxVPN extended permit ip object-group vpnLocal object-group vpnRemote
+access-list inbound extended permit tcp any object-group demo11 object-group demo11Ports
+access-list inbound extended permit tcp any object-group demo12 object-group demo12Ports
+access-list inbound extended permit tcp any object-group demo13 object-group demo13Ports
+access-list inbound extended permit tcp any object-group u19u31 object-group u19u31Ports
+access-list inbound extended permit tcp any object-group demo10 object-group demo10Ports
+access-list inbound extended permit tcp any object-group HallmarkNAT object-group HallmarkPorts
+access-list inbound extended permit tcp any object-group KalTireNAT object-group KalTirePorts
+access-list inbound extended permit udp object-group asteriskRemote object-group asteriskLocal object-group asteriskPorts
+access-list inbound extended permit tcp object-group asteriskRemote object-group asteriskLocal object-group asteriskPorts
+access-list inbound extended permit icmp object-group asteriskRemote object-group asteriskNAT
+access-list inbound extended permit udp any object-group asteriskNAT object-group asteriskPorts1
+access-list inbound extended permit tcp object-group pivotlinkRemote object-group portalNAT eq ftp
+access-list inbound extended permit tcp object-group pivotlinkRemote object-group portalNAT eq ftp-data
+access-list inbound extended permit tcp any object-group portalNAT eq https
+access-list inbound extended permit tcp any object-group portalNAT eq http
+access-list inbound extended permit tcp any object-group KalTireNAT1 object-group KalTirePorts1
+access-list inbound extended permit tcp any object-group demoVM object-group demovmPorts
+access-list dmz1Out extended permit ip object-group demoDMZ1 object-group cvpnDMZ
+access-list ST standard permit host 10.24.74.230
+access-list extended extended permit tcp any object-group vpnLocal object-group demovmPorts inactive
+access-list wdcTest extended permit ip object-group vpnLocal object-group wdcTest
+pager lines 24
+logging enable
+logging buffered debugging
+logging trap errors
+logging asdm warnings
+logging host Internal 10.24.74.13
+mtu External 1500
+mtu Internal 1500
+mtu demoDMZ1 1500
+mtu hostingDMZ 1500
+mtu Mgmt 1500
+ip local pool coDev 10.200.5.2-10.200.5.254
+icmp permit any Internal
+asdm image disk0:/asdm506.bin
+asdm history enable
+arp timeout 14400
+global (External) 1 interface
+nat (Internal) 0 access-list noNAT
+nat (Internal) 1 10.24.74.160 255.255.255.224
+nat (demoDMZ1) 0 access-list noNAT
+nat (hostingDMZ) 0 access-list noNAT
+static (Internal,External) 66.133.106.19 10.24.74.170 netmask 255.255.255.255
+static (Internal,External) 66.133.106.20 10.24.74.171 netmask 255.255.255.255
+static (Internal,External) 66.133.106.22 10.24.74.175 netmask 255.255.255.255
+static (Internal,External) 66.133.106.23 10.24.74.176 netmask 255.255.255.255
+static (Internal,External) 66.133.106.21 10.24.74.174 netmask 255.255.255.255
+static (Internal,External) 66.133.106.72 10.24.74.185 netmask 255.255.255.255
+static (hostingDMZ,External) 66.133.106.58 10.24.73.230 netmask 255.255.255.255
+static (hostingDMZ,External) 66.133.106.59 10.24.73.231 netmask 255.255.255.255
+static (hostingDMZ,External) 66.133.106.57 10.24.73.232 netmask 255.255.255.255
+static (Internal,External) 66.133.106.182 10.24.74.182 netmask 255.255.255.255
+static (Internal,External) 66.133.106.180 10.24.74.180 netmask 255.255.255.255
+access-group inbound in interface External
+access-group dmz1Out in interface demoDMZ1
+route External 208.177.140.0 255.255.255.0 66.133.106.4 1
+route External 0.0.0.0 0.0.0.0 66.133.106.1 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00
+timeout mgcp-pat 0:05:00 sip 0:30:00 sip_media 0:02:00
+timeout uauth 0:05:00 absolute
+aaa-server TACACS+ protocol tacacs+
+aaa-server RADIUS protocol radius
+group-policy lesPolicy internal
+group-policy lesPolicy attributes
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value ST
+ webvpn
+username schwab1 password 6STnqacNrgtr7LnP encrypted
+username schwab1 attributes
+ vpn-group-policy lesPolicy
+ vpn-simultaneous-logins 1
+ password-storage enable
+ group-lock value coDev
+ webvpn
+username schwab2 password P4D1ni0RU7VepGSD encrypted
+username schwab2 attributes
+ vpn-group-policy lesPolicy
+ vpn-simultaneous-logins 1
+ password-storage enable
+ group-lock value coDev
+ webvpn
+username schwab3 password .LZgEtedzhdA7Nq3 encrypted
+username schwab3 attributes
+ vpn-group-policy lesPolicy
+ vpn-simultaneous-logins 1
+ password-storage enable
+ group-lock value coDev
+ webvpn
+username schwab4 password txoAHuyy3aoITcN9 encrypted
+username schwab4 attributes
+ vpn-group-policy lesPolicy
+ vpn-simultaneous-logins 1
+ password-storage enable
+ group-lock value coDev
+ webvpn
+username sherring password MW5/VUvH8HHL84bd encrypted
+username sherring attributes
+ vpn-group-policy lesPolicy
+ vpn-simultaneous-logins 1
+ password-storage enable
+ group-lock value coDev
+ webvpn
+username root password dn444tw40ssU0/6. encrypted privilege 15
+snmp-server host Internal 10.24.74.9 community public
+no snmp-server location
+no snmp-server contact
+snmp-server community public
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+crypto ipsec transform-set 3desmd5 esp-3des esp-md5-hmac
+crypto dynamic-map cvpn 1 set transform-set 3desmd5
+crypto dynamic-map cvpn 1 set reverse-route
+crypto map vpn 1 match address tmxVPN
+crypto map vpn 1 set peer 66.133.106.5
+crypto map vpn 1 set transform-set 3desmd5
+crypto map vpn 2 match address wdcTest
+crypto map vpn 2 set peer 66.133.106.105
+crypto map vpn 2 set transform-set 3desmd5
+crypto map vpn 100 ipsec-isakmp dynamic cvpn
+crypto map vpn interface External
+isakmp identity address
+isakmp enable External
+isakmp policy 1 authentication pre-share
+isakmp policy 1 encryption 3des
+isakmp policy 1 hash md5
+isakmp policy 1 group 2
+isakmp policy 1 lifetime 86400
+isakmp nat-traversal  20
+tunnel-group 66.133.106.5 type ipsec-l2l
+tunnel-group 66.133.106.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group coDev type ipsec-ra
+tunnel-group coDev general-attributes
+ address-pool coDev
+tunnel-group coDev ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.106.105 type ipsec-l2l
+tunnel-group 66.133.106.105 ipsec-attributes
+ pre-shared-key *
+telnet timeout 5
+ssh 0.0.0.0 0.0.0.0 External
+ssh timeout 45
+console timeout 30
+management-access Internal
+dhcpd address 10.24.50.6-10.24.50.6 Mgmt
+dhcpd lease 3600
+dhcpd ping_timeout 750
+dhcpd enable Mgmt
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map global_policy
+ class inspection_default
+policy-map asa_global_fw_policy
+ class inspection_default
+  inspect ftp
+!
+service-policy asa_global_fw_policy global
+tftp-server External 66.133.106.76 demobackup
+Cryptochecksum:5a6f507f2d9c3467ab7b9f2c197a226b
+: end

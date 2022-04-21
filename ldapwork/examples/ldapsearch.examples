@@ -1,0 +1,5 @@
+# See RFC 2254 for ldap filter definitions
+
+ldapsearch -x -LLL '(&(objectClass=account)(|(gecos=sysadmin)))' dn uidNumber gidNumber homeDirectory userPassword gecos
+ldapsearch -x -LLL '(&(objectClass=posixGroup)(|(cn=sysadmin)))' dn gidNumber memberUid
+ldapsearch -x -LLL 'objectClass=account' dn uidNumber gidNumber gecos homeDirectory | grep -A4 rblack

@@ -1,0 +1,7 @@
+AuthName "App Log Monitoring: Acknowledgement"
+AuthType Basic
+AuthUserFile /Users/ethan/work/tomax-work/sysadmin/common/www/.htpasswd
+AuthGroupFile /dev/null
+require valid-user
+
+ErrorDocument 401 /common/401

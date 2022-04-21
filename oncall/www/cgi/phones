@@ -1,0 +1,49 @@
+#!/usr/bin/perl -w
+
+use strict;
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use lib::oncallapi;
+
+my $rs = lib::oncallapi::getGroupMemberPhone();
+if (ref($rs) eq 'ARRAY') {
+	# $rs is an array ref containing all of the contacts and their respective group memberships
+	my $content; # String that will be printed out at the end
+	foreach my $rec (@$rs) {
+		# We need to validate that the record has all of the necessary elements
+		if (validateRecord($rec)) {
+			my $string = sprintf('%s|%s:%s%s',$rec->{group_name},$rec->{contact_name},$rec->{phone},"\r\n");
+			$content.= $string;
+		}
+	}
+	printContent(\$content);
+} else {
+	my $error = sprintf('!%s!',lib::oncallapi::dberr());
+	printContent(\$error);
+}
+
+sub validateRecord {
+	my $rec = shift;
+	if (exists($rec->{group_name}) && exists($rec->{contact_name}) && exists($rec->{phone})) {
+		# We know there is a group and contact, just need to make sure that phone is
+		# a really valid phone number
+		if ($rec->{phone} =~ /^\d+$/) {
+			return 1;
+		} else {
+			return 0;
+		}
+	} else {
+		return 0;
+	}
+}
+
+sub printContent {
+	my $content = shift;
+	print 'Content-type: text/plain',"\n\n";
+	if (ref($content) eq 'SCALAR') {
+		print $$content;
+	} else {
+		print '!UNKNOWN ERROR!';
+	}
+}

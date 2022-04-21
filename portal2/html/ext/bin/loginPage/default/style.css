@@ -1,0 +1,38 @@
+#loginPage{
+	width: 570px;
+	margin: 45px auto;
+	backgroud-color: #F4F4F4;
+	border: 3px solid #407899;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#login-form{
+	margin: 12px;
+}
+#login-form input{
+	border: 1px solid #407899;
+	color: black;
+}
+#login-form > div{
+	display: inline-block;
+}
+
+#password-div{
+	margin-left: 12px;
+}
+
+#login-submit{
+	float: right;
+	border: 1px solid #407899;
+	color: black;
+	background-color: #F4F4F4;
+	cursor: pointer;
+}
+
+#error-msg{
+	text-align:center;
+	margin:10px;
+	color: #EA5A64;
+}

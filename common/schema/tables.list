@@ -1,0 +1,11 @@
+# tables.list
+# Variables that list the sequence for table creation and deletion for use
+# with the "droptables.sh" and "loadschema.sh" scripts.
+
+# List of tables in the order to create:
+TABLES="item property subnet ipaddr ipitemlink iptype iptypelink posixaccount"
+SEQ="item_id_seq property_id_seq ipaddr_id_seq iptype_id_seq subnet_id_seq posixaccount_id_seq"
+
+# List of tables in correct drop sequence (referencing tables first):
+DROPTABLES="item property ipitemlink iptypelink ipaddr iptype subnet posixaccount"
+

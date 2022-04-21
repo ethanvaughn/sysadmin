@@ -1,0 +1,1 @@
+ldapadd -x -D 'cn=manager,dc=tomax,dc=com' -w secret -f /tmp/ldapuseradd.sh.tmp

@@ -1,0 +1,372 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::property;
+use lib::template;
+use lib::vo;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+my $msg2;
+my $errnav = "template";
+my $remote_user = $cgi->remote_user;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+
+#----- view ----------------------------------------------------------
+# Parameters: none.
+sub view {
+	my $debug;
+
+	# Get a list of templates.
+	my $tmpl_list = lib::template::getTemplateList( $dbh );
+	www::cgi::helpers::chkDB( $dbh );
+
+	# Get a list of properties
+	my $prop_list = lib::property::getPropList( $dbh ); 
+	www::cgi::helpers::chkDB( $dbh );
+
+	my @proploop;
+	if ($vars->{tmplid}) {
+		# Get the related properties for the selected template: 
+		my $tmpl_prop_list = lib::template::getTemplatePropList( $dbh, $vars->{tmplid} );
+		www::cgi::helpers::chkDB( $dbh );
+
+		# Make the property loop data structure
+		my $tabindex = 10;
+		foreach my $name (sort keys( %{$prop_list} )) {
+			my $checked = "";
+			$checked = ' checked ' if (exists( $tmpl_prop_list->{$name} ));
+			my $rec = {
+				tabindex => $tabindex++,
+				checked  => $checked,
+				propid   => $prop_list->{$name}->{id},
+				propname => $prop_list->{$name}->{name}
+			};
+			push( @proploop, $rec );
+		}
+		
+		# Add the users field and determine if it's checked (assigned) 
+		my $checked = ' checked ' if (lib::template::useFieldUsers( $dbh, $vars->{tmplid} ));
+		my $rec = {
+			tabindex => $tabindex++,
+			checked  => $checked,
+			propid   => "Users",
+			propname => "Users"
+		};
+		push( @proploop, $rec );
+	}
+
+
+	# Get a list of fields
+	my $field_list = lib::template::getFieldList( $dbh, $vars->{tmplid} ); 
+	www::cgi::helpers::chkDB( $dbh );
+
+	my @fieldloop;
+	if ($vars->{tmplid}) {
+		# Get the related fields for the selected template: 
+		my $tmpl_field_list = lib::template::getTemplateFieldList( $dbh, $vars->{tmplid} );
+		www::cgi::helpers::chkDB( $dbh );
+
+		# Make the field loop data structure
+		my $tabindex = 100;
+		foreach my $name (sort keys( %{$field_list} )) {
+			my $rec = {
+				tabindex    => $tabindex++,
+				field_name  => $field_list->{$name}->{field_name},
+				field_label => $field_list->{$name}->{field_label}
+			};
+			# Display the previous value:
+			$rec->{field_order} = "";
+			if (exists( $tmpl_field_list->{$name}->{field_order} )) {
+				$rec->{field_order} = $tmpl_field_list->{$name}->{field_order};
+			}
+
+			push( @fieldloop, $rec );
+		}
+	}
+
+
+	# Assemble the main template <select> drop-down: 	
+	my $select_tmpl = lib::template::getTemplateDropdown( 
+		"reloadSelect( 'select_tmpl', 'template', 'tmplid' )", 
+		$vars, 
+		$tmpl_list,
+		0
+	);
+	
+	
+	# DEBUG
+	# Comment the lines between /DEBUG to silence. 
+#	$debug .= "<p>ACTION=$ACTION</p>";
+#	foreach my $key (keys( %$vars )) {
+#		$debug .= "$key=$vars->{$key}<br/>";
+#	};
+	# /DEBUG
+
+
+	# Set up the view: 
+	$htmlview = HTML::Template->new( filename => "../tmpl/template.tmpl", loop_context_vars => 1 );
+	$htmlview->param( tabmenu          => $tabmenu );
+	$htmlview->param( subtitle         => "Template Maintenance" );
+	$htmlview->param( user             => $remote_user );
+	$htmlview->param( ADMIN            => $remote_user ) if ($remote_user eq "admin");
+	$htmlview->param( navback          => $vars->{navback} ) if ($vars->{navback});
+	$htmlview->param( navbackaction    => $vars->{navbackaction} ) if ($vars->{navbackaction});
+	$htmlview->param( navbackid        => $vars->{navbackid} ) if ($vars->{navbackid});
+	$htmlview->param( navbackdescr     => $vars->{navbackdescr} ) if ($vars->{navbackdescr});
+	$htmlview->param( msg              => $msg )   if ($msg);
+	$htmlview->param( msg2             => $msg2 )  if ($msg2);
+	$htmlview->param( debug            => $debug ) if ($debug);
+
+	$htmlview->param( select_tmpl      => $select_tmpl );
+	$htmlview->param( tmplid           => $vars->{tmplid} )   if ($vars->{tmplid});
+	$htmlview->param( tmplname         => $vars->{tmplname} ) if ($vars->{tmplname});
+
+	$htmlview->param( proploop        => \@proploop )  if (@proploop);
+	$htmlview->param( fieldloop       => \@fieldloop ) if (@fieldloop);
+
+	print $cgi->header;
+	print $htmlview->output;
+	exit (0);
+}
+
+
+
+#---- Main -------------------------------------------------------------------
+
+
+# Set up the tabmenu:
+$tabmenu = www::cgi::helpers::gen_tabmenu( "INV" );
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- list --------------------------
+if ($ACTION eq "list") {
+	view();
+
+
+#----- update -----------------------------
+} elsif ($ACTION eq "update") {
+	if (!$vars->{tmplid}) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'tmplid' for ACTION: [$ACTION]\n" );
+	}
+
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{tmplname}) {
+		$msg = "Name field is required.";
+		view();
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	# Update the database
+	if (!lib::template::updateTemplate( $dbh, $vars )) {
+		$msg = $dbh->errstr;
+		if ($msg =~ /duplicate.*unique/) {
+			$msg = "The template name '$vars->{tmplname}' already exists.<br/>Please choose a new template name.";
+		} else {
+			$msg = "Unable to update template.<br/>Please contact administrator.";
+			print STDERR "Updating template: $vars->{tmplname}, tmplid=$vars->{tmplid}\n";
+			$dbh->rollback;
+			www::cgi::helpers::exitonerr( "$errnav?tmplid=" . $vars->{tmplid}, $msg );
+		}
+		$dbh->rollback;
+		view();
+	}
+	$dbh->commit;
+	view();
+
+
+
+
+#----- add -----------------------------
+} elsif ($ACTION eq "add") {
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{tmplname} || $vars->{tmplname} eq '') {
+		$msg = "Name field is required.";
+		view();
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	my $tmp_id = lib::template::addTemplate( $dbh, $vars );
+	if (!$tmp_id) {
+		$msg = $dbh->errstr;
+		if ($msg =~ /duplicate.*unique/) {
+			$msg = "The template name '$vars->{tmplname}' already exists.<br/>Please choose a new template name.";
+		} else {
+			$msg = "Unable to add template.<br/>Please contact administrator.";
+			print STDERR "Adding template: $vars->{tmplname}, tmplid=$vars->{tmplid}\n";
+			$dbh->rollback;
+			www::cgi::helpers::exitonerr( "$errnav?tmplid=" . $vars->{tmplid}, $msg );
+		}
+		$dbh->rollback;
+		view();
+	}
+	$dbh->commit;
+
+	$vars->{tmplid} = $tmp_id;
+
+	# Reset the form variables and show add form again:
+	delete($vars->{tmplname});
+	view();
+
+
+
+
+#----- del -----------------------------
+} elsif ($ACTION eq "del") {
+	if (!$vars->{id}) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'propid' for ACTION: [$ACTION]\n" );
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	lib::template::delTemplateById( $dbh, $vars->{id} ) ? $dbh->commit : $dbh->rollback;
+	delete( $vars->{id} );
+	delete( $vars->{tmplname} );
+	view();
+	
+	
+
+
+#----- updatetmplprop -----------------------------
+} elsif ($ACTION eq "updatetmplprop") {
+	if (!$vars->{tmplid}) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'propid' for ACTION: [$ACTION]\n" );
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+	
+	# Update the database ....
+	# Clear the users field: 
+	lib::template::clearUserLink( $dbh, $vars->{tmplid} );
+	my @propids;
+	foreach my $key (keys( %{$vars} )) {
+		if ($key =~ /^chk/ && $key !~ /Users/) {
+			push( @propids, $vars->{$key} );
+		}
+		if ($key =~ /Users/) {
+			lib::template::setUserLink( $dbh, $vars->{tmplid} );
+		}
+	}
+	lib::template::setPropLinks( $dbh, $vars->{tmplid}, \@propids ) ? $dbh->commit : $dbh->rollback;
+	view();
+
+
+
+
+
+#----- updatetmplfields -----------------------------
+} elsif ($ACTION eq "updatetmplfields") {
+	if (!$vars->{tmplid}) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'propid' for ACTION: [$ACTION]\n" );
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+	
+	# Update the database ....
+	my @fields;
+	# Process fields in alphabetical order: 
+	foreach my $key (sort keys( %{$vars} )) {
+		if ($key =~ /^order_(.*)/ && $vars->{$key}) {
+			my $field_name = $1;
+			my $pos = $vars->{$key};
+			# Move to the end of the list if the input is not an integer.
+			$pos = 999 if ($pos =~ /\D/);
+			push( @fields, {field_order => $pos, field_name => $field_name} );
+		}
+	}
+	lib::template::setTemplateFields( $dbh, $vars->{tmplid}, \@fields ) ? $dbh->commit : $dbh->rollback;
+	view();
+
+
+
+
+
+#---- unknown --------------------------
+} else {
+	www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: Unknow action value [$ACTION].\n" );
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+# Misc. message to display. Useful for debugging or status messages.
+if ($msg) {
+	$htmlview->param( msg => $msg );
+}
+
+# Catch-all
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

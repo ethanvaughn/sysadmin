@@ -1,0 +1,36 @@
+<html>
+<head>
+ <title>Unacknowledged Problems - Please Wait...</title>
+ <meta http-equiv="refresh" content="20;url=<tmpl_var name=cgi>" />
+ <tmpl_include name='/u01/app/ack/www/tmpl/ack_css.tmpl'>
+</head>
+<body>
+<form name="counter">
+ <p class='info'>Please wait <input type="text" size="4" name="d2"> seconds for this request to be processed</p>
+</form> 
+<script> 
+<!-- 
+	// 
+	var milisec=0 
+	var seconds=20
+	document.counter.d2.value='20' 
+
+	function display(){ 
+		if (milisec<=0){ 
+		milisec=9 
+		seconds-=1 
+	} 
+ 	if (seconds<=-1){ 
+		milisec=0 
+		seconds+=1 
+	} 
+	else 
+		milisec-=1 
+		document.counter.d2.value=seconds+"."+milisec 
+		setTimeout("display()",100) 
+	} 
+	display() 
+--> 
+</script> 
+</body>
+</html>

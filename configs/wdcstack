@@ -1,0 +1,566 @@
+Building configuration...
+
+Current configuration : 12599 bytes
+!
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+service password-encryption
+!
+hostname wdcstack
+!
+enable secret 5 $1$NO0i$dwNPSvkplOD/g92dC4U4V0
+!
+no aaa new-model
+switch 1 provision ws-c3750g-24t
+switch 2 provision ws-c3750g-24ts-1u
+switch 3 provision ws-c3750g-24t
+switch 4 provision ws-c3750g-24t
+ip subnet-zero
+ip routing
+!
+!
+!
+!
+no file verify auto
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+interface Port-channel1
+ description TMX Nearstore L28
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+!
+interface Port-channel2
+ description G25U43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel4
+ description G29U43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel5
+ description TMXNAS01 G26
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+!
+interface Port-channel6
+ description TMXNAS02 G26
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/1
+ description G25U43
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode on
+!
+interface GigabitEthernet1/0/2
+ description switch01
+ no switchport
+ ip address 10.24.50.1 255.255.255.0
+!
+interface GigabitEthernet1/0/3
+ switchport access vlan 102
+!
+interface GigabitEthernet1/0/4
+ description wdcfwterm01 Inside Interface
+ no switchport
+ ip address 10.24.51.254 255.255.255.0
+!
+interface GigabitEthernet1/0/5
+ description G26U04 - Les Video LAN
+!
+interface GigabitEthernet1/0/6
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+ channel-group 5 mode on
+!
+interface GigabitEthernet1/0/7
+ description BJM X16U05 Filer
+ switchport access vlan 401
+!
+interface GigabitEthernet1/0/8
+ description wdcvpn10
+ switchport access vlan 10
+!
+interface GigabitEthernet1/0/9
+ description Backup Network uplink to hmcstack-2/0/8
+ switchport access vlan 401
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/10
+ description KM Q19U02 Filer
+ switchport access vlan 401
+!
+interface GigabitEthernet1/0/11
+ description G29U43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 4 mode on
+!
+interface GigabitEthernet1/0/12
+ description wdcvpn11 outside
+ switchport access vlan 102
+!
+interface GigabitEthernet1/0/13
+ description L26U42 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/14
+ description L26U43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/15
+ description L25U42 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/16
+ description L25U43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/17
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface GigabitEthernet1/0/18
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface GigabitEthernet1/0/19
+ description L27U43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/20
+ description L27U42 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/21
+ description KM Primary ASA FW
+ switchport access vlan 102
+!
+interface GigabitEthernet1/0/22
+ description KM ADP Router
+ switchport access vlan 102
+!
+interface GigabitEthernet1/0/23
+ description KMP Meriplex Server
+ switchport access vlan 102
+!
+interface GigabitEthernet1/0/24
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+ channel-group 5 mode on
+!
+interface GigabitEthernet2/0/1
+ description G25U43
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode on
+!
+interface GigabitEthernet2/0/2
+ description switch01
+ no switchport
+ ip address 10.24.52.1 255.255.255.0
+!
+interface GigabitEthernet2/0/3
+ switchport access vlan 102
+!
+interface GigabitEthernet2/0/4
+ description fwterm02 Inside Interface
+ switchport access vlan 400
+!
+interface GigabitEthernet2/0/5
+ description BJM-First Data vpn to Suntrust
+ switchport access vlan 102
+ speed 100
+ duplex full
+!
+interface GigabitEthernet2/0/6
+ description BJM VPN Router
+ switchport access vlan 102
+ speed 100
+ duplex full
+!
+interface GigabitEthernet2/0/7
+ description Linksys AP
+!
+interface GigabitEthernet2/0/8
+ description BJM Secondary ASA
+ switchport access vlan 102
+!
+interface GigabitEthernet2/0/9
+ description wdcvpn10 outside
+ switchport access vlan 102
+!
+interface GigabitEthernet2/0/10
+ description KM Q19U11 Filer
+ switchport access vlan 401
+!
+interface GigabitEthernet2/0/11
+ description G29U43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 4 mode on
+!
+interface GigabitEthernet2/0/12
+ description G29U42 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet2/0/13
+ description L26U42 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet2/0/14
+ description L26U43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet2/0/15
+ description L25U42 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet2/0/16
+ description L25U43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet2/0/17
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface GigabitEthernet2/0/18
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface GigabitEthernet2/0/19
+ description L27U43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet2/0/20
+ description L27U42 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet2/0/21
+ description KM Secondary ASA FW
+ switchport access vlan 102
+!
+interface GigabitEthernet2/0/22
+ description KM VPN Concentrator
+ switchport access vlan 102
+!
+interface GigabitEthernet2/0/23
+!
+interface GigabitEthernet2/0/24
+ description HMC Corp Netscreen g30u02-0/0
+ switchport access vlan 102
+!
+interface GigabitEthernet2/0/25
+ description XO to SDC
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ speed nonegotiate
+!
+interface GigabitEthernet2/0/26
+!
+interface GigabitEthernet2/0/27
+ description XO to Tomax
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet2/0/28
+!
+interface GigabitEthernet3/0/1
+ description G26U04 - LES Video WAN
+ switchport access vlan 100
+!
+interface GigabitEthernet3/0/2
+ description Firewall - Inside MB
+ switchport access vlan 14
+!
+interface GigabitEthernet3/0/3
+ description CONSONUS WC2 3/13 - Internet
+ switchport access vlan 102
+ speed 100
+ duplex full
+ no mdix auto
+!
+interface GigabitEthernet3/0/4
+ description Firewall - Inside SPG
+ switchport access vlan 7
+!
+interface GigabitEthernet3/0/5
+ description CONSONUS WC2 3/12 - SDC Connection
+ switchport access vlan 163
+ speed 100
+ duplex full
+ no mdix auto
+!
+interface GigabitEthernet3/0/6
+ description Firewall - Inside ATG
+ switchport access vlan 3
+!
+interface GigabitEthernet3/0/7
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+ channel-group 6 mode on
+!
+interface GigabitEthernet3/0/8
+ description Firewall - Inside DEMO
+ switchport access vlan 6
+!
+interface GigabitEthernet3/0/9
+ description RAT ratnas01 Filer
+ switchport access vlan 401
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/10
+!
+interface GigabitEthernet3/0/11
+ description HMC Primary ASA FW
+ switchport access vlan 102
+!
+interface GigabitEthernet3/0/12
+ switchport access vlan 102
+!
+interface GigabitEthernet3/0/13
+ description DW T16U05 Filer
+ switchport access vlan 401
+!
+interface GigabitEthernet3/0/14
+ description DW Primary ASA
+ switchport access vlan 102
+!
+interface GigabitEthernet3/0/15
+ description DW CVPN
+ switchport access vlan 102
+!
+interface GigabitEthernet3/0/16
+ description RAT SOHO Router
+ switchport access vlan 102
+!
+interface GigabitEthernet3/0/17
+ description RAT Primary ASA
+ switchport access vlan 102
+!
+interface GigabitEthernet3/0/18
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+ channel-group 6 mode on
+!
+interface GigabitEthernet3/0/19
+ description RAT Q16U03 Filer
+ switchport access vlan 401
+!
+interface GigabitEthernet3/0/20
+ description RAT MPLS Primary
+ switchport access vlan 102
+ speed 100
+ duplex full
+!
+interface GigabitEthernet3/0/21
+ description wdcvpn11
+ switchport access vlan 10
+!
+interface GigabitEthernet3/0/22
+ description RAT MPLS Secondary
+ switchport access vlan 102
+ speed 100
+ duplex full
+!
+interface GigabitEthernet3/0/23
+ description KM ADP 2800 Router
+ switchport access vlan 102
+!
+interface GigabitEthernet3/0/24
+ description VPN02 - Inside
+ switchport access vlan 10
+ shutdown
+!
+interface GigabitEthernet4/0/1
+ description - XO 10Mb Internet Connection
+ no switchport
+ ip address 205.158.14.202 255.255.255.252
+ speed 10
+ duplex full
+!
+interface GigabitEthernet4/0/2
+ description Firewall - Inside MB
+ switchport access vlan 14
+!
+interface GigabitEthernet4/0/3
+ description CONSONUS WC1 3/13 - Internet
+ switchport access vlan 102
+ speed 100
+ duplex full
+ no mdix auto
+!
+interface GigabitEthernet4/0/4
+ description Firewall - Inside SPG
+ switchport access vlan 7
+!
+interface GigabitEthernet4/0/5
+ description CONSONUS WC1 3/12 - SDC Connection
+ switchport access vlan 163
+ speed 100
+ duplex full
+ no mdix auto
+!
+interface GigabitEthernet4/0/6
+ description Firewall - Inside ATG
+ switchport access vlan 3
+!
+interface GigabitEthernet4/0/7
+ description Vonage Adapter
+ switchport access vlan 102
+!
+interface GigabitEthernet4/0/8
+ description Firewall - Inside DEMO
+ switchport access vlan 6
+!
+interface GigabitEthernet4/0/9
+ description G36U38 - RAT First Data Router
+ switchport access vlan 102
+!
+interface GigabitEthernet4/0/10
+!
+interface GigabitEthernet4/0/11
+ description HMC Secondary ASA FW
+ switchport access vlan 102
+!
+interface GigabitEthernet4/0/12
+ switchport access vlan 102
+!
+interface GigabitEthernet4/0/13
+ description DW U16U05 Filer
+ switchport access vlan 401
+!
+interface GigabitEthernet4/0/14
+ description DW Secondary ASA
+ switchport access vlan 102
+!
+interface GigabitEthernet4/0/15
+ switchport access vlan 102
+!
+interface GigabitEthernet4/0/16
+ description RAT NetScreen
+ switchport access vlan 102
+!
+interface GigabitEthernet4/0/17
+ description RAT Secondary ASA
+ switchport access vlan 102
+!
+interface GigabitEthernet4/0/18
+ description RAT Secondary VPN Concentrator
+ switchport access vlan 102
+ speed 100
+ duplex full
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/19
+ description RAT R16U03 Filer
+ switchport access vlan 401
+!
+interface GigabitEthernet4/0/20
+ description RAT ratnas02 Filer
+ switchport access vlan 401
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/21
+ description L29U29 fe0 Megapath cisco 1800
+ switchport access vlan 102
+!
+interface GigabitEthernet4/0/22
+ description demofiler
+ switchport access vlan 401
+!
+interface GigabitEthernet4/0/23
+ description g26u43 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet4/0/24
+ description VPN01 - Inside
+ switchport access vlan 10
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan3
+ no ip address
+!
+interface Vlan14
+ no ip address
+!
+interface Vlan100
+ ip address 208.177.140.1 255.255.255.0
+!
+interface Vlan102
+ ip address 66.133.106.4 255.255.254.0
+!
+interface Vlan163
+ ip address 66.133.126.6 255.255.255.248
+!
+interface Vlan400
+ no ip address
+!
+interface Vlan405
+ ip address 10.24.79.2 255.255.255.0
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 205.158.14.201
+ip route 10.24.74.9 255.255.255.255 10.24.51.253
+ip route 10.200.200.0 255.255.255.0 10.24.51.253
+ip route 172.30.230.0 255.255.254.0 10.24.51.253
+ip route 172.33.132.0 255.255.254.0 10.24.51.253
+no ip http server
+!
+access-list 1 permit 10.24.79.1
+tftp-server flash:config.text 1
+snmp-server community public RO 1
+!
+control-plane
+!
+!
+line con 0
+line vty 0 4
+ no login
+ transport input none
+line vty 5 15
+ no login
+ transport input none
+!
+end

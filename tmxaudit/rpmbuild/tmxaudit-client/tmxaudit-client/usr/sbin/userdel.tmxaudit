@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo
+echo "    Tomax Hosted Environment"
+echo
+echo "    Login access to this host is controlled centrally. Please contact the"
+echo "    Tomax System Administration team to delete a login account."
+echo
+echo "    Thank you."
+echo
+
+exit 0

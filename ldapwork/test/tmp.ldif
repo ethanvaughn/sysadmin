@@ -1,0 +1,4 @@
+dn: cn=custuser,ou=Group,dc=tomax,dc=com
+add: memberUid
+memberUid: negchklab
+-

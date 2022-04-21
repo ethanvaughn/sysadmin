@@ -1,0 +1,23 @@
+<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+	<td class="<tmpl_var name='severity_class'>">
+		<tmpl_if name="isdbawarning">
+			N/A
+		<tmpl_else>
+			<<input type=checkbox name=problem value='
+			<tmpl_var name="nagios_ip">,
+			<tmpl_var name="severity">,
+			<tmpl_var name="hostname">,
+			<tmpl_var name="servicedesc">'>
+	</td>
+		
+	<td><tmpl_var name="category"></td>
+	<td><tmpl_var name="severity"></td>
+	<td><tmpl_var name="hostname"></td>
+	<td><tmpl_var name="hostdesc"></td>
+	<td><tmpl_var name="hostip">  </td>
+	<td><tmpl_var name="servicedesc"></td>
+	<td>
+		<a href="#" onClick="javascript:showLongOutput('<tmpl_var name="long_output">');return false;">
+		<tmpl_var name="short_output"></a>
+	</td>
+</tr>

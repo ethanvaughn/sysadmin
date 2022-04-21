@@ -1,0 +1,37 @@
+<html>
+<head>
+<title><tmpl_var name="title"></title>
+<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=address>.css" />
+</head>
+<body>
+	<table>
+	<caption>Performance Reports By Server Group</caption>
+	<tr>
+	<td>
+	<ul class="portal">
+<tmpl_loop name=dataset>
+		<tmpl_if name=gid>
+			<tmpl_if name=desc>
+				<li class="portal"><a href="printtree.pl?showimages=<tmpl_var name=gid>&dclocation=<tmpl_var name=desc>"><tmpl_var name="name"></a></li>
+			<tmpl_else>
+				<li class="portal"><a href="printtree.pl?showimages=<tmpl_var name=gid>"><tmpl_var name="name"></a></li>
+			</tmpl_if>
+		<tmpl_else>
+			<tmpl_if name=desc>
+				<li class="portal"><a href="printtree.pl?id=<tmpl_var name=id>&dclocation=<tmpl_var name=desc>"><tmpl_var name=name></a></li>
+			<tmpl_else>
+				<li class="portal"><a href="printtree.pl?id=<tmpl_var name=id>"><tmpl_var name=name></a></li>
+			</tmpl_if>
+		</tmpl_if>
+</tmpl_loop>
+		<p>
+			<!-- used to point to printallgraphs.pl !-->
+			<li class="portal"><a href="performance_report.pl" target="new">Customizable Graph Reports</a> (Opens a new window)</li>
+		</p>
+	</ul>
+	</td>
+	</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,2 @@
+ALTER TABLE ipaddr ADD COLUMN comment VARCHAR(256);
+

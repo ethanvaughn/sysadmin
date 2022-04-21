@@ -1,0 +1,200 @@
+#!/usr/bin/perl -w
+
+# The "list" controller for http querying of various plain-text list output of 
+# information found in the inventory database. By default all items are listed 
+# with their relevant information. 
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+use Socket;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::item;
+use lib::company;
+use lib::property;
+use lib::attrib;
+use lib::vo;
+use lib::ip;
+
+use strict;
+
+
+
+#----- getNagiosServiceList --------------------------------------------------
+sub getNagiosServiceList{
+	
+	# initialize item and port
+	my @items = ( "10.24.74.9", "10.9.15.10" );
+	my $port = 80;
+	my $proto = getprotobyname('tcp');
+
+	my @list;
+
+	# Set the http request:
+	my $request = <<REQ;
+GET /nquery/listserv HTTP/1.0
+Accept: */*
+User-agent: $0
+
+REQ
+
+
+	# Connect and load the list for each server:
+	foreach my $item (@items) {
+	 
+		my $paddr = sockaddr_in( $port, inet_aton( $item ) );
+
+		# create the socket, connect to the port
+		socket( SOCKET, PF_INET, SOCK_STREAM, $proto ) 
+			or die "Unable to open socket to [$item:$port]: $!";
+
+		connect( SOCKET, $paddr ) 
+			or die "Unable to connect to [$item:$port]: $!";
+
+		send( SOCKET, $request, 0 )
+			or die "Unable to send HTTP Request: $!";
+
+		# Unbuffer the output:
+		$| = 1;
+
+		# Get the output and close the socket:
+		my @output = <SOCKET>;
+		close SOCKET 
+			or die "Unable to close socket to [$item:$port]: $!";
+
+		# Strip headers ... 
+		# Skip everything upto and including the first empty line.
+		my $hdrdone = 0;
+		foreach my $line (@output) {
+			if ($line =~ /\r\n/) {
+				$hdrdone = 1;
+				next;
+			}
+			if ($hdrdone) {
+				push( @list, $line );
+			}
+		}
+	}
+	
+	return \@list;
+
+}
+
+
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+my $self_url = $cgi->url(-absolute => 1);
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "report";
+}
+
+my $vars = $cgi->Vars;
+my $msg;
+my $errnav = "nservrep";
+
+my $servlist = getNagiosServiceList();
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+
+#---- Main -------------------------------------------------------------------
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. 
+
+
+print $cgi->header( 'text/plain' );
+
+#---- list --------------------------
+if ($ACTION eq "report") {
+	my @reportlist;
+	my @sortlist;
+	# Copy array to a hash of hashes keyed by itemname for lookup later when we merge with the services list. 
+	my $items = lib::item::getItemList( $dbh );
+	my %itemlist; 
+	foreach my $item (@$items) {
+		$itemlist{$item->{itemname}} = $item;
+	}
+	foreach my $service (@$servlist) {
+		# Look up item record.
+		chomp $service;
+		my @servrec = split( /[|]/, $service );
+		if ($itemlist{$servrec[0]}) {
+			my @user = split( /,/, $itemlist{$servrec[0]}->{user} );
+			push( @reportlist, "$user[0]|$servrec[1]|$servrec[0]" ); 
+		} else {
+			# Not found in Inventory, but exists in Nagios (aggregates like clusters)
+			push( @reportlist, "ZZZ|$servrec[1]|$servrec[0]" ); 
+		}
+	}
+	@sortlist = sort( @reportlist );
+
+	# Print the actual report:
+	my $newcust = 1;
+	my $prevcust = "";
+	my $newserv = 1;
+	my $prevserv = "";
+	foreach my $line (@sortlist) {
+		my @aline = split( /[|]/, $line );
+		
+		# Set a break on each customer
+		my $currcust = $aline[0];		
+		if ($prevcust ne $currcust) {
+			$newcust = 1;
+			$prevcust = $currcust;
+		}
+		if ($newcust == 1) {
+			print "\n\n\n------------------------------------------------------------------------------\n";
+			print "[$aline[0]]\n\n";
+			$newcust = 0;
+		}
+
+		# Set a secondary break on each service.
+		my $currserv = $aline[1];		
+		if ($prevserv ne $currserv) {
+			$newserv = 1;
+			$prevserv = $currserv;
+		}
+		if ($newserv == 1) {
+			print "\n    '$aline[1]'\n";
+			$newserv = 0;
+		}
+
+		# List the items for this service
+		print "            $aline[2]\n";
+	}
+	
+
+#---- unknown --------------------------
+} else {
+	$msg = "CGI: $errnav: Unknow action value [$ACTION].\n";
+	$msg .= "Please contact SysAdmin.\n";
+	www::cgi::helpers::exitonerr( $errnav, $msg );
+}
+
+
+#----- END Controller Engine -------------------------------------------------
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+
+
+exit (0);

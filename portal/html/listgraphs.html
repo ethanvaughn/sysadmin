@@ -1,0 +1,21 @@
+<html>
+<head>
+<title><tmpl_var name=title></title>
+<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=address>.css" />
+</head>
+<body>
+	<table>
+	<caption>Performance Reports By Server Group</caption>
+	<tr>
+	<td>
+	<ul class="portal">
+	<tmpl_loop name=dataset>
+		<li class="portal"><a href="readgraphs.pl?showgraphs=<tmpl_var name=portalusername>&graph=<tmpl_var name=graph>"><tmpl_var name=graph></a><br>
+	</tmpl_loop>
+	</ul>
+	</td>
+	</tr>
+	</table>
+</body>
+</html>

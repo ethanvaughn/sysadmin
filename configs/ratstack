@@ -1,0 +1,758 @@
+Building configuration...
+
+Current configuration : 16116 bytes
+!
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+service password-encryption
+!
+hostname ratstack
+!
+enable secret 5 $1$mRl3$Sb9CO8x/8PAIsCoXDSyZa/
+!
+no aaa new-model
+clock timezone MST -7
+switch 1 provision ws-c3750g-24t
+switch 2 provision ws-c3750g-24t
+switch 3 provision ws-c3750g-24t
+switch 4 provision ws-c3750g-24t
+switch 5 provision ws-c3750g-24t
+switch 6 provision ws-c3750g-24t
+ip subnet-zero
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+no file verify auto
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+interface Port-channel1
+ description Q16U03-VIF1
+ switchport access vlan 203
+ switchport mode access
+!
+interface Port-channel2
+ description Q16U03-VIF2
+ switchport access vlan 203
+ switchport mode access
+!
+interface Port-channel3
+ description R16U03-VIF1
+ switchport access vlan 203
+ switchport mode access
+!
+interface Port-channel4
+ description R16U03-VIF2
+ switchport access vlan 203
+ switchport mode access
+!
+interface Port-channel5
+ description RATNAS01-VIF1
+ switchport access vlan 203
+ switchport mode access
+!
+interface Port-channel6
+ description RATNAS02-VIF1
+ switchport access vlan 203
+ switchport mode access
+!
+interface GigabitEthernet1/0/1
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/2
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/3
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/4
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/5
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/6
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/7
+ switchport access vlan 205
+ speed 100
+ duplex full
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/8
+ switchport access vlan 205
+ speed 100
+ duplex full
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/9
+ description g34u07 Gb2
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/10
+ description g34u07 DRAC
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/11
+ description g34u07 PCI1
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/12
+ description g34u07 PCI2
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/13
+ description Netscreen
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/14
+ description g34u07 PCI3
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/15
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/16
+ description g34u07 Gb1
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/17
+ switchport access vlan 200
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/18
+ description Primary MegaPath Concentrator
+ switchport access vlan 205
+ speed 100
+ duplex full
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/19
+ switchport access vlan 204
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/20
+ switchport access vlan 200
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/21
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/22
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/23
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/24
+ description !!!!!BAD PORT!!!!!
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/1
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/2
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/3
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/4
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/5
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/6
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/7
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/8
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/9
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/10
+ switchport access vlan 204
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/11
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/12
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/13
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/14
+ description Secondary Megapath Concentrator
+ switchport access vlan 205
+ speed 100
+ duplex full
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/15
+ description MCI Router Ethernet
+ switchport access vlan 205
+ speed 100
+ duplex full
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/16
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/17
+ switchport access vlan 200
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/18
+ description MCI Router Ethernet
+ switchport access vlan 205
+ speed 100
+ duplex full
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/19
+ switchport access vlan 204
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/20
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/21
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/22
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/23
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/24
+ switchport access vlan 200
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/1
+ switchport access vlan 203
+ switchport mode access
+ channel-group 1 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/2
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/3
+ switchport access vlan 203
+ switchport mode access
+ channel-group 1 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/4
+ switchport access vlan 203
+ switchport mode access
+ channel-group 2 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/5
+ switchport access vlan 203
+ switchport mode access
+ channel-group 2 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/6
+ switchport access vlan 203
+ switchport mode access
+ channel-group 2 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/7
+ switchport access vlan 203
+ switchport mode access
+ channel-group 1 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/8
+ switchport access vlan 203
+ switchport mode access
+ channel-group 2 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/9
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/10
+ switchport access vlan 203
+ switchport mode access
+ channel-group 1 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/11
+ description G36U38 - RAT First Data Router
+ switchport access vlan 205
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/12
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/13
+ switchport access vlan 204
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/14
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/15
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/16
+ switchport access vlan 200
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/17
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/18
+ switchport access vlan 200
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/19
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/20
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/21
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/22
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/23
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet3/0/24
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/1
+ switchport access vlan 203
+ switchport mode access
+ channel-group 3 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/2
+ switchport access vlan 203
+ switchport mode access
+ channel-group 3 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/3
+ switchport access vlan 203
+ switchport mode access
+ channel-group 3 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/4
+ switchport access vlan 203
+ switchport mode access
+ channel-group 3 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/5
+ switchport access vlan 203
+ switchport mode access
+ channel-group 4 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/6
+ switchport access vlan 203
+ switchport mode access
+ channel-group 4 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/7
+ switchport access vlan 203
+ switchport mode access
+ channel-group 4 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/8
+ switchport access vlan 203
+ switchport mode access
+ channel-group 4 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/9
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/10
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/11
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/12
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/13
+ switchport access vlan 204
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/14
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/15
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/16
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/17
+ switchport access vlan 200
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/18
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/19
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/20
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/21
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/22
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/23
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet4/0/24
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/1
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/2
+ description rat27 gb1
+ switchport access vlan 200
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/3
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/4
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/5
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/6
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/7
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/8
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/9
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/10
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/11
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/12
+ switchport access vlan 204
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/13
+ description rat26 gb1
+ switchport access vlan 200
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/14
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/15
+ switchport access vlan 200
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/16
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/17
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/18
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/19
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/20
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/21
+ switchport access vlan 202
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/22
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/23
+ switchport access vlan 201
+ spanning-tree portfast
+!
+interface GigabitEthernet5/0/24
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet6/0/1
+ switchport access vlan 203
+ switchport mode access
+ channel-group 5 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/2
+ switchport access vlan 203
+ switchport mode access
+ channel-group 5 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/3
+ switchport access vlan 203
+ switchport mode access
+ channel-group 5 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/4
+ switchport access vlan 203
+ switchport mode access
+ channel-group 5 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/5
+ switchport access vlan 203
+ switchport mode access
+ channel-group 6 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/6
+ switchport access vlan 203
+ switchport mode access
+ channel-group 6 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/7
+ switchport access vlan 203
+ switchport mode access
+ channel-group 6 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/8
+ switchport access vlan 203
+ switchport mode access
+ channel-group 6 mode on
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/9
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/10
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/11
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/12
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/13
+ description rat17 HBA
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/14
+ description rat17 gb2
+ switchport access vlan 203
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/15
+ description rat21 gb2
+ switchport access vlan 203
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/16
+!
+interface GigabitEthernet6/0/17
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/18
+ description rat27 gb2
+ switchport access vlan 203
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/19
+ switchport access vlan 203
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/20
+ description rat26 gb2
+ switchport access vlan 203
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/21
+ description rat21 gb1
+ switchport access vlan 203
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/22
+!
+interface GigabitEthernet6/0/23
+ description rat17 gb1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet6/0/24
+ switchport access vlan 202
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan202
+ ip address 10.24.81.190 255.255.255.224
+!
+ip classless
+no ip http server
+ip http secure-server
+!
+!
+control-plane
+!
+!
+line con 0
+ session-timeout 30
+line vty 0 4
+ no login
+ transport input none
+line vty 5 15
+ no login
+ transport input none
+!
+end

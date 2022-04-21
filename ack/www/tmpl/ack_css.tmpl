@@ -1,0 +1,58 @@
+<style type="text/css">
+<!--
+	/* Master overrides */
+	div.subpage {
+		margin: 4px 4px 4px 10%;
+		width: 824px;
+		padding: 4px;
+		background: white;
+		border: solid thin black;
+	}
+	
+	/* Application Specific */
+	.critical {
+		border: solid thin #696969;
+		background: red;
+	}
+	
+	.warning {
+		border: solid thin #696969;
+		background: yellow;
+	}
+
+	.online {
+		color: green;
+		font-weight: bold;
+	}
+
+	.offline 	{
+		color: red;
+		font-weight: bold;
+	}
+	
+	#sitestatus {
+		border: solid thin #696969;
+		background: white;
+		margin-left: 10px;
+	}
+	
+	#oncall {
+		float: left;
+		border: solid thin #696969;
+		background: white;
+	}
+	
+	#dateline {
+		padding-top: 20px;
+		clear: left;
+	}
+	
+-->
+</style>
+<script>
+	function showLongOutput(string) {
+		var url = '<tmpl_var name=cgi>?action=show&output=';
+		url = url + string;
+		window.open(url,'outputwin','width=500,height=50,resizable=no,scrollbars=no,toolbar=no,location=no,status=no,menubar=no');
+	}
+</script>

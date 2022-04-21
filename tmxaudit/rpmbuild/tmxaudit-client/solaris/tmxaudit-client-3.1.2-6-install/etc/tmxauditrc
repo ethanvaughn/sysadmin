@@ -1,0 +1,13 @@
+# /etc/tmxauditrc
+# Global tmxaudit environment vars, functions, aliases, etc.
+
+# Command logger function.
+function tmxaudit_DO_NOT_UNSET_THIS_FUNCTION {
+	# Get last command from hist and strip the sequence num & whitespace:
+	cmd=$(history | tail -n1 | sed 's/^[\t, ]*[0-9]* *//');
+	# Log the command to the security log:
+	logger -p authpriv.info "PID:[$$] PPID:[$PPID] CMD:[$cmd]";
+}
+
+# Trap the command logger to be run after every shell cmd.
+trap tmxaudit_DO_NOT_UNSET_THIS_FUNCTION DEBUG

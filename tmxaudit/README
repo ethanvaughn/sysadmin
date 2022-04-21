@@ -1,0 +1,16 @@
+
+------------------------------------------------------------------------------
+This is the general README for the tmxaudit project.
+-------------------------------------------------------------------------------
+
+DEPENDENCIES
+------------------------------------------------------------------------------
+o	The auth project requires the following PERL modules:
+
+    1    DBI  (perl-DBI-*.rpm)
+    2    DBD::pg (perl-DBD-Pg*.rpm)
+    3    CGI (perl-CGI*.rpm)
+    4    Crypt/PasswdMD5.pm (CPAN)
+    5    Data/Password.pm (CPAN)
+    6    Term::ReadKey (CPAN)
+    7    HTML::Template (CPAN)

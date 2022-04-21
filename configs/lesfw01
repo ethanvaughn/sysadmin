@@ -1,0 +1,200 @@
+: Saved
+:
+ASA Version 8.0(3)6
+!
+terminal width 160
+hostname lesfw01
+domain-name tomax.com
+enable password mYeNr0cSeWbBfOBq encrypted
+passwd mYeNr0cSeWbBfOBq encrypted
+no names
+!
+interface GigabitEthernet0/0
+ nameif External
+ security-level 0
+ ip address 66.133.106.68 255.255.254.0 standby 66.133.106.69
+!
+interface GigabitEthernet0/1
+ nameif Internal
+ security-level 100
+ ip address 10.24.84.1 255.255.255.128 standby 10.24.84.2
+!
+interface GigabitEthernet0/2
+ nameif DMZ1
+ security-level 50
+ ip address 10.24.101.1 255.255.255.224 standby 10.24.101.2
+!
+interface GigabitEthernet0/3
+ description LAN Failover Interface
+!
+interface Management0/0
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+ftp mode passive
+clock timezone MST -7
+dns server-group DefaultDNS
+ domain-name tomax.com
+object-group network vpnLocal
+ network-object 10.24.84.0 255.255.255.128
+object-group network vpnRemote
+ network-object host 10.24.74.9
+ network-object host 10.24.74.10
+ network-object host 10.24.74.12
+ network-object host 10.24.74.13
+ network-object host 10.24.74.14
+ network-object host 10.24.74.19
+ network-object host 10.24.74.20
+ network-object 172.30.230.0 255.255.254.0
+object-group network lesRemote
+ network-object 10.10.0.0 255.255.0.0
+ network-object 10.11.0.0 255.255.0.0
+ network-object 10.16.0.0 255.240.0.0
+object-group network lesLocal
+ network-object 10.24.84.0 255.255.255.128
+object-group network isd
+ network-object host 69.214.17.69
+object-group network 5th3rd
+ network-object host 64.57.148.10
+ network-object host 64.57.148.99
+ network-object host 64.57.148.119
+ network-object host 204.90.2.117
+object-group network dmz1Network
+ network-object 10.24.101.0 255.255.255.224
+object-group network cvpnLes
+ network-object 10.200.200.0 255.255.255.0
+access-list noNAT extended permit ip object-group vpnLocal object-group vpnRemote
+access-list noNAT extended permit ip object-group lesLocal object-group lesRemote
+access-list noNAT extended permit ip object-group lesLocal object-group isd
+access-list noNAT extended permit ip object-group lesLocal object-group 5th3rd
+access-list noNAT extended permit ip object-group vpnLocal object-group cvpnLes
+access-list tmxVPN extended permit ip object-group vpnLocal object-group vpnRemote
+access-list lesVPN extended permit ip object-group lesLocal object-group lesRemote
+access-list lesOut extended permit ip object-group lesLocal object-group lesRemote
+access-list lesOut extended permit ip object-group lesLocal object-group vpnRemote
+access-list lesOut extended permit ip object-group lesLocal object-group isd
+access-list lesOut extended permit ip object-group lesLocal object-group dmz1Network
+access-list lesOut extended permit icmp object-group lesLocal object-group 5th3rd
+access-list lesOut extended permit ip object-group lesLocal object-group 5th3rd
+access-list isdVPN extended permit ip object-group lesLocal object-group isd
+pager lines 24
+mtu External 1500
+mtu Internal 1500
+mtu DMZ1 1500
+ip local pool les 10.200.200.1-10.200.200.254
+failover
+failover lan unit primary
+failover lan interface fail-link GigabitEthernet0/3
+failover interface ip fail-link 1.1.1.1 255.255.255.0 standby 1.1.1.2
+icmp unreachable rate-limit 1 burst-size 1
+asdm image disk0:/asdm-602.bin
+no asdm history enable
+arp timeout 14400
+global (External) 1 interface
+nat (Internal) 0 access-list noNAT
+nat (Internal) 1 10.24.84.0 255.255.255.128
+access-group lesOut in interface Internal
+route External 0.0.0.0 0.0.0.0 66.133.106.1 1
+route DMZ1 64.57.148.10 255.255.255.255 10.24.101.10 1
+route DMZ1 64.57.148.99 255.255.255.255 10.24.101.10 1
+route DMZ1 64.57.148.119 255.255.255.255 10.24.101.10 1
+route DMZ1 204.90.2.117 255.255.255.255 10.24.101.10 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+dynamic-access-policy-record DfltAccessPolicy
+snmp-server host Internal 10.24.74.9 community public
+no snmp-server location
+no snmp-server contact
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+crypto ipsec transform-set 3desmd5 esp-3des esp-md5-hmac
+crypto dynamic-map cvpn 1 set transform-set 3desmd5
+crypto dynamic-map cvpn 1 set reverse-route
+crypto map vpn 1 match address tmxVPN
+crypto map vpn 1 set peer 66.133.106.5
+crypto map vpn 1 set transform-set 3desmd5
+crypto map vpn 2 match address lesVPN
+crypto map vpn 2 set peer 66.39.171.8
+crypto map vpn 2 set transform-set 3desmd5
+crypto map vpn 3 match address isdVPN
+crypto map vpn 3 set peer 69.214.17.66
+crypto map vpn 3 set transform-set 3desmd5
+crypto map vpn 100 ipsec-isakmp dynamic cvpn
+crypto map vpn interface External
+crypto isakmp identity address
+crypto isakmp enable External
+crypto isakmp policy 1
+ authentication pre-share
+ encryption 3des
+ hash md5
+ group 2
+ lifetime 86400
+telnet timeout 5
+ssh timeout 5
+console timeout 30
+management-access Internal
+threat-detection basic-threat
+threat-detection statistics protocol
+threat-detection statistics access-list
+username etsuchimoto password lP4QUGXnrX0Vh0D5 encrypted
+username etsuchimoto attributes
+ vpn-simultaneous-logins 1
+username les01 password f/g9t23bnYScyMNz encrypted
+username les01 attributes
+ vpn-simultaneous-logins 250
+ vpn-idle-timeout 720
+ vpn-session-timeout 720
+username mashurex password u02p1vHoOmT96cxS encrypted
+username mashurex attributes
+ vpn-simultaneous-logins 1
+username nrogers password dVnpI8UBOQtLNvMq encrypted
+username nrogers attributes
+ vpn-simultaneous-logins 1
+tunnel-group 66.133.106.5 type ipsec-l2l
+tunnel-group 66.133.106.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.39.171.8 type ipsec-l2l
+tunnel-group 66.39.171.8 ipsec-attributes
+ pre-shared-key *
+tunnel-group 69.214.17.66 type ipsec-l2l
+tunnel-group 69.214.17.66 ipsec-attributes
+ pre-shared-key *
+tunnel-group les type remote-access
+tunnel-group les general-attributes
+ address-pool les
+tunnel-group les ipsec-attributes
+ pre-shared-key *
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect rsh
+  inspect rtsp
+  inspect esmtp
+  inspect sqlnet
+  inspect skinny
+  inspect sunrpc
+  inspect xdmcp
+  inspect sip
+  inspect netbios
+  inspect tftp
+  inspect icmp
+!
+service-policy global_policy global
+prompt hostname context
+Cryptochecksum:60dcbca5d6cca416665a7160eaec3e95
+: end

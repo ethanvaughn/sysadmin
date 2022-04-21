@@ -1,0 +1,90 @@
+#!/usr/bin/perl
+
+use FindBin qw( $Bin );
+use lib "$Bin/..";
+
+#use CGI;
+#use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+
+use lib::statusdat;
+
+use strict;
+
+
+#---- main -------------------------------------------------------------------
+
+#----- Globals
+#my $q = new CGI;
+
+# Our output is ASCII :
+print "Content-type: text/plain\n\n";
+
+
+# Get the list of unacknowledged alerts:
+my @unack_list = lib::statusdat::getUnack();
+
+# Get the lookup hashes from the objects.cache:
+my $hosts    = lib::objectcache::getHostRecHash();
+my $services = lib::objectcache::getServiceRecHash();
+
+foreach my $unack_rec (@unack_list) {
+	
+	# Get this unacknowledged record's corresponding objects.cache records:
+	my $hostrec = $hosts->{$unack_rec->{host_name}};
+
+
+	my $objcache_rec = $hosts->{$unack_rec->{host_name}};
+
+	if ($unack_rec->{firstline} =~ /service/) {
+		my $servicekey = $unack_rec->{host_name} . '|' . $unack_rec->{service_description};
+		$objcache_rec = $services->{$servicekey};
+	}
+
+	# Set the fields that are type dependent (different for hosts and services):
+	my $status = '';
+	my $descr  = '';
+	if ($unack_rec->{firstline} =~ /host/) {
+		# Record is a host
+		$status = 'DOWN';
+		if ($unack_rec->{current_state} == 2) {
+			$status = 'UNREACHABLE';
+		}
+
+		# Set the service_description field appropriately:
+		$descr = 'HOST';
+	} else {
+		# Record is a service
+		$status = 'WARNING';
+		if ($unack_rec->{current_state} == 3) {
+			$status = 'UNKNOWN';
+		} elsif ($unack_rec->{current_state} == 2) {
+			$status = 'CRITICAL';
+		}
+		
+		# Set the service_description field appropriately:
+		$descr = $unack_rec->{service_description};
+	}
+	
+	# Set the record owner:
+	my $owner = 'unknown';
+	if ($objcache_rec->{contact_groups} =~ /dba-/) {
+		$owner = 'DBA';
+	}
+	if ($objcache_rec->{contact_groups} =~ /sysadmin/ || $objcache_rec->{contact_groups} =~ /sa-/) {
+		$owner = 'SA';
+	}
+
+
+	# Write the unack record:
+	print "$status";
+	print "|$unack_rec->{host_name}";
+	print "|$hostrec->{alias}";
+	print "|$hostrec->{address}";
+	print "|$descr";
+	print "|$unack_rec->{plugin_output}";
+	print "|$owner";
+	print "\n";
+}
+
+
+exit (0);

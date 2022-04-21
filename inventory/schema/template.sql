@@ -1,0 +1,21 @@
+CREATE TABLE template (
+	id SERIAL NOT NULL PRIMARY KEY,
+ 
+	name  VARCHAR(64) NOT NULL UNIQUE,
+	
+	mtime TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
+	ctime TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
+
+) WITHOUT OIDS;
+
+GRANT SELECT,INSERT,UPDATE,DELETE ON template TO appuser;
+GRANT ALL ON template_id_seq TO appuser;
+
+/* Example Types */
+INSERT INTO template (name) VALUES( 'HOSTED_SERVER' );
+INSERT INTO template (name) VALUES( 'AIRCARD' );
+INSERT INTO template (name) VALUES( 'FIREWALL' );
+INSERT INTO template (name) VALUES( 'CRT' );
+INSERT INTO template (name) VALUES( 'LAPTOP' );
+INSERT INTO template (name) VALUES( 'LCD' );
+INSERT INTO template (name) VALUES( 'NONHOSTED_SERVER' );

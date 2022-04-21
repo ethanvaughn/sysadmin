@@ -1,0 +1,10 @@
+dn: cn=sysadmin,ou=Group,dc=tomax,dc=com
+add: memberUid
+memberUid: evaughn
+-
+add: memberUid
+memberUid: jkruse
+-
+add: memberUid
+memberUid: dhatch
+-

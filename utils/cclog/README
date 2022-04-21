@@ -1,0 +1,7 @@
+
+INSTALLATION
+
+ 1.  Copy the cclog/etc/init.d/cclog init script to /etc/init.d/ directory.
+
+ 2.  Run the "chkconfig --add cclog" command.
+

@@ -1,0 +1,645 @@
+!Generated on 01/08/2010 07:31:01
+!Active version: sg0810301
+
+configure
+
+
+!*************************** GLOBAL ***************************
+  username admin des-password wamebe3gbhggdgmfjaaaebgfbehe3ehh superuser
+
+  ip route 0.0.0.0 0.0.0.0 10.110.10.1 1
+  ip route 10.108.0.0 255.255.0.0 10.110.10.29 1
+  ip route 10.109.0.0 255.255.0.0 10.110.10.29 1
+  ip route 10.201.0.0 255.255.0.0 10.110.10.29 1
+  ip route 10.202.0.0 255.255.0.0 10.110.10.29 1
+  ip route 10.203.0.0 255.255.0.0 10.110.10.29 1
+  ip route 10.204.0.0 255.255.0.0 10.110.10.29 1
+  ip route 10.205.0.0 255.255.0.0 10.110.10.29 1
+
+!************************* INTERFACE *************************
+interface  1/1
+  bridge vlan 225
+
+interface  1/2
+  bridge vlan 226
+
+interface Ethernet-Mgmt
+  admin-shutdown
+
+!************************** CIRCUIT **************************
+circuit VLAN226
+
+  ip address 10.110.10.33 255.255.255.224
+
+circuit VLAN225
+
+  ip address 10.110.10.5 255.255.255.224
+
+!************************** SERVICE **************************
+service hmc01
+  ip address 10.110.10.41
+  keepalive type none
+  active
+
+service hmc01-16009
+  ip address 10.110.10.41
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service hmc01-16091
+  ip address 10.110.10.41
+  keepalive type tcp
+  keepalive port 16091
+  active
+
+service hmc01-16109
+  ip address 10.110.10.41
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service hmc01-389
+  ip address 10.110.10.41
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service hmc01-636
+  ip address 10.110.10.41
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service hmc01-7777
+  ip address 10.110.10.41
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service hmc01-7778
+  ip address 10.110.10.41
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service hmc01-7779
+  ip address 10.110.10.41
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service hmc01-7780
+  ip address 10.110.10.41
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service hmc01-8990
+  ip address 10.110.10.41
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service hmc02
+  ip address 10.110.10.42
+  keepalive type none
+  active
+
+service hmc02-16009
+  ip address 10.110.10.42
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service hmc02-16091
+  ip address 10.110.10.42
+  keepalive type tcp
+  keepalive port 16091
+  active
+
+service hmc02-16109
+  ip address 10.110.10.42
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service hmc02-389
+  ip address 10.110.10.42
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service hmc02-636
+  ip address 10.110.10.42
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service hmc02-7777
+  ip address 10.110.10.42
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service hmc02-7778
+  ip address 10.110.10.42
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service hmc02-7779
+  ip address 10.110.10.42
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service hmc02-7780
+  ip address 10.110.10.42
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service hmc02-8990
+  ip address 10.110.10.42
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service hmc03
+  ip address 10.110.10.43
+  keepalive type none
+  active
+
+service hmc03-16009
+  ip address 10.110.10.43
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service hmc03-16091
+  ip address 10.110.10.43
+  keepalive type tcp
+  keepalive port 16091
+  active
+
+service hmc03-16109
+  ip address 10.110.10.43
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service hmc03-8990
+  ip address 10.110.10.43
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service hmc04
+  ip address 10.110.10.47
+  keepalive type none
+  active
+
+service hmc05
+  ip address 10.110.10.51
+  keepalive type none
+  active
+
+service hmc05-16009
+  ip address 10.110.10.51
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service hmc05-16091
+  ip address 10.110.10.51
+  keepalive type tcp
+  keepalive port 16091
+  active
+
+service hmc05-16109
+  ip address 10.110.10.51
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service hmc05-389
+  ip address 10.110.10.51
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service hmc05-636
+  ip address 10.110.10.51
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service hmc05-7777
+  ip address 10.110.10.51
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service hmc05-7778
+  ip address 10.110.10.51
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service hmc05-7779
+  ip address 10.110.10.51
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service hmc05-7780
+  ip address 10.110.10.51
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service hmc05-8990
+  ip address 10.110.10.51
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service hmc06
+  ip address 10.110.10.52
+  keepalive type none
+  active
+
+service hmc06-16009
+  ip address 10.110.10.52
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service hmc06-16091
+  ip address 10.110.10.52
+  keepalive type tcp
+  keepalive port 16091
+  active
+
+service hmc06-16109
+  ip address 10.110.10.52
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service hmc06-389
+  ip address 10.110.10.52
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service hmc06-636
+  ip address 10.110.10.52
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service hmc06-7777
+  ip address 10.110.10.52
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service hmc06-7778
+  ip address 10.110.10.52
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service hmc06-7779
+  ip address 10.110.10.52
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service hmc06-7780
+  ip address 10.110.10.52
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service hmc06-8990
+  ip address 10.110.10.52
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service hmc07
+  ip address 10.110.10.57
+  keepalive type none
+  active
+
+service hmc07-1521
+  ip address 10.110.10.57
+  keepalive type tcp
+  keepalive port 1521
+  active
+
+!*************************** OWNER ***************************
+owner NAT
+
+  content hmc01
+    vip address 10.110.10.11
+    flow-timeout-multiplier 1125
+    add service hmc01
+    active
+
+  content hmc02
+    vip address 10.110.10.12
+    flow-timeout-multiplier 1125
+    add service hmc02
+    active
+
+  content hmc03
+    vip address 10.110.10.13
+    flow-timeout-multiplier 1125
+    add service hmc03
+    active
+
+  content hmc04
+    vip address 10.110.10.17
+    flow-timeout-multiplier 1125
+    add service hmc04
+    active
+
+  content hmc05
+    vip address 10.110.10.21
+    flow-timeout-multiplier 1125
+    add service hmc05
+    active
+
+  content hmc06
+    vip address 10.110.10.22
+    flow-timeout-multiplier 1125
+    add service hmc06
+    active
+
+  content hmc07
+    vip address 10.110.10.27
+    flow-timeout-multiplier 1125
+    add service hmc07
+    active
+
+owner NON-PROD
+
+  content 16009
+    vip address 10.110.10.20
+    protocol tcp
+    port 16009
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc05-16009
+    add service hmc06-16009
+    active
+
+  content 16091
+    vip address 10.110.10.20
+    protocol tcp
+    port 16091
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc05-16091
+    add service hmc06-16091
+    active
+
+  content 16109
+    vip address 10.110.10.20
+    protocol tcp
+    port 16109
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc05-16109
+    add service hmc06-16109
+    active
+
+  content 389
+    vip address 10.110.10.20
+    protocol tcp
+    port 389
+    flow-timeout-multiplier 1125
+    add service hmc05-389
+    add service hmc06-389
+    active
+
+  content 636
+    vip address 10.110.10.20
+    protocol tcp
+    port 636
+    flow-timeout-multiplier 1125
+    add service hmc05-636
+    add service hmc06-636
+    active
+
+  content 7777
+    vip address 10.110.10.20
+    protocol tcp
+    port 7777
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc05-7777
+    add service hmc06-7777
+    active
+
+  content 7778
+    vip address 10.110.10.20
+    protocol tcp
+    port 7778
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc05-7778
+    add service hmc06-7778
+    active
+
+  content 7779
+    vip address 10.110.10.20
+    port 7779
+    protocol tcp
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc05-7779
+    add service hmc06-7779
+    active
+
+  content 7780
+    vip address 10.110.10.20
+    port 7780
+    protocol tcp
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc05-7780
+    add service hmc06-7780
+    active
+
+  content 8990
+    vip address 10.110.10.20
+    protocol tcp
+    port 8990
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc05-8990
+    add service hmc06-8990
+    active
+
+owner PROD
+
+  content 16009
+    vip address 10.110.10.10
+    port 16009
+    protocol tcp
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc01-16009
+    add service hmc02-16009
+    add service hmc03-16009
+    active
+
+  content 16091
+    vip address 10.110.10.10
+    protocol tcp
+    port 16091
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc01-16091
+    add service hmc02-16091
+    add service hmc03-16091
+    active
+
+  content 16109
+    vip address 10.110.10.10
+    protocol tcp
+    port 16109
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc01-16109
+    add service hmc02-16109
+    add service hmc03-16109
+    active
+
+  content 389
+    vip address 10.110.10.10
+    protocol tcp
+    port 389
+    flow-timeout-multiplier 1125
+    add service hmc01-389
+    add service hmc02-389
+    active
+
+  content 636
+    vip address 10.110.10.10
+    protocol tcp
+    port 636
+    flow-timeout-multiplier 1125
+    add service hmc01-636
+    add service hmc02-636
+    active
+
+  content 7777
+    vip address 10.110.10.10
+    protocol tcp
+    port 7777
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc01-7777
+    add service hmc02-7777
+    active
+
+  content 7778
+    vip address 10.110.10.10
+    protocol tcp
+    port 7778
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc01-7778
+    add service hmc02-7778
+    active
+
+  content 7779
+    vip address 10.110.10.10
+    protocol tcp
+    port 7779
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc01-7779
+    add service hmc02-7779
+    active
+
+  content 7780
+    vip address 10.110.10.10
+    protocol tcp
+    port 7780
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc01-7780
+    add service hmc02-7780
+    active
+
+  content 8990
+    vip address 10.110.10.10
+    port 8990
+    protocol tcp
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service hmc01-8990
+    add service hmc02-8990
+    add service hmc03-8990
+    active
+
+!*************************** GROUP ***************************
+group NON-PROD
+  vip address 10.110.10.20
+  flow-timeout-multiplier 1125
+  add service hmc05
+  add service hmc06
+  active
+
+group hmc01
+  vip address 10.110.10.11
+  flow-timeout-multiplier 1125
+  add service hmc01
+  active
+
+group hmc02
+  vip address 10.110.10.12
+  flow-timeout-multiplier 1125
+  add service hmc02
+  active
+
+group hmc03
+  vip address 10.110.10.13
+  flow-timeout-multiplier 1125
+  add service hmc03
+  active
+
+group hmc04
+  vip address 10.110.10.17
+  flow-timeout-multiplier 1125
+  add service hmc04
+  active
+
+group hmc07
+  vip address 10.110.10.27
+  flow-timeout-multiplier 1125
+  add service hmc07
+  active

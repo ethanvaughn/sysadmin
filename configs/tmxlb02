@@ -1,0 +1,445 @@
+!Generated on 07/29/2009 16:10:19
+!Active version: sg0750004
+
+configure
+
+
+!*************************** GLOBAL ***************************
+  no restrict web-mgmt
+  no restrict xml
+  username admin des-password wamebe3gbhggdgmfjaaaebgfbehe3ehh superuser
+
+  ip route 0.0.0.0 0.0.0.0 172.21.159.1 1
+
+!************************* INTERFACE *************************
+interface  1/1
+  description "172.21.156.3 - Tomax Network"
+
+interface  1/2
+  bridge vlan 104
+  description "192.168.123.1 - Load Balancer Network"
+
+interface Ethernet-Mgmt
+  admin-shutdown
+
+!************************** CIRCUIT **************************
+circuit VLAN1
+
+  ip address 172.21.156.3 255.255.0.0
+
+circuit VLAN104
+
+  ip address 192.168.123.1 255.255.255.0
+
+!************************** SERVICE **************************
+service dev27
+  ip address 192.168.123.140
+  keepalive type none
+  active
+
+service dev29
+  ip address 192.168.123.141
+  keepalive type none
+  active
+
+service dev29-389
+  ip address 192.168.123.141
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service dev29-636
+  ip address 192.168.123.141
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service dev29-7777
+  ip address 192.168.123.141
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service dev29-7778
+  ip address 192.168.123.141
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service dev29-7779
+  ip address 192.168.123.141
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service dev29-7780
+  ip address 192.168.123.141
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service dev30
+  ip address 192.168.123.142
+  keepalive type none
+  active
+
+service dev31
+  ip address 192.168.123.143
+  keepalive type none
+  active
+
+service dev32
+  ip address 192.168.123.144
+  keepalive type none
+  active
+
+service dev32-389
+  ip address 192.168.123.144
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service dev32-636
+  ip address 192.168.123.144
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service dev32-7777
+  ip address 192.168.123.144
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service dev32-7778
+  ip address 192.168.123.144
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service dev32-7779
+  ip address 192.168.123.144
+  keepalive type tcp
+  keepalive port 7779
+  active
+
+service dev32-7780
+  ip address 192.168.123.144
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service devjpos1
+  ip address 192.168.123.10
+  keepalive type none
+  active
+
+service team4-1
+  ip address 192.168.123.14
+  keepalive type none
+  active
+
+service team4-1-389
+  ip address 192.168.123.14
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service team4-1-636
+  ip address 192.168.123.14
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service team4-1-7777
+  ip address 192.168.123.14
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service team4-1-7780
+  ip address 192.168.123.14
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service team4-2
+  ip address 192.168.123.15
+  keepalive type none
+  active
+
+service team4-2-389
+  ip address 192.168.123.15
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service team4-2-636
+  ip address 192.168.123.15
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service team4-2-7777
+  ip address 192.168.123.15
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service team4-2-7780
+  ip address 192.168.123.15
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+service team4-4
+  ip address 192.168.123.16
+  keepalive type none
+  active
+
+service team4-4-389
+  ip address 192.168.123.16
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service team4-4-636
+  ip address 192.168.123.16
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service team4-4-7777
+  ip address 192.168.123.16
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service team4-4-7780
+  ip address 192.168.123.16
+  keepalive type tcp
+  keepalive port 7780
+  active
+
+!*************************** OWNER ***************************
+owner LS3-APP
+
+  content 389
+    vip address 172.21.156.151
+    protocol tcp
+    port 389
+    flow-timeout-multiplier 1125
+    add service dev29-389
+    add service dev32-389
+    active
+
+  content 636
+    vip address 172.21.156.151
+    protocol tcp
+    port 636
+    flow-timeout-multiplier 1125
+    add service dev29-636
+    add service dev32-636
+    active
+
+  content 7777
+    vip address 172.21.156.151
+    protocol tcp
+    port 7777
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dev29-7777
+    add service dev32-7777
+    active
+
+  content 7778
+    vip address 172.21.156.151
+    protocol tcp
+    port 7778
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dev29-7778
+    add service dev32-7778
+    active
+
+  content 7779
+    vip address 172.21.156.151
+    protocol tcp
+    port 7779
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dev29-7779
+    add service dev32-7779
+    active
+
+  content 7780
+    vip address 172.21.156.151
+    port 7780
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service dev29-7780
+    add service dev32-7780
+    active
+
+owner LS3-JBOSS
+
+owner NAT
+
+  content dev27
+    vip address 172.21.156.140
+    flow-timeout-multiplier 1125
+    add service dev27
+    active
+
+  content dev29
+    vip address 172.21.156.141
+    flow-timeout-multiplier 1125
+    add service dev29
+    active
+
+  content dev30
+    vip address 172.21.156.142
+    flow-timeout-multiplier 1125
+    add service dev30
+    active
+
+  content dev31
+    vip address 172.21.156.143
+    flow-timeout-multiplier 1125
+    add service dev31
+    active
+
+  content dev32
+    vip address 172.21.156.144
+    flow-timeout-multiplier 1125
+    add service dev32
+    active
+
+  content devjpos1
+    vip address 172.21.156.46
+    flow-timeout-multiplier 1125
+    add service devjpos1
+    active
+
+  content team4-1
+    vip address 172.21.156.51
+    add service team4-1
+    flow-timeout-multiplier 1125
+    active
+
+  content team4-2
+    vip address 172.21.156.52
+    flow-timeout-multiplier 1125
+    add service team4-2
+    active
+
+  content team4-4
+    flow-timeout-multiplier 1125
+    add service team4-4
+    vip address 172.21.156.56
+    active
+
+owner RAT-TEST
+
+  content 389
+    protocol tcp
+    vip address 172.21.156.157
+    port 389
+    flow-timeout-multiplier 1125
+    add service team4-1-389
+    add service team4-2-389
+    add service team4-4-389
+    active
+
+  content 636
+    protocol tcp
+    port 636
+    flow-timeout-multiplier 1125
+    add service team4-1-636
+    add service team4-2-636
+    add service team4-4-636
+    vip address 172.21.156.157
+    active
+
+  content 7777
+    vip address 172.21.156.157
+    protocol tcp
+    port 7777
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service team4-1-7777
+    add service team4-2-7777
+    advanced-balance sticky-srcip
+    add service team4-4-7777
+    active
+
+  content 7780
+    vip address 172.21.156.157
+    protocol tcp
+    port 7780
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    add service team4-1-7780
+    add service team4-2-7780
+    add service team4-4-7780
+    active
+
+!*************************** GROUP ***************************
+group dev27
+  vip address 172.21.156.140
+  flow-timeout-multiplier 1125
+  add service dev27
+  active
+
+group dev29
+  vip address 172.21.156.141
+  flow-timeout-multiplier 1125
+  add service dev29
+  active
+
+group dev30
+  vip address 172.21.156.142
+  flow-timeout-multiplier 1125
+  add service dev30
+  active
+
+group dev31
+  vip address 172.21.156.143
+  flow-timeout-multiplier 1125
+  add service dev31
+  active
+
+group dev32
+  vip address 172.21.156.144
+  flow-timeout-multiplier 1125
+  add service dev32
+  active
+
+group devjpos1
+  vip address 172.21.156.46
+  flow-timeout-multiplier 1125
+  add service devjpos1
+  active
+
+group team4-1
+  vip address 172.21.156.51
+  flow-timeout-multiplier 1125
+  add service team4-1
+  active
+
+group team4-2
+  vip address 172.21.156.52
+  flow-timeout-multiplier 1125
+  add service team4-2
+  active
+
+group team4-4
+  vip address 172.21.156.56
+  flow-timeout-multiplier 1125
+  add service team4-4
+  active

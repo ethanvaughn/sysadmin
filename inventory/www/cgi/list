@@ -1,0 +1,87 @@
+#!/usr/bin/perl -w
+
+# The "list" controller for http querying of various plain-text list output of 
+# information found in the inventory database. By default all items are listed 
+# with their relevant information. 
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::item;
+use lib::company;
+use lib::property;
+use lib::attrib;
+use lib::vo;
+use lib::ip;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+my $self_url = $cgi->url(-absolute => 1);
+#my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "items";
+}
+
+my $vars = $cgi->Vars;
+my $msg;
+my $errnav = "list";
+#my $remote_user = $cgi->remote_user;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+
+
+#---- Main -------------------------------------------------------------------
+
+# Set up the tabmenu:
+#$tabmenu = www::cgi::helpers::gen_tabmenu( "INV" );
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. 
+
+
+print $cgi->header( 'text/plain' );
+
+#---- items --------------------------
+if ($ACTION eq "items") {
+	my $items = lib::item::getItemList( $dbh );
+	foreach my $item (@$items) {
+		print "$item->{user},$item->{itemname},$item->{comment},$item->{adminip},$item->{rackpos}\n";
+	}
+	
+
+#---- unknown --------------------------
+} else {
+	$msg = "CGI: $errnav: Unknow action value [$ACTION].\n";
+	$msg .= "Please contact SysAdmin.\n";
+	www::cgi::helpers::exitonerr( $errnav, $msg );
+}
+
+
+#----- END Controller Engine -------------------------------------------------
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+
+
+exit (0);

@@ -1,0 +1,209 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+
+<div id="nav">
+	<tmpl_if name="ADMIN">
+		<a class="button" href="main?action=detailnew">Add New Item</a>
+		<a class="button" href="company">Company Maint</a>
+		<a class="button" href="property">Property Maint</a>
+		<a class="button" href="template">Template Maint</a>
+	</tmpl_if>
+</div>
+
+<div id="subtitle">
+	<h1><tmpl_var name="subtitle"></h1>
+</div>
+
+
+
+<tmpl_if name="debug">
+	<div id="debug" style="border: thick solid blue;">
+		<h3>D e b u g</h3>
+		<div>
+			<tmpl_var name="debug">	
+		</div>
+	</div>
+</tmpl_if>
+
+
+
+<div id="content">
+	<tmpl_if name="msg">
+		<div class="message">
+		<tmpl_var name="msg">
+		</div>
+	</tmpl_if>
+
+	<tmpl_if name="ADMIN">
+	<div class="notebox">
+	<table>
+		<form method="POST">
+		<input type="hidden" name="prop_id" value="<tmpl_var name='prop_id'>">
+		<tr>
+			<td><input tabindex=6 type="text" name="propname"></td>
+			<td><tmpl_var name="select_add_type"></td>
+			<td><button tabindex=8 type="submit" name="action" value="add" title="Add new property.">Add</button></td>
+		</tr>
+		</form>
+	</table>
+	</div>
+
+	<div class="stickynote">
+	<span style="">Property:</span><tmpl_var name='select_prop'>
+
+	<table>
+		<tmpl_if name="prop_id">
+			<form method="POST">
+			<input type="hidden" name="prop_id" value="<tmpl_var name='prop_id'>">
+			<tr>
+				<td><input tabindex=2 type="text" name="propname" value="<tmpl_var name='propname'>"></td>
+				<td><tmpl_var name="select_edit_type"></td>
+				<td>
+					<button tabindex=4 type="submit" name="action" value="update" title="Update the property <tmpl_var name='propname'>.">Update</button>
+					<button tabindex=5 type="button" name="action" value="del"  title="Delete the property <tmpl_var name='propname'>."
+						onclick="return del_post( 'property', 'action=del&id=<tmpl_var name='prop_id'>', '<tmpl_var name='propname'>' );">
+						Delete
+					</button>
+				</td>
+			</tr>
+			</form>
+		</tmpl_if>
+	</table>
+	</div>
+
+	</tmpl_if>
+</div>
+
+
+
+
+<div id="content-columns">
+<div id="twocol-left">
+
+	<div class="stickynote" style="width:400px;">
+	<span><tmpl_var name="propname"></span>
+	</div>
+	
+	<table  style="width:416px;margin:0;padding:0">
+	<thead>
+
+	<tmpl_if name="msg2">
+		<tr>
+		<span class="message">
+		<tmpl_var name="msg2">
+		</span>
+		</tr>
+	</tmpl_if>
+
+	<tr>
+	    <th style="margin:0;padding:0">Values</th>
+		<tmpl_if name="ADMIN">
+	    	<th style="width:0;margin:0;padding:0">X</th>
+		</tmpl_if>
+	</tr>
+	</thead>
+
+	<tmpl_if name="PROP">
+
+		<!-- Add/Edit Field -->
+		<tmpl_if name="ADMIN">
+		<form method="POST" action="property?prop_id=<tmpl_var name='prop_id'>">
+			<input type="hidden" name="prop_id" value="<tmpl_var name='prop_id'>">
+			<tr>
+				<td style="padding:0"><input tabindex=9 type="text" name="propval" value="<tmpl_var name='propval'>" style="width:100%"></td>
+				<tmpl_if name="propval_id">
+					<!-- EDIT -->
+					<input type="hidden" name="propval_id" value="<tmpl_var name='propval_id'>">
+					<td style="padding:0;text-align:center;background-color:#696969">
+						<button tabindex=10 type="submit" name="action" value="updatepropval" title="Update the value.">update</button>
+						<button tabindex=10 type="submit" name="action" value="cancelvalupdate" title="Cancel the update.">cancel</button>
+					</td>
+				<tmpl_else>
+					<!-- ADD -->
+					<td style="padding:0;text-align:center;background-color:#696969"><button tabindex=10 type="submit" name="action" value="addpropval" title="Add the value to <tmpl_var name='propname'>.">add</button></td>
+				</tmpl_if>
+			</tr>
+		</form>
+		</tmpl_if>
+
+		<!-- Value Loop -->
+		<tmpl_if name="ADMIN">
+			<tmpl_loop name="valueloop">
+			<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+			    <td><a tabindex="<tmpl_var name="tabindex">" href='property?prop_id=<tmpl_var name="prop_id">&propval_id=<tmpl_var name="propval_id">&propval=<tmpl_var name="propval">'><tmpl_var name="propval"></td>
+				<td class="nopad"><a tabindex="<tmpl_var name="tabindex">" title="Delete the value [<tmpl_var name='propval'>] from <tmpl_var name='propname'>." class="button" href="JavaScript:del_post( 'property', 'action=delpropval&prop_id=<tmpl_var name='prop_id'>&propval_id=<tmpl_var name='propval_id'>', '<tmpl_var name='propval'>' );">del</a></td>
+			</tr>
+			</tmpl_loop>
+		<tmpl_else>
+			<tmpl_loop name="listloop">
+			<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+			    <td><tmpl_var name="propval"></td>
+			</tr>
+			</tmpl_loop>
+		</tmpl_if>
+
+	<tmpl_else>
+		<tr><td>N/A for Property Type: <tmpl_var name="proptype"></td></tr>
+	</tmpl_if>
+	</table>
+</div>
+
+
+
+
+<div id="twocol-right">
+
+	<form id="tmpl" method="POST">
+	<input type="hidden" name="prop_id" value="<tmpl_var name='prop_id'>">
+
+
+	<div class="stickynote" style="float:none;width:335px;">
+	<span>Template Assignment</span>
+	</div>
+	
+	<tmpl_if name="prop_id">	
+		<div class="buttonrow" style="width: 335px;">
+			<button tabindex=100 title="Update template assignments." name="action" value="updateproptmpl">Update</button>
+			<button tabindex=100 title="Cancel template assignments." name="action" value="list">Cancel</button>
+		</div>
+	
+		<table width=100%>
+		<thead>
+		<tr>
+		    <th>X</th>
+		    <th>Name</th>
+		</tr>
+		</thead>
+	
+		<tr>
+		    <td colspan=2 class="nopad" style="background-color: black;">
+				<a tabindex=100 title="Check all templates." class="button" href="#" onclick="return checkAll( 'tmpl' );">check all</a>
+				<a tabindex=100 title="Clear all templates." class="button" href="#" onclick="return uncheckAll( 'tmpl' );">clear all</a>
+			</td>
+		</tr>
+
+		<tmpl_loop name="tloop">
+		<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+		    <td>
+				<input tabindex="<tmpl_var name="tabindex">" type="checkbox" 
+					name="chk<tmpl_var name='tmplname'>"
+					value="<tmpl_var name='tmplid'>"<tmpl_var name="checked">>
+			</td>
+		    <td><tmpl_var name="tmplname"></td>
+		</tr>
+		</tmpl_loop>
+		</table>
+	
+		<div class="buttonrow" style="width: 335px;">
+			<button tabindex=300 title="Update template assignments." name="action" value="updateproptmpl">Update</button>
+			<button tabindex=300 title="Cancel template assignments." name="action" value="list">Cancel</button>
+		</div>
+	</tmpl_if>	
+
+	</form>
+</div>
+
+</div>
+
+
+
+<tmpl_include name = "../tmpl/footer.tmpl">

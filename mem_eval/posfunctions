@@ -1,0 +1,47 @@
+#
+# Utility functions for monitoring POS processes and memory usage on Linux.
+#
+
+#----- chkposhome_exit -------------------------------------------------------
+# Check to see if the POS_HOME env var is set:
+function chkposhome_exit {
+	if [ "X${POS_HOME}" = "X" ]; then
+		echo
+		echo "Please export the POS_HOME env variable. eg:"
+		echo "    export POS_HOME=/u01/app/tomax"
+		echo
+		exit 1
+	fi
+}
+
+
+#----- tl_tmxsrvc_pid ---------------------------------------------------------
+# Returns the pid of the top-level tmxsrvc process.
+function tl_tmxsrvc_pid {
+	ps -eo pid,ppid,cmd --sort=ppid | grep tmxsrvc | head -n1 | awk '{print $1;}'
+}
+
+
+#----- tl_otxserv_pid ---------------------------------------------------------
+# Returns the pid of the top-level otxserv parent listener process.
+# Requires the tl_tmxsrvc_pid() function.
+function tl_otxserv_pid {
+	ps -eo ppid,pid,cmd --sort=pid | grep otxserv | grep "^[ ]*$(tl_tmxsrvc_pid)[ ]" | awk '{print $2;}'
+}
+
+
+#----- tl_txrep_pid ---------------------------------------------------------
+# Returns the pid of the top-level txrep parent listener process.
+# Requires the tl_tmxsrvc_pid() function.
+function tl_txrep_pid {
+	ps -eo ppid,pid,cmd --sort=pid | grep txrep | grep "^[ ]*$(tl_tmxsrvc_pid)[ ]" | awk '{print $2;}'
+}
+
+
+#----- tl_crdtmon_pid ---------------------------------------------------------
+# Returns the pid of the top-level crdtmon parent listener process.
+# Requires the tl_tmxsrvc_pid() function.
+function tl_crdtmon_pid {
+	ps -eo ppid,pid,cmd --sort=pid | grep crdtmon | grep "^[ ]*$(tl_tmxsrvc_pid)[ ]" | awk '{print $2;}'
+}
+

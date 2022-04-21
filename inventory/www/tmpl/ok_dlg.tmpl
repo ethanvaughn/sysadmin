@@ -1,0 +1,13 @@
+<TMPL_INCLUDE NAME = "../tmpl/header.tmpl">
+
+<TMPL_IF NAME="msg">
+	<div>
+	<TMPL_VAR NAME="msg">
+	</div>
+</TMPL_IF>
+
+<form action="<TMPL_VAR NAME='action'>" method="POST">
+<input type="submit" value="OK">
+</form>
+
+<TMPL_INCLUDE NAME = "../tmpl/footer.tmpl">

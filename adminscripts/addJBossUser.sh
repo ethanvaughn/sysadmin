@@ -1,0 +1,46 @@
+#!/bin/bash
+
+function usage_exit {
+	echo 
+	echo "Add specified jboss user with directories and permissions."
+	echo
+	echo "Usage: $0 jbossuser \"Full Name\""
+	echo
+	echo "    jbossuser = username of the jboss system account."
+	echo "    Full Name = Descriptive name of the jboss account."
+	echo
+	echo " eg."
+	echo "     $0 jboss0prtl \"JBoss Portal User\""
+	echo
+
+	exit 1
+}
+
+if [ $# -ne 2 ]; then
+	usage_exit
+fi
+
+jbossuser=$1
+comment=$2
+uid=$(/u01/app/adminscripts/nextuid.pl)
+
+groupadd -g 115 jboss
+tmxuseradd -u $uid -g jboss -G tomax -c "$comment" -d /u01/home/$jbossuser $jbossuser
+mkdir /u01/app/$jbossuser
+chown $jbossuser: /u01/app/$jbossuser
+chmod g+rwxs /u01/app/$jbossuser
+mkdir -p /u01/app/jdk
+chgrp jboss /u01/app/jdk
+chmod g+rwxs /u01/app/jdk
+chage -M 99999 $jbossuser
+
+echo "Appending sudo access:"
+SUDO_CMD="%sysdba ALL=(ALL) NOPASSWD: /bin/su - $jbossuser"
+echo "    $SUDO_CMD"
+echo "$SUDO_CMD" >> /etc/sudoers
+
+
+echo "User $jbossuser Created."
+echo 
+
+exit 0

@@ -1,0 +1,1 @@
+0 21 * * * root /u01/app/auth-client/authclient.pl &> /dev/null

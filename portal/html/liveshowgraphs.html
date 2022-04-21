@@ -1,0 +1,28 @@
+<html>
+<head>
+<title><tmpl_var name="title"></title>
+<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=portalusername>.css" />
+</head>
+<body>
+<table>
+<caption>Performance Reports:&nbsp;&nbsp;<a href="#" onclick="window.open(self.location.href);return false"><img src="../images/detach.gif" height=11 width=13 alt='Open in New Window' border=0></a></caption>
+<tr>
+<td>
+<tmpl_if name=address>
+	<!-- This section never runs since there is only one graph server now.  Also, it's a stupid section anyway !-->
+	<p><img src="retrieveGraph.pl?dclocation=west&image=<tmpl_var name=dataset>&imgnum=1"><br>Daily</p>
+	<p><img src="retrieveGraph.pl?dclocation=west&image=<tmpl_var name=dataset>&imgnum=2"><br>Weekly</p>
+	<p><img src="retrieveGraph.pl?dclocation=west&image=<tmpl_var name=dataset>&imgnum=3"><br>Monthly</p>
+	<p><img src="retrieveGraph.pl?dclocation=west&image=<tmpl_var name=dataset>&imgnum=4"><br>Yearly</p>
+<tmpl_else>
+	<p><img src="/portal/bin/loader.cgi?cgi=graph_image.php&action=view&local_graph_id=<tmpl_var name=dataset>&rra_id=1"><br>Daily <a href='/portal/bin/loader.cgi?cgi=graph_xport.php&local_graph_id=<tmpl_var name=dataset>&rra_id=1&view_type='>CVS Export</a></p>
+	<p><img src="/portal/bin/loader.cgi?cgi=graph_image.php&action=view&local_graph_id=<tmpl_var name=dataset>&rra_id=2"><br>Weekly <a href='/portal/bin/loader.cgi?cgi=graph_xport.php&local_graph_id=<tmpl_var name=dataset>&rra_id=2&view_type='>CVS Export</a></p>
+	<p><img src="/portal/bin/loader.cgi?cgi=graph_image.php&action=view&local_graph_id=<tmpl_var name=dataset>&rra_id=3"><br>Monthly <a href='/portal/bin/loader.cgi?cgi=graph_xport.php&local_graph_id=<tmpl_var name=dataset>&rra_id=3&view_type='>CVS Export</a></p>
+	<p><img src="/portal/bin/loader.cgi?cgi=graph_image.php&action=view&local_graph_id=<tmpl_var name=dataset>&rra_id=4"><br>Yearly <a href='/portal/bin/loader.cgi?cgi=graph_xport.php&local_graph_id=<tmpl_var name=dataset>&rra_id=4&view_type='>CVS Export</a></p>
+</tmpl_if>
+<tr>
+<td>
+</table>
+</body>
+</html>

@@ -1,0 +1,167 @@
+Building configuration...
+
+Current configuration : 3217 bytes
+!
+version 12.1
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname L26U43
+!
+enable secret 5 $1$jK9f$nA8SLUBrR8zBWC.JN0Qfa0
+!
+ip subnet-zero
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+interface GigabitEthernet0/1
+ description vmware15 HBA
+ switchport access vlan 404
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/2
+ switchport access vlan 404
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/3
+ switchport access vlan 404
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/4
+ description L26U33 GE2 (Tomax LB)
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/5
+ switchport access vlan 404
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/6
+ switchport access vlan 404
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 2-4094
+ switchport mode trunk
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/7
+ switchport access vlan 404
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/8
+ description vmware15 trunk
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/9
+ switchport access vlan 404
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/10
+ switchport access vlan 404
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/11
+ switchport access vlan 404
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/12
+ switchport access vlan 404
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/13
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/14
+ switchport access vlan 404
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/15
+ switchport access vlan 407
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/16
+ description L26U33 GE1 (Tomax LB)
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/17
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/18
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/19
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/20
+ switchport access vlan 404
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 400
+ switchport mode trunk
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/21
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/22
+ no ip address
+ spanning-tree portfast
+!
+interface GigabitEthernet0/23
+ description wdcstack01 - L37U26 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet0/24
+ description wdcstack01 - L37U27 Uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface Vlan1
+ no ip address
+ no ip route-cache
+ shutdown
+!
+ip http server
+!
+line con 0
+line vty 0 4
+ login    
+line vty 5 15
+ login
+!
+end

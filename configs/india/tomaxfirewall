@@ -1,0 +1,85 @@
+: Saved
+:
+PIX Version 6.1(4)
+nameif ethernet0 outside security0
+nameif ethernet1 inside security100
+enable password mYeNr0cSeWbBfOBq encrypted
+passwd mYeNr0cSeWbBfOBq encrypted
+hostname tomaxfirewall
+domain-name tomax.com
+fixup protocol ftp 21
+fixup protocol http 80
+fixup protocol h323 1720
+fixup protocol rsh 514
+fixup protocol rtsp 554
+fixup protocol smtp 25
+fixup protocol sqlnet 1521
+fixup protocol sip 5060
+fixup protocol skinny 2000
+names
+access-list tmxHQVPN permit ip 192.168.20.0 255.255.255.0 172.21.0.0 255.255.0.0
+access-list tmxHQVPN permit ip 192.168.20.0 255.255.255.0 host 208.177.140.20
+access-list tmxHQVPN permit ip 192.168.20.0 255.255.255.0 host 208.177.140.21
+access-list tmxHQVPN permit ip 192.168.20.0 255.255.255.0 host 208.177.140.23
+access-list tmxHQVPN permit ip 192.168.20.0 255.255.255.0 host 208.177.140.41
+access-list 100 permit icmp any any
+access-list nonat permit ip 192.168.20.0 255.255.255.0 172.21.0.0 255.255.0.0
+access-list nonat permit ip 192.168.20.0 255.255.255.0 host 208.177.140.20
+access-list nonat permit ip 192.168.20.0 255.255.255.0 host 208.177.140.21
+access-list nonat permit ip 192.168.20.0 255.255.255.0 host 208.177.140.23
+access-list nonat permit ip 192.168.20.0 255.255.255.0 host 208.177.140.41
+pager lines 24
+interface ethernet0 auto
+interface ethernet1 auto
+mtu outside 1500
+mtu inside 1500
+ip address outside 203.200.4.113 255.255.255.240
+ip address inside 192.168.20.1 255.255.255.0
+ip audit info action alarm
+ip audit attack action alarm
+pdm history enable
+arp timeout 14400
+global (outside) 1 interface
+nat (inside) 0 access-list nonat
+nat (inside) 1 0.0.0.0 0.0.0.0 0 0
+access-group 100 in interface outside
+route outside 0.0.0.0 0.0.0.0 203.200.4.114 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 rpc 0:10:00 h323 0:05:00 sip 0:30:00 sip_media 0:02:00
+timeout uauth 0:05:00 absolute
+aaa-server TACACS+ protocol tacacs+
+aaa-server RADIUS protocol radius
+no snmp-server location
+no snmp-server contact
+snmp-server community public
+no snmp-server enable traps
+floodguard enable
+sysopt connection permit-ipsec
+no sysopt route dnat
+crypto ipsec transform-set desmd5 esp-des esp-md5-hmac
+crypto map tomaxhq 5 ipsec-isakmp
+crypto map vpn 1 ipsec-isakmp
+crypto map vpn 1 match address tmxHQVPN
+crypto map vpn 1 set peer 208.177.140.5
+crypto map vpn 1 set transform-set desmd5
+crypto map vpn interface outside
+isakmp enable outside
+isakmp key ******** address 208.177.140.5 netmask 255.255.255.255
+isakmp identity address
+isakmp policy 1 authentication pre-share
+isakmp policy 1 encryption des
+isakmp policy 1 hash md5
+isakmp policy 1 group 1
+isakmp policy 1 lifetime 86400
+isakmp policy 2 authentication pre-share
+isakmp policy 2 encryption des
+isakmp policy 2 hash md5
+isakmp policy 2 group 2
+isakmp policy 2 lifetime 86400
+telnet 192.168.20.0 255.255.255.0 inside
+telnet timeout 10
+ssh 208.177.140.0 255.255.255.0 outside
+ssh 67.177.13.131 255.255.255.255 outside
+ssh timeout 60
+terminal width 80
+Cryptochecksum:e620eb38eeba457423b64173d3cb2de7

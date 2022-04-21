@@ -1,0 +1,107 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::vo;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+#----- viewMain ----------------------------------------------------------
+# Parameters (["ADD"])
+# Load and display the IP Address detail page.
+# Set state accordingly when the optional parameter $STATE is passed.
+sub viewMain {
+	my $ADD = shift;
+
+#DEBUG
+foreach my $key (keys( %$vars )) {
+	print STDERR "viewadddrdetail: $key=$vars->{$key}\n";
+};
+
+#		if (!$cgi->param( 'id' )) {
+#			www::cgi::helpers::exitonerr( "CGI: company: missing param 'id' for ACTION: [$ACTION]\n" );
+#		}
+	
+	# Get required data.
+#	my $nblist = lib::nb::getNbList( $dbh );
+#	my $iplist = lib::ip::getIpListPerNb( $dbh );
+
+	# Paint the picture
+	$htmlview = HTML::Template->new( filename => "../tmpl/main.tmpl", loop_context_vars => 1 );
+
+	$htmlview->param( tabmenu      => $tabmenu );
+	$htmlview->param( subtitle     => "Oncall Management" );
+	
+}
+
+
+
+#---- Main -------------------------------------------------------------------
+
+#DEBUG
+#print STDERR "company: ACTION=$ACTION\n";
+#foreach my $key (keys( %$vars )) {
+#	print STDERR "company: $key=$vars->{$key}\n";
+#};
+
+
+# Set up the tabmenu:
+$tabmenu = www::cgi::helpers::gen_tabmenu( "ONCALL" );
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- list --------------------------
+if ($ACTION eq "list") {
+	viewMain();
+
+#---- unknown --------------------------
+} else {
+	www::cgi::helpers::exitonerr( "CGI: company: Unknow action value [$ACTION].\n" );
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

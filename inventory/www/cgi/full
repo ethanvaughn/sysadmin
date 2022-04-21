@@ -1,0 +1,288 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::item;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+my $errnav = "full";
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+
+#----- getData --------------------------------------------------------------- 
+sub getData {
+	my $data = lib::item::getItemList( $dbh ); 
+	www::cgi::helpers::chkDB( $dbh );
+	return $data;
+}
+
+
+
+
+#----- createCSV --------------------------------------------------------------- 
+sub createCSV {
+	my $data = shift;
+	
+	# send the header to start a download:
+	print $cgi->header(
+		-type=>'application/x-download',
+		-attachment=>'full.csv'
+	);
+#	print $cgi->header(
+#		-type=>'text/plain',
+#	);
+
+	
+	# Print the field headers:
+	#           1    2   3        4       5     6    7         8          9          0       1     2        3        4    5     6     7       8        9      0        1       2    3   4       5     6   7   8   9    0      
+	print "itemname,id,serialno,rackpos,owner,users,comment,datacenter,environment,height,hwvendor,model,osvendor,osver,osarch,tier,svc_#,svc_begin,svc_end,svc_desc,physical,lom,term,storage,nat,backup,db,lb,mgmt,heartbeat\n";
+	
+	foreach my $itemname (sort keys( %$data )) {
+		# Replace the commas in the field:
+#		$data->{$itemname}->{user} =~ s/[,]/:/g;
+
+		my $row = "";
+
+		# Process the fields:
+		my %addr;
+		foreach my $key (keys( %{$data->{$itemname}} )) {
+			# Process users:
+			if ($key =~ /usercode/) {
+				$data->{$itemname}->{$key} =~ s/ - /:/g;
+			}
+
+
+			# Process addressing:
+			if ($key =~ /(.*)_ADMINIP/ || $key =~ /(.*)_IPADDR/) {
+				my $label = $1;
+				if ($key =~ /_ADMINIP/) {
+					# Mark the adminip:
+					$data->{$itemname}->{$key} .= '*';
+				}
+				if ($label =~ /PHYSICAL/) {
+					$addr{0} .= $data->{$itemname}->{$key} . ':';
+				} elsif ($label =~ /LOM/) {
+					$addr{1} .= $data->{$itemname}->{$key} . ':';					
+				} elsif ($label =~ /TERM/) {
+					$addr{2} .= $data->{$itemname}->{$key} . ':';					
+				} elsif ($label =~ /STORAGE/) {
+					$addr{3} .= $data->{$itemname}->{$key} . ':';					
+				} elsif ($label =~ /NAT/) {
+					$addr{4} .= $data->{$itemname}->{$key} . ':';					
+				} elsif ($label =~ /BACKUP/) {
+					$addr{5} .= $data->{$itemname}->{$key} . ':';					
+				} elsif ($label =~ /DB/) {
+					$addr{6} .= $data->{$itemname}->{$key} . ':';					
+				} elsif ($label =~ /LB/) {
+					$addr{7} .= $data->{$itemname}->{$key} . ':';					
+				} elsif ($label =~ /MGMT/) {
+					$addr{8} .= $data->{$itemname}->{$key} . ':';					
+				} elsif ($label =~ /HEARTBEAT/) {
+					$addr{9} .= $data->{$itemname}->{$key} . ':';					
+				}
+			}
+
+		}
+
+
+
+
+		$row .= "$itemname,"; #1
+		$row .= "$data->{$itemname}->{id},";#2
+		$row .= "$data->{$itemname}->{serialno}" if ($data->{$itemname}->{serialno});#3
+		$row .= ',';
+		$row .= "$data->{$itemname}->{Rack}" . "$data->{$itemname}->{'Rack-Position'}" if ($data->{$itemname}->{Rack} && $data->{$itemname}->{'Rack-Position'});#4
+		$row .= ',';
+		$row .= "$data->{$itemname}->{ownercode}" if ($data->{$itemname}->{ownercode});#5
+		$row .= ',';
+		$row .= "$data->{$itemname}->{usercode}" if ($data->{$itemname}->{usercode});#6
+		$row .= ',';
+		$row .= "$data->{$itemname}->{comment}" if ($data->{$itemname}->{comment});#7
+		$row .= ',';
+		$row .= "$data->{$itemname}->{Datacenter}" if ($data->{$itemname}->{Datacenter});#8
+		$row .= ',';
+		$row .= "$data->{$itemname}->{Environment}" if ($data->{$itemname}->{Environment});#9
+		$row .= ',';
+		$row .= "$data->{$itemname}->{Height}" if ($data->{$itemname}->{Height});#10
+		$row .= ',';
+		$row .= "$data->{$itemname}->{'Hardware-Vendor'}" if ($data->{$itemname}->{'Hardware-Vendor'});#11
+		$row .= ',';
+		$row .= "$data->{$itemname}->{'Hardware-Model'}" if ($data->{$itemname}->{'Hardware-Model'});#12
+		$row .= ',';
+		$row .= "$data->{$itemname}->{'OS Vendor'}" if ($data->{$itemname}->{'OS Vendor'});#13
+		$row .= ',';
+		$row .= "$data->{$itemname}->{'OS Version'}" if ($data->{$itemname}->{'OS Version'});#14
+		$row .= ',';
+		$row .= "$data->{$itemname}->{'OS Architecture'}" if ($data->{$itemname}->{'OS Architecture'});#15
+		$row .= ',';
+		$row .= "$data->{$itemname}->{Tier}" if ($data->{$itemname}->{'Tier'});#16
+		$row .= ',';
+		$row .= "$data->{$itemname}->{'Svc Cont #'}" if ($data->{$itemname}->{'Svc Cont #'});#17
+		$row .= ',';
+		$row .= "$data->{$itemname}->{'Svc Cont Date Begin'}" if ($data->{$itemname}->{'Svc Cont Date Begin'});#18
+		$row .= ',';
+		$row .= "$data->{$itemname}->{'Svc Cont Date End'}" if ($data->{$itemname}->{'Svc Cont Date End'});#19
+		$row .= ',';
+		$row .= "$data->{$itemname}->{'Svc Cont Desc'}" if ($data->{$itemname}->{'Svc Cont Desc'});#20
+		$row .= ',';
+		
+		# Arrange the addresses based on type: 
+		for (my $i=0; $i<10; $i++) {
+ 			if ($addr{$i}) {
+				chop( $addr{$i} );
+				$row .= $addr{$i};
+			}
+			$row .= ",";
+		}
+		
+		# Expunge the trailing comma
+		chop( $row );
+		
+		print "$row\n";
+	}
+	
+	exit (0);
+	
+}
+
+
+
+
+#----- viewList --------------------------------------------------------------- 
+sub viewList {
+	my $data = shift;
+
+	my $rows = "";
+	my $rowcnt = 0;
+	foreach my $rec (@$data) {
+		$rows .= "<tr";
+		$rows .= ' class="altrow" ' if ($rowcnt%2 == 0);
+		$rows .= ">";
+		
+		$rows .= "<td>$rec->{itemname}</td>";
+		$rows .= "<td>$rec->{id}</td>";
+		$rows .= "<td>$rec->{serialno}</td>";
+		$rows .= "<td>$rec->{rackpos}</td>";
+		$rows .= "<td>$rec->{owner}</td>";
+		$rows .= "<td>$rec->{user}</td>";
+		$rows .= "<td>$rec->{comment}</td>";
+		$rows .= "<td>$rec->{Datacenter}</td>";
+		$rows .= "<td>$rec->{Environment}</td>";
+		$rows .= "<td>$rec->{Height}</td>";
+		$rows .= "<td>$rec->{'Hardware-Vendor'}</td>";
+		$rows .= "<td>$rec->{'Hardware-Model'}</td>";
+		$rows .= "<td>$rec->{'OS Vendor'}</td>";
+		$rows .= "<td>$rec->{'OS Version'}</td>";
+		$rows .= "<td>$rec->{'OS Architecture'}</td>";
+		$rows .= "<td>$rec->{'Svc Cont #'}</td>";
+		$rows .= "<td>$rec->{'Svc Cont Date Begin'}</td>";
+		$rows .= "<td>$rec->{'Svc Cont Date End'}</td>";
+		$rows .= "<td>$rec->{'Svc Cont Desc'}</td>";
+		$rows .= "<td>$rec->{Tier}</td>";
+
+		my $i = 1;
+		foreach my $key (%$rec) {
+			$rows .= "<td>$rec->{'address'.$i}</td>" if ($rec->{'address'.$i});
+			$i++;
+		}
+		
+		$rows .= "</tr>\n";
+		$rowcnt++;
+	}
+
+	$htmlview = HTML::Template->new( filename => "../tmpl/full.tmpl", loop_context_vars => 1 );
+	$htmlview->param( tabmenu  => $tabmenu );
+	$htmlview->param( subtitle => "List of Items (Full Report)" );
+	$htmlview->param( rows     => $rows );
+
+	print $cgi->header;
+	print $htmlview->output;
+
+	exit (0);
+}
+
+
+
+
+#---- Main -------------------------------------------------------------------
+
+#DEBUG
+#print STDERR "property: ACTION=$ACTION\n";
+#foreach my $key (keys( %$vars )) {
+#	print STDERR "property: $key=$vars->{$key}\n";
+#};
+
+# Set up the tabmenu:
+#$tabmenu = www::cgi::helpers::gen_tabmenu( "INV" );
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+
+#---- csv --------------------------
+if ($ACTION eq "csv") {
+	# do csv stuff
+	my $data = getData();
+	createCSV( $data );
+	viewList( $data );
+	
+
+
+
+#----- list -----------------------------
+} else {
+	my $data = getData();
+	viewList( $data );
+}
+
+
+
+
+#----- End Controller Engine -------------------------------------------------
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+# Misc. message to display. Useful for debugging or status messages.
+if ($msg) {
+	$htmlview->param( msg => $msg );
+}
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

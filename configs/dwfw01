@@ -1,0 +1,1578 @@
+: Saved
+:
+ASA Version 7.0(4)3 
+!
+terminal width 160
+hostname dwfw01
+domain-name tomax.com
+enable password /zp29/u4XwwZ0P0p encrypted
+no names
+!
+interface GigabitEthernet0/0
+ nameif External
+ security-level 0
+ ip address 66.133.106.33 255.255.254.0 standby 66.133.106.34 
+!
+interface GigabitEthernet0/1
+ nameif Internal
+ security-level 100
+ ip address 10.24.82.1 255.255.255.128 standby 10.24.82.2 
+!
+interface GigabitEthernet0/2
+ nameif DMZ1
+ security-level 50
+ ip address 10.24.100.129 255.255.255.224 standby 10.24.100.130 
+!
+interface GigabitEthernet0/3
+ description LAN Failover Interface
+!
+interface Management0/0
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+passwd /zp29/u4XwwZ0P0p encrypted
+boot system disk0:/asa704-3-k8.bin
+ftp mode passive
+clock timezone MST -7
+object-group network vpnLocal
+ network-object 10.24.82.0 255.255.255.128
+object-group network vpnRemote
+ network-object host 10.24.74.9
+ network-object host 10.24.74.10
+ network-object host 10.24.74.12
+ network-object host 10.24.74.13
+ network-object host 10.24.74.14
+ network-object host 10.24.74.19
+ network-object host 10.24.74.20
+ network-object 172.30.230.0 255.255.254.0
+object-group network vpnDW
+ network-object 128.103.0.0 255.255.0.0
+ network-object 128.27.0.0 255.255.0.0
+object-group network cvpn
+ network-object 10.200.2.128 255.255.255.224
+object-group network site901
+ network-object 10.9.1.0 255.255.255.0
+object-group network isd
+ network-object host 69.214.17.69
+object-group network store221
+ network-object 10.2.21.0 255.255.255.0
+object-group network dwServers
+ network-object 10.24.82.0 255.255.255.128
+object-group network dwStores
+ network-object 10.0.1.0 255.255.255.0
+ network-object 10.2.7.0 255.255.255.0
+ network-object 10.3.6.0 255.255.255.0
+ network-object 10.3.47.0 255.255.255.0
+ network-object 10.2.21.0 255.255.255.0
+ network-object 10.1.14.0 255.255.255.0
+ network-object 10.3.61.0 255.255.255.0
+ network-object 10.2.61.0 255.255.255.0
+ network-object 10.2.42.0 255.255.255.0
+ network-object 10.1.75.0 255.255.255.0
+ network-object 10.2.5.0 255.255.255.0
+ network-object 10.1.55.0 255.255.255.0
+ network-object 10.2.46.0 255.255.255.0
+ network-object 128.103.0.0 255.255.0.0
+ network-object 128.27.0.0 255.255.0.0
+ network-object 10.1.90.0 255.255.255.0
+ network-object 10.1.8.0 255.255.255.0
+ network-object 10.1.12.0 255.255.255.0
+ network-object 10.2.53.0 255.255.255.0
+ network-object 10.2.60.0 255.255.255.0
+ network-object 10.2.71.0 255.255.255.0
+ network-object 10.2.75.0 255.255.255.0
+ network-object 10.3.18.0 255.255.255.0
+ network-object 10.3.39.0 255.255.255.0
+ network-object 10.3.41.0 255.255.255.0
+ network-object 10.0.45.0 255.255.255.0
+ network-object 10.1.5.0 255.255.255.0
+ network-object 10.2.20.0 255.255.255.0
+ network-object 10.3.42.0 255.255.255.0
+ network-object 10.3.53.0 255.255.255.0
+ network-object 10.2.32.0 255.255.255.0
+ network-object 10.2.99.0 255.255.255.0
+ network-object 10.3.45.0 255.255.255.0
+ network-object 10.1.19.0 255.255.255.0
+ network-object 10.3.27.0 255.255.255.0
+ network-object 10.3.32.0 255.255.255.0
+ network-object 10.3.55.0 255.255.255.0
+ network-object 10.2.70.0 255.255.255.0
+ network-object 10.3.59.0 255.255.255.0
+ network-object 10.1.24.0 255.255.255.0
+ network-object 10.2.96.0 255.255.255.0
+ network-object 10.3.20.0 255.255.255.0
+ network-object 10.1.54.0 255.255.255.0
+ network-object 10.2.59.0 255.255.255.0
+ network-object 10.2.84.0 255.255.255.0
+ network-object 10.1.23.0 255.255.255.0
+ network-object 10.2.54.0 255.255.255.0
+ network-object 10.2.79.0 255.255.255.0
+ network-object 10.3.33.0 255.255.255.0
+ network-object 10.2.35.0 255.255.255.0
+ network-object 10.2.80.0 255.255.255.0
+ network-object 10.2.57.0 255.255.255.0
+ network-object 10.2.31.0 255.255.255.0
+ network-object 10.3.52.0 255.255.255.0
+ network-object 10.1.31.0 255.255.255.0
+ network-object 10.2.86.0 255.255.255.0
+ network-object 10.1.66.0 255.255.255.0
+ network-object 10.1.61.0 255.255.255.0
+ network-object 10.3.21.0 255.255.255.0
+ network-object 10.3.14.0 255.255.255.0
+ network-object 10.2.10.0 255.255.255.0
+ network-object 10.2.17.0 255.255.255.0
+ network-object 10.2.63.0 255.255.255.0
+ network-object 10.0.19.0 255.255.255.0
+ network-object 10.3.64.0 255.255.255.0
+ network-object 10.2.3.0 255.255.255.0
+ network-object 10.1.29.0 255.255.255.0
+ network-object 10.2.8.0 255.255.255.0
+ network-object 10.2.68.0 255.255.255.0
+ network-object 10.6.7.0 255.255.255.0
+ network-object 10.2.25.0 255.255.255.0
+ network-object 10.3.28.0 255.255.255.0
+ network-object 10.2.58.0 255.255.255.0
+ network-object 10.2.51.0 255.255.255.0
+ network-object 10.2.82.0 255.255.255.0
+ network-object 10.2.72.0 255.255.255.0
+ network-object 10.3.38.0 255.255.255.0
+ network-object 10.2.76.0 255.255.255.0
+ network-object 10.2.16.0 255.255.255.0
+ network-object 10.2.45.0 255.255.255.0
+ network-object 10.2.91.0 255.255.255.0
+ network-object 10.3.60.0 255.255.255.0
+ network-object 10.3.25.0 255.255.255.0
+ network-object 10.2.69.0 255.255.255.0
+ network-object 10.2.83.0 255.255.255.0
+ network-object 10.3.1.0 255.255.255.0
+ network-object 10.2.11.0 255.255.255.0
+ network-object 10.2.92.0 255.255.255.0
+ network-object 10.1.91.0 255.255.255.0
+ network-object 10.2.14.0 255.255.255.0
+ network-object 10.3.65.0 255.255.255.0
+ network-object 10.2.12.0 255.255.255.0
+ network-object 10.2.97.0 255.255.255.0
+ network-object 10.2.49.0 255.255.255.0
+ network-object 10.3.22.0 255.255.255.0
+ network-object 10.3.3.0 255.255.255.0
+ network-object 10.2.67.0 255.255.255.0
+ network-object 10.3.62.0 255.255.255.0
+ network-object 10.3.57.0 255.255.255.0
+ network-object 10.3.35.0 255.255.255.0
+ network-object 10.3.24.0 255.255.255.0
+ network-object 10.1.95.0 255.255.255.0
+ network-object 10.2.90.0 255.255.255.0
+ network-object 10.2.62.0 255.255.255.0
+ network-object 10.2.38.0 255.255.255.0
+ network-object 10.0.18.0 255.255.255.0
+ network-object 10.2.65.0 255.255.255.0
+ network-object 10.3.10.0 255.255.255.0
+ network-object 10.3.9.0 255.255.255.0
+ network-object 10.1.89.0 255.255.255.0
+ network-object 10.2.55.0 255.255.255.0
+ network-object 10.3.48.0 255.255.255.0
+ network-object 10.3.23.0 255.255.255.0
+ network-object 10.3.17.0 255.255.255.0
+ network-object 10.3.29.0 255.255.255.0
+ network-object 10.2.36.0 255.255.255.0
+ network-object 10.3.26.0 255.255.255.0
+ network-object 10.3.58.0 255.255.255.0
+ network-object 10.2.37.0 255.255.255.0
+ network-object 10.1.85.0 255.255.255.0
+ network-object 10.2.81.0 255.255.255.0
+ network-object 10.2.50.0 255.255.255.0
+ network-object 10.2.87.0 255.255.255.0
+ network-object 10.2.30.0 255.255.255.0
+ network-object 10.3.63.0 255.255.255.0
+ network-object 10.3.68.0 255.255.255.0
+ network-object 10.1.57.0 255.255.255.0
+ network-object 10.2.41.0 255.255.255.0
+ network-object 10.2.52.0 255.255.255.0
+ network-object 10.1.63.0 255.255.255.0
+ network-object 10.2.13.0 255.255.255.0
+ network-object 10.3.4.0 255.255.255.0
+ network-object 10.2.47.0 255.255.255.0
+ network-object 10.3.40.0 255.255.255.0
+ network-object 10.2.95.0 255.255.255.0
+ network-object 10.2.39.0 255.255.255.0
+ network-object 10.3.66.0 255.255.255.0
+ network-object 10.0.97.0 255.255.255.0
+ network-object 10.3.11.0 255.255.255.0
+ network-object 10.2.43.0 255.255.255.0
+ network-object 10.3.54.0 255.255.255.0
+ network-object 10.4.11.0 255.255.255.0
+ network-object 10.3.70.0 255.255.255.0
+ network-object 10.3.51.0 255.255.255.0
+ network-object 10.3.72.0 255.255.255.0
+ network-object 10.3.67.0 255.255.255.0
+ network-object 10.3.46.0 255.255.255.0
+ network-object 10.2.27.0 255.255.255.0
+ network-object 10.2.44.0 255.255.255.0
+ network-object 10.2.77.0 255.255.255.0
+ network-object 10.2.28.0 255.255.255.0
+ network-object 10.3.71.0 255.255.255.0
+ network-object 10.2.22.0 255.255.255.0
+ network-object 10.2.98.0 255.255.255.0
+ network-object 10.3.74.0 255.255.255.0
+ network-object 10.2.56.0 255.255.255.0
+ network-object 10.2.4.0 255.255.255.0
+ network-object 10.2.94.0 255.255.255.0
+ network-object 10.3.49.0 255.255.255.0
+ network-object 10.3.43.0 255.255.255.0
+ network-object 10.2.23.0 255.255.255.0
+ network-object 10.2.64.0 255.255.255.0
+ network-object 10.2.9.0 255.255.255.0
+ network-object 10.2.73.0 255.255.255.0
+ network-object 10.2.6.0 255.255.255.0
+ network-object 10.3.16.0 255.255.255.0
+ network-object 10.1.65.0 255.255.255.0
+ network-object 10.2.66.0 255.255.255.0
+ network-object 10.2.48.0 255.255.255.0
+ network-object 10.2.2.0 255.255.255.0
+ network-object 10.2.24.0 255.255.255.0
+ network-object 10.3.73.0 255.255.255.0
+ network-object 10.3.37.0 255.255.255.0
+ network-object 10.2.34.0 255.255.255.0
+ network-object 10.1.50.0 255.255.255.0
+ network-object 10.3.56.0 255.255.255.0
+ network-object 10.1.49.0 255.255.255.0
+ network-object 10.3.36.0 255.255.255.0
+ network-object 10.3.2.0 255.255.255.0
+ network-object 10.3.5.0 255.255.255.0
+ network-object 10.3.19.0 255.255.255.0
+ network-object 10.3.34.0 255.255.255.0
+ network-object 10.3.15.0 255.255.255.0
+ network-object 10.2.29.0 255.255.255.0
+ network-object 10.2.85.0 255.255.255.0
+ network-object 10.2.18.0 255.255.255.0
+ network-object 10.3.75.0 255.255.255.0
+ network-object 10.3.77.0 255.255.255.0
+ network-object 10.3.93.0 255.255.255.0
+ network-object 10.8.98.0 255.255.255.0
+ network-object 10.4.30.0 255.255.255.0
+ network-object 10.3.99.0 255.255.255.0
+ network-object 10.3.97.0 255.255.255.0
+ network-object 10.4.1.0 255.255.255.0
+ network-object 10.3.85.0 255.255.255.0
+ network-object 10.4.0.0 255.255.255.0
+ network-object 10.3.87.0 255.255.255.0
+ network-object 10.4.4.0 255.255.255.0
+ network-object 10.4.8.0 255.255.255.0
+ network-object 10.3.82.0 255.255.255.0
+ network-object 10.3.91.0 255.255.255.0
+ network-object 10.3.98.0 255.255.255.0
+ network-object 10.3.92.0 255.255.255.0
+ network-object 10.3.86.0 255.255.255.0
+ network-object 10.4.16.0 255.255.255.0
+ network-object 10.9.5.0 255.255.255.0
+ network-object 10.4.5.0 255.255.255.0
+ network-object 10.4.7.0 255.255.255.0
+object-group network isdServers
+ network-object host 10.24.82.43
+ network-object host 10.24.82.45
+object-group network novaLocal
+ network-object host 10.24.82.43
+ network-object host 10.24.82.45
+object-group network novaRemote
+ network-object host 198.203.191.98
+ network-object host 198.203.192.212
+ network-object host 198.203.192.132
+ network-object host 198.203.191.104
+ network-object host 198.203.192.217
+ network-object host 198.203.191.35
+ network-object host 198.203.191.112
+object-group network novaNAT
+ network-object host 172.22.130.32
+object-group network store249
+ network-object 10.2.49.0 255.255.255.0
+object-group network dwCvpn
+ network-object 10.9.99.0 255.255.255.0
+object-group network store376
+ network-object 10.3.76.0 255.255.255.0
+object-group network store902
+ network-object 10.9.2.0 255.255.255.0
+object-group network store903
+ network-object 10.9.3.0 255.255.255.0
+object-group network store807
+ network-object 10.8.7.0 255.255.255.0
+object-group network store313
+ network-object 10.3.13.0 255.255.255.0
+object-group network store379
+ network-object 10.3.79.0 255.255.255.0
+object-group network store380
+ network-object 10.3.80.0 255.255.255.0
+object-group network store378
+ network-object 10.3.78.0 255.255.255.0
+object-group network store383
+ network-object 10.3.83.0 255.255.255.0
+object-group network store382
+ network-object 10.3.82.0 255.255.255.0
+object-group network store381
+ network-object 10.3.81.0 255.255.255.0
+object-group network store384
+ network-object 10.3.84.0 255.255.255.0
+object-group network store386
+ network-object 10.3.86.0 255.255.255.0
+object-group network store236
+ network-object 10.2.36.0 255.255.255.0
+object-group network store389
+ network-object 10.3.89.0 255.255.255.0
+object-group network store387
+ network-object 10.3.87.0 255.255.255.0
+object-group network store388
+ network-object 10.3.88.0 255.255.255.0
+object-group network store392
+ network-object 10.3.92.0 255.255.255.0
+object-group network store391
+ network-object 10.3.91.0 255.255.255.0
+object-group network store390
+ network-object 10.3.90.0 255.255.255.0
+object-group network store393
+ network-object 10.3.93.0 255.255.255.0
+object-group network store278
+ network-object 10.2.78.0 255.255.255.0
+object-group network store430
+ network-object 10.4.30.0 255.255.255.0
+object-group network store331
+ network-object 10.3.31.0 255.255.255.0
+object-group network store399
+ network-object 10.3.99.0 255.255.255.0
+object-group network store395
+ network-object 10.3.95.0 255.255.255.0
+object-group network store394
+ network-object 10.3.94.0 255.255.255.0
+object-group network store396
+ network-object 10.3.96.0 255.255.255.0
+object-group network store001
+ network-object 10.0.1.0 255.255.255.0
+object-group network store397
+ network-object 10.3.97.0 255.255.255.0
+object-group network store247
+ network-object 10.2.47.0 255.255.255.0
+object-group network store400
+ network-object 10.4.0.0 255.255.255.0
+object-group network store417
+ network-object 10.4.17.0 255.255.255.0
+object-group network store404
+ network-object 10.4.4.0 255.255.255.0
+object-group network store398
+ network-object 10.3.98.0 255.255.255.0
+object-group network store419
+ network-object 10.4.19.0 255.255.255.0
+object-group network store401
+ network-object 10.4.1.0 255.255.255.0
+object-group network store416
+ network-object 10.4.16.0 255.255.255.0
+object-group network store408
+ network-object 10.4.8.0 255.255.255.0
+object-group network store402
+ network-object 10.4.2.0 255.255.255.0
+object-group network store403
+ network-object 10.4.3.0 255.255.255.0
+object-group network site897
+ network-object 10.8.97.0 255.255.255.0
+object-group network store223
+ network-object 10.2.23.0 255.255.255.0
+object-group network store904
+ network-object 10.9.4.0 255.255.255.0
+object-group network store204
+ network-object 10.2.4.0 255.255.255.0
+object-group network store129
+ network-object 10.1.29.0 255.255.255.0
+object-group network store905
+ network-object 10.9.5.0 255.255.255.0
+object-group network store262
+ network-object 10.2.62.0 255.255.255.0
+object-group network store342
+ network-object 10.3.42.0 255.255.255.0
+object-group network store349
+ network-object 10.3.49.0 255.255.255.0
+object-group network store335
+ network-object 10.3.35.0 255.255.255.0
+object-group network store322
+ network-object 10.3.22.0 255.255.255.0
+object-group network store324
+ network-object 10.3.24.0 255.255.255.0
+object-group network store242
+ network-object 10.2.42.0 255.255.255.0
+object-group network store243
+ network-object 10.2.43.0 255.255.255.0
+object-group network svsNetwork
+ network-object host 216.76.27.251
+ network-object host 216.76.27.232
+object-group network store265
+ network-object 10.2.65.0 255.255.255.0
+object-group network store405
+ network-object 10.4.5.0 255.255.255.0
+object-group network store275
+ network-object 10.2.75.0 255.255.255.0
+object-group network store256
+ network-object 10.2.56.0 255.255.255.0
+object-group network store356
+ network-object 10.3.56.0 255.255.255.0
+object-group network store260
+ network-object 10.2.60.0 255.255.255.0
+object-group network store339
+ network-object 10.3.39.0 255.255.255.0
+object-group network store294
+ network-object 10.2.94.0 255.255.255.0
+object-group network store407
+ network-object 10.4.7.0 255.255.255.0
+object-group network store357
+ network-object 10.3.57.0 255.255.255.0
+object-group network store406
+ network-object 10.4.6.0 255.255.255.0
+object-group network store233
+ network-object 10.2.33.0 255.255.255.0
+object-group network store409
+ network-object 10.4.9.0 255.255.255.0
+access-list noNAT extended permit ip object-group vpnLocal object-group vpnRemote 
+access-list noNAT extended permit ip object-group vpnLocal object-group vpnDW 
+access-list noNAT extended permit ip object-group vpnLocal object-group cvpn 
+access-list noNAT extended permit ip object-group vpnLocal object-group site901 
+access-list noNAT extended permit ip object-group vpnLocal object-group store221 
+access-list noNAT extended permit ip object-group vpnLocal object-group dwStores 
+access-list noNAT extended permit ip object-group isdServers object-group isd 
+access-list noNAT extended permit ip object-group vpnLocal object-group store249 
+access-list noNAT extended permit ip object-group vpnLocal object-group dwCvpn 
+access-list noNAT extended permit ip object-group vpnLocal object-group store376 
+access-list noNAT extended permit ip object-group vpnLocal object-group store902 
+access-list noNAT extended permit ip object-group vpnLocal object-group store903 
+access-list noNAT extended permit ip object-group vpnLocal object-group store807 
+access-list noNAT extended permit ip object-group vpnLocal object-group store313 
+access-list noNAT extended permit ip object-group vpnLocal object-group store379 
+access-list noNAT extended permit ip object-group vpnLocal object-group store380 
+access-list noNAT extended permit ip object-group vpnLocal object-group store378 
+access-list noNAT extended permit ip object-group vpnLocal object-group store383 
+access-list noNAT extended permit ip object-group vpnLocal object-group store382 
+access-list noNAT extended permit ip object-group vpnLocal object-group store381 
+access-list noNAT extended permit ip object-group vpnLocal object-group store384 
+access-list noNAT extended permit ip object-group vpnLocal object-group store386 
+access-list noNAT extended permit ip object-group vpnLocal object-group store236 
+access-list noNAT extended permit ip object-group vpnLocal object-group store389 
+access-list noNAT extended permit ip object-group vpnLocal object-group store387 
+access-list noNAT extended permit ip object-group vpnLocal object-group store388 
+access-list noNAT extended permit ip object-group vpnLocal object-group store392 
+access-list noNAT extended permit ip object-group vpnLocal object-group store391 
+access-list noNAT extended permit ip object-group vpnLocal object-group store390 
+access-list noNAT extended permit ip object-group vpnLocal object-group store278 
+access-list noNAT extended permit ip object-group vpnLocal object-group store430 
+access-list noNAT extended permit ip object-group vpnLocal object-group store331 
+access-list noNAT extended permit ip object-group vpnLocal object-group store395 
+access-list noNAT extended permit ip object-group vpnLocal object-group store394 
+access-list noNAT extended permit ip object-group vpnLocal object-group store396 
+access-list noNAT extended permit ip object-group vpnLocal object-group store001 
+access-list noNAT extended permit ip object-group vpnLocal object-group store247 
+access-list noNAT extended permit ip object-group vpnLocal object-group store400 
+access-list noNAT extended permit ip object-group vpnLocal object-group store417 
+access-list noNAT extended permit ip object-group vpnLocal object-group store404 
+access-list noNAT extended permit ip object-group vpnLocal object-group store398 
+access-list noNAT extended permit ip object-group vpnLocal object-group store419 
+access-list noNAT extended permit ip object-group vpnLocal object-group store416 
+access-list noNAT extended permit ip object-group novaLocal object-group novaRemote 
+access-list noNAT extended permit ip object-group vpnLocal object-group store408 
+access-list noNAT extended permit ip object-group vpnLocal object-group store402 
+access-list noNAT extended permit ip object-group vpnLocal object-group store403 
+access-list noNAT extended permit ip object-group vpnLocal object-group site897 
+access-list noNAT extended permit ip object-group vpnLocal object-group store223 
+access-list noNAT extended permit ip object-group vpnLocal object-group store904 
+access-list noNAT extended permit ip object-group vpnLocal object-group store129 
+access-list noNAT extended permit ip object-group vpnLocal object-group store905 
+access-list noNAT extended permit ip object-group vpnLocal object-group store406 
+access-list noNAT extended permit ip object-group vpnLocal object-group store233 
+access-list noNAT extended permit ip object-group vpnLocal object-group store409 
+access-list tmxVPN extended permit ip object-group vpnLocal object-group vpnRemote 
+access-list dwVPN extended permit ip object-group vpnLocal object-group vpnDW 
+access-list site901 extended permit ip object-group vpnLocal object-group site901 
+access-list isd extended permit ip object-group isdServers object-group isd 
+access-list abc extended permit icmp host 10.24.82.45 host 10.2.9.65 
+access-list abc extended permit icmp host 10.2.9.65 host 10.24.82.45 
+access-list store903 extended permit ip object-group vpnLocal object-group store903 
+access-list store807 extended permit ip object-group vpnLocal object-group store807 
+access-list store221 extended permit ip object-group vpnLocal object-group store221 
+access-list dmz1Out extended permit ip object-group dwStores object-group dwServers 
+access-list dmz1Out extended permit ip object-group dwCvpn object-group vpnLocal 
+access-list store313 extended permit ip object-group vpnLocal object-group store313 
+access-list store902 extended permit ip object-group vpnLocal object-group store902 
+access-list novaNAT extended permit ip object-group novaLocal object-group novaRemote 
+access-list novaVPN extended permit ip object-group novaNAT object-group novaRemote 
+access-list store376 extended permit ip object-group vpnLocal object-group store376 
+access-list store249 extended permit ip object-group vpnLocal object-group store249 
+access-list store379 extended permit ip object-group vpnLocal object-group store379 
+access-list store380 extended permit ip object-group vpnLocal object-group store380 
+access-list store378 extended permit ip object-group vpnLocal object-group store378 
+access-list store383 extended permit ip object-group vpnLocal object-group store383 
+access-list store382 extended permit ip object-group vpnLocal object-group store382 
+access-list store381 extended permit ip object-group vpnLocal object-group store381 
+access-list store384 extended permit ip object-group vpnLocal object-group store384 
+access-list store386 extended permit ip object-group vpnLocal object-group store386 
+access-list store236 extended permit ip object-group vpnLocal object-group store236 
+access-list store389 extended permit ip object-group vpnLocal object-group store389 
+access-list store387 extended permit ip object-group vpnLocal object-group store387 
+access-list store388 extended permit ip object-group vpnLocal object-group store388 
+access-list store392 extended permit ip object-group vpnLocal object-group store392 
+access-list store391 extended permit ip object-group vpnLocal object-group store391 
+access-list store390 extended permit ip object-group vpnLocal object-group store390 
+access-list store223 extended permit ip object-group vpnLocal object-group store223 
+access-list store393 extended permit ip object-group vpnLocal object-group store393 
+access-list store278 extended permit ip object-group vpnLocal object-group store278 
+access-list store430 extended permit ip object-group vpnLocal object-group store430 
+access-list store331 extended permit ip object-group vpnLocal object-group store331 
+access-list store399 extended permit ip object-group vpnLocal object-group store399 
+access-list store395 extended permit ip object-group vpnLocal object-group store395 
+access-list store394 extended permit ip object-group vpnLocal object-group store394 
+access-list store396 extended permit ip object-group vpnLocal object-group store396 
+access-list store001 extended permit ip object-group vpnLocal object-group store001 
+access-list store397 extended permit ip object-group vpnLocal object-group store397 
+access-list store247 extended permit ip object-group vpnLocal object-group store247 
+access-list store400 extended permit ip object-group vpnLocal object-group store400 
+access-list store417 extended permit ip object-group vpnLocal object-group store417 
+access-list store404 extended permit ip object-group vpnLocal object-group store404 
+access-list store398 extended permit ip object-group vpnLocal object-group store398 
+access-list store419 extended permit ip object-group vpnLocal object-group store419 
+access-list store401 extended permit ip object-group vpnLocal object-group store401 
+access-list store416 extended permit ip object-group vpnLocal object-group store416 
+access-list store408 extended permit ip object-group vpnLocal object-group store408 
+access-list store402 extended permit ip object-group vpnLocal object-group store402 
+access-list store322 extended permit ip object-group vpnLocal object-group store322 
+access-list store403 extended permit ip object-group vpnLocal object-group store403 
+access-list site897 extended permit ip object-group vpnLocal object-group site897 
+access-list store904 extended permit ip object-group vpnLocal object-group store904 
+access-list store204 extended permit ip object-group vpnLocal object-group store204 
+access-list store129 extended permit ip object-group vpnLocal object-group store129 
+access-list store905 extended permit ip object-group vpnLocal object-group store905 
+access-list store262 extended permit ip object-group vpnLocal object-group store262 
+access-list store342 extended permit ip object-group vpnLocal object-group store342 
+access-list store349 extended permit ip object-group vpnLocal object-group store349 
+access-list store335 extended permit ip object-group vpnLocal object-group store335 
+access-list store324 extended permit ip object-group vpnLocal object-group store324 
+access-list store242 extended permit ip object-group vpnLocal object-group store242 
+access-list svsVPN1 extended permit ip host 10.24.82.43 host 216.76.27.232 
+access-list svsVPN1 extended permit ip host 10.24.82.43 host 216.76.27.251 
+access-list svsVPN2 extended permit ip host 10.24.82.45 host 216.76.27.232 
+access-list svsVPN2 extended permit ip host 10.24.82.45 host 216.76.27.251 
+access-list svsVPN extended permit ip host 66.133.106.143 host 216.76.27.232 
+access-list svsVPN extended permit ip host 66.133.106.145 host 216.76.27.232 
+access-list store275 extended permit ip object-group vpnLocal object-group store275 
+access-list store243 extended permit ip object-group vpnLocal object-group store243 
+access-list natvpn extended permit ip host 66.133.106.143 host 216.76.27.251 
+access-list natvpn extended permit ip host 66.133.106.145 host 216.76.27.251 
+access-list store265 extended permit ip object-group vpnLocal object-group store265 
+access-list store405 extended permit ip object-group vpnLocal object-group store405 
+access-list store256 extended permit ip object-group vpnLocal object-group store256 
+access-list store356 extended permit ip object-group vpnLocal object-group store356 
+access-list store260 extended permit ip object-group vpnLocal object-group store260 
+access-list store339 extended permit ip object-group vpnLocal object-group store339 
+access-list store294 extended permit ip object-group vpnLocal object-group store294 
+access-list store407 extended permit ip object-group vpnLocal object-group store407 
+access-list store357 extended permit ip object-group vpnLocal object-group store357 
+access-list store406 extended permit ip object-group vpnLocal object-group store406 
+access-list store233 extended permit ip object-group vpnLocal object-group store233 
+access-list store409 extended permit ip object-group vpnLocal object-group store409 
+pager lines 24
+logging enable
+logging buffered debugging
+logging trap debugging
+logging asdm informational
+logging host Internal 10.24.74.13
+mtu External 1500
+mtu Internal 1500
+mtu DMZ1 1500
+ip local pool cvpn 10.200.2.129-10.200.2.158
+failover
+failover lan unit primary
+failover lan interface fail-link GigabitEthernet0/3
+failover interface ip fail-link 1.1.1.1 255.255.255.0 standby 1.1.1.2
+asdm image disk0:/asdm-501.bin
+no asdm history enable
+arp timeout 14400
+global (External) 1 interface
+global (External) 2 172.22.130.32
+nat (Internal) 0 access-list noNAT
+nat (Internal) 2 access-list novaNAT
+nat (Internal) 1 10.24.82.0 255.255.255.128
+nat (DMZ1) 1 10.0.1.0 255.255.255.0
+nat (DMZ1) 1 10.0.18.0 255.255.255.0
+nat (DMZ1) 1 10.0.19.0 255.255.255.0
+nat (DMZ1) 1 10.0.45.0 255.255.255.0
+nat (DMZ1) 1 10.0.97.0 255.255.255.0
+nat (DMZ1) 1 10.1.5.0 255.255.255.0
+nat (DMZ1) 1 10.1.8.0 255.255.255.0
+nat (DMZ1) 1 10.1.12.0 255.255.255.0
+nat (DMZ1) 1 10.1.14.0 255.255.255.0
+nat (DMZ1) 1 10.1.19.0 255.255.255.0
+nat (DMZ1) 1 10.1.23.0 255.255.255.0
+nat (DMZ1) 1 10.1.24.0 255.255.255.0
+nat (DMZ1) 1 10.1.29.0 255.255.255.0
+nat (DMZ1) 1 10.1.31.0 255.255.255.0
+nat (DMZ1) 1 10.1.49.0 255.255.255.0
+nat (DMZ1) 1 10.1.50.0 255.255.255.0
+nat (DMZ1) 1 10.1.54.0 255.255.255.0
+nat (DMZ1) 1 10.1.55.0 255.255.255.0
+nat (DMZ1) 1 10.1.57.0 255.255.255.0
+nat (DMZ1) 1 10.1.61.0 255.255.255.0
+nat (DMZ1) 1 10.1.63.0 255.255.255.0
+nat (DMZ1) 1 10.1.65.0 255.255.255.0
+nat (DMZ1) 1 10.1.66.0 255.255.255.0
+nat (DMZ1) 1 10.1.75.0 255.255.255.0
+nat (DMZ1) 1 10.1.85.0 255.255.255.0
+nat (DMZ1) 1 10.1.89.0 255.255.255.0
+nat (DMZ1) 1 10.1.90.0 255.255.255.0
+nat (DMZ1) 1 10.1.91.0 255.255.255.0
+nat (DMZ1) 1 10.1.95.0 255.255.255.0
+nat (DMZ1) 1 10.2.2.0 255.255.255.0
+nat (DMZ1) 1 10.2.3.0 255.255.255.0
+nat (DMZ1) 1 10.2.5.0 255.255.255.0
+nat (DMZ1) 1 10.2.6.0 255.255.255.0
+nat (DMZ1) 1 10.2.7.0 255.255.255.0
+nat (DMZ1) 1 10.2.8.0 255.255.255.0
+nat (DMZ1) 1 10.2.9.0 255.255.255.0
+nat (DMZ1) 1 10.2.10.0 255.255.255.0
+nat (DMZ1) 1 10.2.11.0 255.255.255.0
+nat (DMZ1) 1 10.2.12.0 255.255.255.0
+nat (DMZ1) 1 10.2.13.0 255.255.255.0
+nat (DMZ1) 1 10.2.14.0 255.255.255.0
+nat (DMZ1) 1 10.2.16.0 255.255.255.0
+nat (DMZ1) 1 10.2.17.0 255.255.255.0
+nat (DMZ1) 1 10.2.18.0 255.255.255.0
+nat (DMZ1) 1 10.2.20.0 255.255.255.0
+nat (DMZ1) 1 10.2.21.0 255.255.255.0
+nat (DMZ1) 1 10.2.22.0 255.255.255.0
+nat (DMZ1) 1 10.2.24.0 255.255.255.0
+nat (DMZ1) 1 10.2.25.0 255.255.255.0
+nat (DMZ1) 1 10.2.27.0 255.255.255.0
+nat (DMZ1) 1 10.2.28.0 255.255.255.0
+nat (DMZ1) 1 10.2.29.0 255.255.255.0
+nat (DMZ1) 1 10.2.30.0 255.255.255.0
+nat (DMZ1) 1 10.2.31.0 255.255.255.0
+nat (DMZ1) 1 10.2.32.0 255.255.255.0
+nat (DMZ1) 1 10.2.34.0 255.255.255.0
+nat (DMZ1) 1 10.2.35.0 255.255.255.0
+nat (DMZ1) 1 10.2.37.0 255.255.255.0
+nat (DMZ1) 1 10.2.38.0 255.255.255.0
+nat (DMZ1) 1 10.2.39.0 255.255.255.0
+nat (DMZ1) 1 10.2.41.0 255.255.255.0
+nat (DMZ1) 1 10.2.42.0 255.255.255.0
+nat (DMZ1) 1 10.2.44.0 255.255.255.0
+nat (DMZ1) 1 10.2.45.0 255.255.255.0
+nat (DMZ1) 1 10.2.46.0 255.255.255.0
+nat (DMZ1) 1 10.2.47.0 255.255.255.0
+nat (DMZ1) 1 10.2.48.0 255.255.255.0
+nat (DMZ1) 1 10.2.49.0 255.255.255.0
+nat (DMZ1) 1 10.2.50.0 255.255.255.0
+nat (DMZ1) 1 10.2.51.0 255.255.255.0
+nat (DMZ1) 1 10.2.52.0 255.255.255.0
+nat (DMZ1) 1 10.2.53.0 255.255.255.0
+nat (DMZ1) 1 10.2.54.0 255.255.255.0
+nat (DMZ1) 1 10.2.55.0 255.255.255.0
+nat (DMZ1) 1 10.2.57.0 255.255.255.0
+nat (DMZ1) 1 10.2.58.0 255.255.255.0
+nat (DMZ1) 1 10.2.59.0 255.255.255.0
+nat (DMZ1) 1 10.2.61.0 255.255.255.0
+nat (DMZ1) 1 10.2.63.0 255.255.255.0
+nat (DMZ1) 1 10.2.64.0 255.255.255.0
+nat (DMZ1) 1 10.2.66.0 255.255.255.0
+nat (DMZ1) 1 10.2.67.0 255.255.255.0
+nat (DMZ1) 1 10.2.68.0 255.255.255.0
+nat (DMZ1) 1 10.2.69.0 255.255.255.0
+nat (DMZ1) 1 10.2.70.0 255.255.255.0
+nat (DMZ1) 1 10.2.71.0 255.255.255.0
+nat (DMZ1) 1 10.2.72.0 255.255.255.0
+nat (DMZ1) 1 10.2.73.0 255.255.255.0
+nat (DMZ1) 1 10.2.76.0 255.255.255.0
+nat (DMZ1) 1 10.2.77.0 255.255.255.0
+nat (DMZ1) 1 10.2.79.0 255.255.255.0
+nat (DMZ1) 1 10.2.80.0 255.255.255.0
+nat (DMZ1) 1 10.2.81.0 255.255.255.0
+nat (DMZ1) 1 10.2.82.0 255.255.255.0
+nat (DMZ1) 1 10.2.83.0 255.255.255.0
+nat (DMZ1) 1 10.2.84.0 255.255.255.0
+nat (DMZ1) 1 10.2.86.0 255.255.255.0
+nat (DMZ1) 1 10.2.87.0 255.255.255.0
+nat (DMZ1) 1 10.2.90.0 255.255.255.0
+nat (DMZ1) 1 10.2.91.0 255.255.255.0
+nat (DMZ1) 1 10.2.92.0 255.255.255.0
+nat (DMZ1) 1 10.2.95.0 255.255.255.0
+nat (DMZ1) 1 10.2.96.0 255.255.255.0
+nat (DMZ1) 1 10.2.97.0 255.255.255.0
+nat (DMZ1) 1 10.2.98.0 255.255.255.0
+nat (DMZ1) 1 10.2.99.0 255.255.255.0
+nat (DMZ1) 1 10.3.1.0 255.255.255.0
+nat (DMZ1) 1 10.3.2.0 255.255.255.0
+nat (DMZ1) 1 10.3.3.0 255.255.255.0
+nat (DMZ1) 1 10.3.4.0 255.255.255.0
+nat (DMZ1) 1 10.3.5.0 255.255.255.0
+nat (DMZ1) 1 10.3.6.0 255.255.255.0
+nat (DMZ1) 1 10.3.9.0 255.255.255.0
+nat (DMZ1) 1 10.3.10.0 255.255.255.0
+nat (DMZ1) 1 10.3.11.0 255.255.255.0
+nat (DMZ1) 1 10.3.14.0 255.255.255.0
+nat (DMZ1) 1 10.3.15.0 255.255.255.0
+nat (DMZ1) 1 10.3.16.0 255.255.255.0
+nat (DMZ1) 1 10.3.17.0 255.255.255.0
+nat (DMZ1) 1 10.3.18.0 255.255.255.0
+nat (DMZ1) 1 10.3.19.0 255.255.255.0
+nat (DMZ1) 1 10.3.20.0 255.255.255.0
+nat (DMZ1) 1 10.3.21.0 255.255.255.0
+nat (DMZ1) 1 10.3.23.0 255.255.255.0
+nat (DMZ1) 1 10.3.25.0 255.255.255.0
+nat (DMZ1) 1 10.3.26.0 255.255.255.0
+nat (DMZ1) 1 10.3.27.0 255.255.255.0
+nat (DMZ1) 1 10.3.28.0 255.255.255.0
+nat (DMZ1) 1 10.3.29.0 255.255.255.0
+nat (DMZ1) 1 10.3.32.0 255.255.255.0
+nat (DMZ1) 1 10.3.33.0 255.255.255.0
+nat (DMZ1) 1 10.3.34.0 255.255.255.0
+nat (DMZ1) 1 10.3.36.0 255.255.255.0
+nat (DMZ1) 1 10.3.37.0 255.255.255.0
+nat (DMZ1) 1 10.3.38.0 255.255.255.0
+nat (DMZ1) 1 10.3.40.0 255.255.255.0
+nat (DMZ1) 1 10.3.41.0 255.255.255.0
+nat (DMZ1) 1 10.3.43.0 255.255.255.0
+nat (DMZ1) 1 10.3.45.0 255.255.255.0
+nat (DMZ1) 1 10.3.46.0 255.255.255.0
+nat (DMZ1) 1 10.3.47.0 255.255.255.0
+nat (DMZ1) 1 10.3.48.0 255.255.255.0
+nat (DMZ1) 1 10.3.51.0 255.255.255.0
+nat (DMZ1) 1 10.3.52.0 255.255.255.0
+nat (DMZ1) 1 10.3.53.0 255.255.255.0
+nat (DMZ1) 1 10.3.54.0 255.255.255.0
+nat (DMZ1) 1 10.3.55.0 255.255.255.0
+nat (DMZ1) 1 10.3.57.0 255.255.255.0
+nat (DMZ1) 1 10.3.58.0 255.255.255.0
+nat (DMZ1) 1 10.3.59.0 255.255.255.0
+nat (DMZ1) 1 10.3.60.0 255.255.255.0
+nat (DMZ1) 1 10.3.61.0 255.255.255.0
+nat (DMZ1) 1 10.3.62.0 255.255.255.0
+nat (DMZ1) 1 10.3.63.0 255.255.255.0
+nat (DMZ1) 1 10.3.64.0 255.255.255.0
+nat (DMZ1) 1 10.3.65.0 255.255.255.0
+nat (DMZ1) 1 10.3.66.0 255.255.255.0
+nat (DMZ1) 1 10.3.67.0 255.255.255.0
+nat (DMZ1) 1 10.3.68.0 255.255.255.0
+nat (DMZ1) 1 10.3.70.0 255.255.255.0
+nat (DMZ1) 1 10.3.71.0 255.255.255.0
+nat (DMZ1) 1 10.3.72.0 255.255.255.0
+nat (DMZ1) 1 10.3.73.0 255.255.255.0
+nat (DMZ1) 1 10.3.74.0 255.255.255.0
+nat (DMZ1) 1 10.3.75.0 255.255.255.0
+nat (DMZ1) 1 10.3.77.0 255.255.255.0
+nat (DMZ1) 1 10.3.82.0 255.255.255.0
+nat (DMZ1) 1 10.3.85.0 255.255.255.0
+nat (DMZ1) 1 10.3.86.0 255.255.255.0
+nat (DMZ1) 1 10.3.87.0 255.255.255.0
+nat (DMZ1) 1 10.3.91.0 255.255.255.0
+nat (DMZ1) 1 10.3.92.0 255.255.255.0
+nat (DMZ1) 1 10.3.98.0 255.255.255.0
+nat (DMZ1) 1 10.4.0.0 255.255.255.0
+nat (DMZ1) 1 10.4.4.0 255.255.255.0
+nat (DMZ1) 1 10.4.8.0 255.255.255.0
+nat (DMZ1) 1 10.4.11.0 255.255.255.0
+nat (DMZ1) 1 10.4.16.0 255.255.255.0
+nat (DMZ1) 1 10.4.30.0 255.255.255.0
+nat (DMZ1) 1 10.6.7.0 255.255.255.0
+nat (DMZ1) 1 10.9.99.0 255.255.255.0
+nat (DMZ1) 1 198.203.191.0 255.255.255.0
+nat (DMZ1) 1 198.203.192.0 255.255.255.0
+nat (DMZ1) 1 10.27.0.0 255.255.0.0
+nat (DMZ1) 1 10.103.0.0 255.255.0.0
+nat (DMZ1) 1 128.103.0.0 255.255.0.0
+static (Internal,DMZ1) 10.24.82.43 10.24.82.43 netmask 255.255.255.255 
+static (Internal,DMZ1) 10.24.82.45 10.24.82.45 netmask 255.255.255.255 
+access-group dmz1Out in interface DMZ1
+route External 0.0.0.0 0.0.0.0 66.133.106.1 1
+route DMZ1 10.3.57.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.2.73.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.57.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.45.0 255.255.255.0 10.24.100.137 1
+route DMZ1 216.76.27.251 255.255.255.255 10.24.100.150 1
+route DMZ1 216.76.27.232 255.255.255.255 10.24.100.150 1
+route DMZ1 10.2.42.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.64.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.15.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.29.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.59.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.55.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.52.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.48.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.47.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.17.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.9.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.4.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.80.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.46.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.40.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.10.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.92.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.86.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.0.19.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.4.16.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.84.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.61.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.33.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.14.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.32.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.18.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.11.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.96.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.95.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.71.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.79.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.77.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.69.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.63.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.59.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.54.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.47.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.24.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.23.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.19.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.14.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.8.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.5.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.0.97.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.0.18.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.0.1.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.44.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.41.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.39.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.35.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.25.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.21.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.20.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.17.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.7.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.5.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.3.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.90.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.66.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.63.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.61.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.55.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.54.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.31.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.41.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.27.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.6.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.13.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.89.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.45.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.5.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.82.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.55.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.1.95.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.86.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.92.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.57.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.1.85.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.98.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.36.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.91.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.82.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.4.8.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.49.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.4.4.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.3.87.0 255.255.255.0 10.24.100.137 1
+route DMZ1 10.2.9.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.71.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.73.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.31.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.85.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.77.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.24.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.18.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.87.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.83.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.66.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.3.68.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.9.99.0 255.255.255.0 10.24.100.136 1
+route DMZ1 10.3.3.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.3.25.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.3.60.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.2.72.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.3.21.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.3.53.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.0.45.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.2.46.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.1.12.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.3.61.0 255.255.255.0 10.24.100.135 1
+route DMZ1 10.2.48.0 255.255.255.0 10.24.100.135 1
+route DMZ1 198.203.191.98 255.255.255.255 10.24.100.140 1
+route DMZ1 198.203.191.104 255.255.255.255 10.24.100.140 1
+route DMZ1 198.203.191.35 255.255.255.255 10.24.100.140 1
+route DMZ1 198.203.191.112 255.255.255.255 10.24.100.140 1
+route DMZ1 198.203.192.212 255.255.255.255 10.24.100.140 1
+route DMZ1 198.203.192.132 255.255.255.255 10.24.100.140 1
+route DMZ1 198.203.192.217 255.255.255.255 10.24.100.140 1
+route DMZ1 10.2.68.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.98.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.22.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.1.50.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.1.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.12.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.85.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.28.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.67.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.50.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.4.11.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.62.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.67.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.16.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.51.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.81.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.27.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.28.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.63.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.64.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.54.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.38.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.72.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.14.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.53.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.70.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.65.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.58.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.37.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.4.0.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.20.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.97.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.1.91.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.43.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.51.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.38.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.26.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.32.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.6.7.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.99.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.8.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.30.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.58.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.16.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.19.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.4.30.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.1.65.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.11.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.52.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.2.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.66.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.34.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.37.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.91.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.10.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.70.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.1.49.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.23.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.6.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.1.75.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.34.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.76.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.90.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.2.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.74.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.3.75.0 255.255.255.0 10.24.100.141 1
+route DMZ1 10.2.29.0 255.255.255.0 10.24.100.141 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00
+timeout mgcp-pat 0:05:00 sip 0:30:00 sip_media 0:02:00
+timeout uauth 0:05:00 absolute
+username dtran password uuGhjuhyJOOkub3e encrypted
+username dtran attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username ssapkal password TZzQBpAP7T6HYVuX encrypted
+username ssapkal attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username bchapman password hXcZBqkdzZ5k.MVP encrypted
+username bchapman attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username sgiles password Ck1eLeQCpvirtyJi encrypted
+username sgiles attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username ushende password bK1ZkZWiq6/3ZXiw encrypted
+username ushende attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username jcoreil password gV55KONxGWIE/Wbb encrypted
+username jcoreil attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username dmazzone password cd7LZ3ZNCMeICEcu encrypted
+username dmazzone attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username jstanton password GvnjtJJwruCvk37G encrypted
+username jstanton attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username kpuri password LwB6K6LPxGkf22ak encrypted
+username kpuri attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username lponder password 1SqU2.LhhbIAj6A6 encrypted
+username lponder attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username boconnor password fE0ZmT4YMstc.xBL encrypted
+username boconnor attributes
+ vpn-simultaneous-logins 1
+ webvpn
+username nsharma password 3x6l5TelJOJYcMbk encrypted
+username nsharma attributes
+ vpn-simultaneous-logins 1
+ webvpn
+snmp-server host Internal 10.24.74.9 community public
+no snmp-server location
+no snmp-server contact
+snmp-server community public
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+crypto ipsec transform-set 3desmd5 esp-3des esp-md5-hmac 
+crypto dynamic-map cvpn 1 set transform-set 3desmd5
+crypto dynamic-map cvpn 1 set reverse-route
+crypto map vpn 1 match address tmxVPN
+crypto map vpn 1 set peer 66.133.106.5 
+crypto map vpn 1 set transform-set 3desmd5
+crypto map vpn 2 match address dwVPN
+crypto map vpn 2 set peer 65.120.173.46 
+crypto map vpn 2 set transform-set 3desmd5
+crypto map vpn 3 match address site901
+crypto map vpn 3 set peer 70.239.243.102 
+crypto map vpn 3 set transform-set 3desmd5
+crypto map vpn 4 match address isd
+crypto map vpn 4 set peer 69.214.17.66 
+crypto map vpn 4 set transform-set 3desmd5
+crypto map vpn 5 match address isd
+crypto map vpn 5 set peer 75.52.112.137 
+crypto map vpn 5 set transform-set 3desmd5
+crypto map vpn 6 match address store807
+crypto map vpn 6 set peer 72.20.67.138 
+crypto map vpn 6 set transform-set 3desmd5
+crypto map vpn 7 match address store313
+crypto map vpn 7 set peer 66.76.113.3 
+crypto map vpn 7 set transform-set 3desmd5
+crypto map vpn 8 match address store221
+crypto map vpn 8 set peer 71.156.174.241 
+crypto map vpn 8 set transform-set 3desmd5
+crypto map vpn 9 match address store379
+crypto map vpn 9 set peer 66.242.212.108 
+crypto map vpn 9 set transform-set 3desmd5
+crypto map vpn 10 match address store902
+crypto map vpn 10 set peer 75.18.24.254 
+crypto map vpn 10 set transform-set 3desmd5
+crypto map vpn 11 match address novaVPN
+crypto map vpn 11 set peer 198.203.192.170 
+crypto map vpn 11 set transform-set 3desmd5
+crypto map vpn 12 match address store380
+crypto map vpn 12 set peer 67.223.203.142 
+crypto map vpn 12 set transform-set 3desmd5
+crypto map vpn 13 match address store378
+crypto map vpn 13 set peer 198.70.47.236 
+crypto map vpn 13 set transform-set 3desmd5
+crypto map vpn 14 match address store383
+crypto map vpn 14 set peer 98.17.190.17 
+crypto map vpn 14 set transform-set 3desmd5
+crypto map vpn 15 match address store382
+crypto map vpn 15 set peer 65.19.37.92 
+crypto map vpn 15 set transform-set 3desmd5
+crypto map vpn 16 match address store381
+crypto map vpn 16 set peer 76.164.153.208 
+crypto map vpn 16 set transform-set 3desmd5
+crypto map vpn 17 match address store384
+crypto map vpn 17 set peer 98.17.190.53 
+crypto map vpn 17 set transform-set 3desmd5
+crypto map vpn 18 match address store386
+crypto map vpn 18 set peer 76.213.134.209 
+crypto map vpn 18 set transform-set 3desmd5
+crypto map vpn 19 match address store236
+crypto map vpn 19 set peer 65.23.161.157 
+crypto map vpn 19 set transform-set 3desmd5
+crypto map vpn 20 match address store389
+crypto map vpn 20 set peer 69.26.6.175 
+crypto map vpn 20 set transform-set 3desmd5
+crypto map vpn 21 match address store393
+crypto map vpn 21 set peer 63.171.228.29 
+crypto map vpn 21 set transform-set 3desmd5
+crypto map vpn 22 match address store249
+crypto map vpn 22 set peer 76.253.153.9 
+crypto map vpn 22 set transform-set 3desmd5
+crypto map vpn 23 match address store387
+crypto map vpn 23 set peer 71.39.30.154 
+crypto map vpn 23 set transform-set 3desmd5
+crypto map vpn 24 match address store388
+crypto map vpn 24 set peer 209.82.173.162 
+crypto map vpn 24 set transform-set 3desmd5
+crypto map vpn 25 match address store392
+crypto map vpn 25 set peer 76.250.241.145 
+crypto map vpn 25 set transform-set 3desmd5
+crypto map vpn 26 match address store391
+crypto map vpn 26 set peer 67.76.197.60 
+crypto map vpn 26 set transform-set 3desmd5
+crypto map vpn 27 match address store390
+crypto map vpn 27 set peer 64.250.197.65 
+crypto map vpn 27 set transform-set 3desmd5
+crypto map vpn 29 match address store903
+crypto map vpn 29 set peer 75.52.112.142 
+crypto map vpn 29 set transform-set 3desmd5
+crypto map vpn 30 match address store278
+crypto map vpn 30 set peer 66.76.70.182 
+crypto map vpn 30 set transform-set 3desmd5
+crypto map vpn 31 match address store376
+crypto map vpn 31 set peer 66.76.25.126 
+crypto map vpn 31 set transform-set 3desmd5
+crypto map vpn 32 match address store430
+crypto map vpn 32 set peer 24.32.115.104 
+crypto map vpn 32 set transform-set 3desmd5
+crypto map vpn 33 match address store331
+crypto map vpn 33 set peer 209.33.8.48 
+crypto map vpn 33 set transform-set 3desmd5
+crypto map vpn 34 match address store399
+crypto map vpn 34 set peer 207.225.33.204 
+crypto map vpn 34 set transform-set 3desmd5
+crypto map vpn 35 match address store395
+crypto map vpn 35 set peer 208.123.18.152 
+crypto map vpn 35 set transform-set 3desmd5
+crypto map vpn 36 match address store394
+crypto map vpn 36 set peer 24.225.4.243 
+crypto map vpn 36 set transform-set 3desmd5
+crypto map vpn 37 match address store396
+crypto map vpn 37 set peer 72.20.66.80 
+crypto map vpn 37 set transform-set 3desmd5
+crypto map vpn 38 match address store001
+crypto map vpn 38 set peer 166.211.96.2 
+crypto map vpn 38 set transform-set 3desmd5
+crypto map vpn 39 match address store397
+crypto map vpn 39 set peer 216.161.8.252 
+crypto map vpn 39 set transform-set 3desmd5
+crypto map vpn 40 match address store247
+crypto map vpn 40 set peer 166.211.96.5 
+crypto map vpn 40 set transform-set 3desmd5
+crypto map vpn 41 match address store400
+crypto map vpn 41 set peer 216.16.107.12 
+crypto map vpn 41 set transform-set 3desmd5
+crypto map vpn 42 match address store417
+crypto map vpn 42 set peer 69.21.241.150 
+crypto map vpn 42 set transform-set 3desmd5
+crypto map vpn 43 match address store404
+crypto map vpn 43 set peer 71.36.26.49 
+crypto map vpn 43 set transform-set 3desmd5
+crypto map vpn 44 match address store398
+crypto map vpn 44 set peer 70.58.191.121 
+crypto map vpn 44 set transform-set 3desmd5
+crypto map vpn 45 match address store419
+crypto map vpn 45 set peer 69.55.45.182 
+crypto map vpn 45 set transform-set 3desmd5
+crypto map vpn 46 match address store401
+crypto map vpn 46 set peer 151.213.143.89 
+crypto map vpn 46 set transform-set 3desmd5
+crypto map vpn 47 match address store416
+crypto map vpn 47 set peer 71.116.13.213 
+crypto map vpn 47 set transform-set 3desmd5
+crypto map vpn 48 match address store408
+crypto map vpn 48 set peer 99.168.113.177 
+crypto map vpn 48 set transform-set 3desmd5
+crypto map vpn 49 match address store402
+crypto map vpn 49 set peer 216.227.31.215 
+crypto map vpn 49 set transform-set 3desmd5
+crypto map vpn 51 match address store403
+crypto map vpn 51 set peer 69.29.9.33 
+crypto map vpn 51 set transform-set 3desmd5
+crypto map vpn 52 match address site897
+crypto map vpn 52 set peer 66.112.43.149 
+crypto map vpn 52 set transform-set 3desmd5
+crypto map vpn 53 match address store223
+crypto map vpn 53 set peer 66.112.43.161 
+crypto map vpn 53 set transform-set 3desmd5
+crypto map vpn 54 match address store904
+crypto map vpn 54 set peer 99.18.216.254 
+crypto map vpn 54 set transform-set 3desmd5
+crypto map vpn 55 match address store204
+crypto map vpn 55 set peer 72.8.232.11 
+crypto map vpn 55 set transform-set 3desmd5
+crypto map vpn 56 match address store129
+crypto map vpn 56 set peer 98.190.15.50 
+crypto map vpn 56 set transform-set 3desmd5
+crypto map vpn 57 match address store905
+crypto map vpn 57 set peer 99.30.210.141 
+crypto map vpn 57 set transform-set 3desmd5
+crypto map vpn 58 match address store262
+crypto map vpn 58 set peer 24.230.78.90 
+crypto map vpn 58 set transform-set 3desmd5
+crypto map vpn 59 match address store342
+crypto map vpn 59 set peer 99.92.148.102 
+crypto map vpn 59 set transform-set 3desmd5
+crypto map vpn 60 match address store349
+crypto map vpn 60 set peer 206.253.40.25 
+crypto map vpn 60 set transform-set 3desmd5
+crypto map vpn 61 match address store322
+crypto map vpn 61 set peer 71.86.24.194 
+crypto map vpn 61 set transform-set 3desmd5
+crypto map vpn 62 match address store324
+crypto map vpn 62 set peer 66.112.74.120 
+crypto map vpn 62 set transform-set 3desmd5
+crypto map vpn 63 match address store242
+crypto map vpn 63 set peer 99.58.252.54 
+crypto map vpn 63 set transform-set 3desmd5
+crypto map vpn 64 set peer 65.82.130.22 
+crypto map vpn 64 set transform-set 3desmd5
+crypto map vpn 66 match address store335
+crypto map vpn 66 set peer 68.65.49.3 
+crypto map vpn 66 set transform-set 3desmd5
+crypto map vpn 67 match address store243
+crypto map vpn 67 set peer 65.216.41.27 
+crypto map vpn 67 set transform-set 3desmd5
+crypto map vpn 68 match address store265
+crypto map vpn 68 set peer 99.35.139.94 
+crypto map vpn 68 set transform-set 3desmd5
+crypto map vpn 69 match address store405
+crypto map vpn 69 set peer 74.42.74.203 
+crypto map vpn 69 set transform-set 3desmd5
+crypto map vpn 70 match address store275
+crypto map vpn 70 set peer 65.87.63.113 
+crypto map vpn 70 set transform-set 3desmd5
+crypto map vpn 71 match address store256
+crypto map vpn 71 set peer 67.213.228.191 
+crypto map vpn 71 set transform-set 3desmd5
+crypto map vpn 72 match address store356
+crypto map vpn 72 set peer 66.112.43.169 
+crypto map vpn 72 set transform-set 3desmd5
+crypto map vpn 73 match address store260
+crypto map vpn 73 set peer 99.147.30.45 
+crypto map vpn 73 set transform-set 3desmd5
+crypto map vpn 74 match address store339
+crypto map vpn 74 set peer 65.124.86.253 
+crypto map vpn 74 set transform-set 3desmd5
+crypto map vpn 75 match address store294
+crypto map vpn 75 set peer 208.124.119.199 
+crypto map vpn 75 set transform-set 3desmd5
+crypto map vpn 76 match address store407
+crypto map vpn 76 set peer 166.155.140.31 
+crypto map vpn 76 set transform-set 3desmd5
+crypto map vpn 77 match address store357
+crypto map vpn 77 set peer 64.202.226.14 
+crypto map vpn 77 set transform-set 3desmd5
+crypto map vpn 78 match address store406
+crypto map vpn 78 set peer 71.36.89.81 
+crypto map vpn 78 set transform-set 3desmd5
+crypto map vpn 79 match address store233
+crypto map vpn 79 set peer 208.54.216.7 
+crypto map vpn 79 set transform-set 3desmd5
+crypto map vpn 80 match address store409
+crypto map vpn 80 set peer 99.75.66.129 
+crypto map vpn 80 set transform-set 3desmd5
+crypto map vpn 100 ipsec-isakmp dynamic cvpn
+crypto map vpn interface External
+isakmp identity address 
+isakmp enable External
+isakmp policy 1 authentication pre-share
+isakmp policy 1 encryption 3des
+isakmp policy 1 hash md5
+isakmp policy 1 group 2
+isakmp policy 1 lifetime 86400
+isakmp nat-traversal  20
+tunnel-group 66.133.106.5 type ipsec-l2l
+tunnel-group 66.133.106.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.120.173.42 type ipsec-l2l
+tunnel-group 65.120.173.42 ipsec-attributes
+ pre-shared-key *
+tunnel-group luciditycg type ipsec-ra
+tunnel-group luciditycg general-attributes
+ address-pool cvpn
+tunnel-group luciditycg ipsec-attributes
+ pre-shared-key *
+tunnel-group sas type ipsec-ra
+tunnel-group sas general-attributes
+ address-pool cvpn
+tunnel-group sas ipsec-attributes
+ pre-shared-key *
+tunnel-group 70.239.243.125 type ipsec-l2l
+tunnel-group 70.239.243.125 ipsec-attributes
+ pre-shared-key *
+tunnel-group 69.214.17.66 type ipsec-l2l
+tunnel-group 69.214.17.66 ipsec-attributes
+ pre-shared-key *
+tunnel-group 70.239.243.102 type ipsec-l2l
+tunnel-group 70.239.243.102 ipsec-attributes
+ pre-shared-key *
+tunnel-group 24.249.107.48 type ipsec-l2l
+tunnel-group 24.249.107.48 ipsec-attributes
+ pre-shared-key *
+tunnel-group 75.52.112.137 type ipsec-l2l
+tunnel-group 75.52.112.137 ipsec-attributes
+ pre-shared-key *
+tunnel-group 71.156.174.241 type ipsec-l2l
+tunnel-group 71.156.174.241 ipsec-attributes
+ pre-shared-key *
+tunnel-group 72.20.67.138 type ipsec-l2l
+tunnel-group 72.20.67.138 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.76.113.3 type ipsec-l2l
+tunnel-group 66.76.113.3 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.120.173.46 type ipsec-l2l
+tunnel-group 65.120.173.46 ipsec-attributes
+ pre-shared-key *
+tunnel-group 198.203.192.170 type ipsec-l2l
+tunnel-group 198.203.192.170 ipsec-attributes
+ pre-shared-key *
+tunnel-group 74.41.101.30 type ipsec-l2l
+tunnel-group 74.41.101.30 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.76.25.126 type ipsec-l2l
+tunnel-group 66.76.25.126 ipsec-attributes
+ pre-shared-key *
+tunnel-group 71.153.161.65 type ipsec-l2l
+tunnel-group 71.153.161.65 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.242.212.108 type ipsec-l2l
+tunnel-group 66.242.212.108 ipsec-attributes
+ pre-shared-key *
+tunnel-group 216.163.97.41 type ipsec-l2l
+tunnel-group 216.163.97.41 ipsec-attributes
+ pre-shared-key *
+tunnel-group 198.70.47.236 type ipsec-l2l
+tunnel-group 198.70.47.236 ipsec-attributes
+ pre-shared-key *
+tunnel-group 98.17.190.17 type ipsec-l2l
+tunnel-group 98.17.190.17 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.19.37.92 type ipsec-l2l
+tunnel-group 65.19.37.92 ipsec-attributes
+ pre-shared-key *
+tunnel-group 76.162.153.208 type ipsec-l2l
+tunnel-group 76.162.153.208 ipsec-attributes
+ pre-shared-key *
+tunnel-group 76.164.153.208 type ipsec-l2l
+tunnel-group 76.164.153.208 ipsec-attributes
+ pre-shared-key *
+tunnel-group 98.17.190.53 type ipsec-l2l
+tunnel-group 98.17.190.53 ipsec-attributes
+ pre-shared-key *
+tunnel-group 76.213.134.209 type ipsec-l2l
+tunnel-group 76.213.134.209 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.23.163.27 type ipsec-l2l
+tunnel-group 65.23.163.27 ipsec-attributes
+ pre-shared-key *
+tunnel-group 71.39.30.154 type ipsec-l2l
+tunnel-group 71.39.30.154 ipsec-attributes
+ pre-shared-key *
+tunnel-group 69.26.6.175 type ipsec-l2l
+tunnel-group 69.26.6.175 ipsec-attributes
+ pre-shared-key *
+tunnel-group 209.82.173.162 type ipsec-l2l
+tunnel-group 209.82.173.162 ipsec-attributes
+ pre-shared-key *
+tunnel-group 76.250.241.145 type ipsec-l2l
+tunnel-group 76.250.241.145 ipsec-attributes
+ pre-shared-key *
+tunnel-group 67.76.197.60 type ipsec-l2l
+tunnel-group 67.76.197.60 ipsec-attributes
+ pre-shared-key *
+tunnel-group 64.250.197.65 type ipsec-l2l
+tunnel-group 64.250.197.65 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.112.43.161 type ipsec-l2l
+tunnel-group 66.112.43.161 ipsec-attributes
+ pre-shared-key *
+tunnel-group 63.76.58.14 type ipsec-l2l
+tunnel-group 63.76.58.14 ipsec-attributes
+ pre-shared-key *
+tunnel-group 75.52.112.142 type ipsec-l2l
+tunnel-group 75.52.112.142 ipsec-attributes
+ pre-shared-key *
+tunnel-group 76.253.153.9 type ipsec-l2l
+tunnel-group 76.253.153.9 ipsec-attributes
+ pre-shared-key *
+tunnel-group 68.25.77.117 type ipsec-l2l
+tunnel-group 68.25.77.117 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.76.70.138 type ipsec-l2l
+tunnel-group 66.76.70.138 ipsec-attributes
+ pre-shared-key *
+tunnel-group 24.32.115.104 type ipsec-l2l
+tunnel-group 24.32.115.104 ipsec-attributes
+ pre-shared-key *
+tunnel-group 209.33.8.48 type ipsec-l2l
+tunnel-group 209.33.8.48 ipsec-attributes
+ pre-shared-key *
+tunnel-group 63.171.228.49 type ipsec-l2l
+tunnel-group 63.171.228.49 ipsec-attributes
+ pre-shared-key *
+tunnel-group 166.211.96.2 type ipsec-l2l
+tunnel-group 166.211.96.2 ipsec-attributes
+ pre-shared-key *
+tunnel-group 208.123.18.152 type ipsec-l2l
+tunnel-group 208.123.18.152 ipsec-attributes
+ pre-shared-key *
+tunnel-group 24.225.4.243 type ipsec-l2l
+tunnel-group 24.225.4.243 ipsec-attributes
+ pre-shared-key *
+tunnel-group 72.20.66.80 type ipsec-l2l
+tunnel-group 72.20.66.80 ipsec-attributes
+ pre-shared-key *
+tunnel-group 151.213.143.89 type ipsec-l2l
+tunnel-group 151.213.143.89 ipsec-attributes
+ pre-shared-key *
+tunnel-group 207.225.33.204 type ipsec-l2l
+tunnel-group 207.225.33.204 ipsec-attributes
+ pre-shared-key *
+tunnel-group 166.211.96.5 type ipsec-l2l
+tunnel-group 166.211.96.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group 216.16.107.12 type ipsec-l2l
+tunnel-group 216.16.107.12 ipsec-attributes
+ pre-shared-key *
+tunnel-group 69.21.241.150 type ipsec-l2l
+tunnel-group 69.21.241.150 ipsec-attributes
+ pre-shared-key *
+tunnel-group 71.36.26.49 type ipsec-l2l
+tunnel-group 71.36.26.49 ipsec-attributes
+ pre-shared-key *
+tunnel-group 96.2.254.161 type ipsec-l2l
+tunnel-group 96.2.254.161 ipsec-attributes
+ pre-shared-key *
+tunnel-group 70.58.191.121 type ipsec-l2l
+tunnel-group 70.58.191.121 ipsec-attributes
+ pre-shared-key *
+tunnel-group 69.55.45.182 type ipsec-l2l
+tunnel-group 69.55.45.182 ipsec-attributes
+ pre-shared-key *
+tunnel-group 71.116.13.213 type ipsec-l2l
+tunnel-group 71.116.13.213 ipsec-attributes
+ pre-shared-key *
+tunnel-group 99.168.113.177 type ipsec-l2l
+tunnel-group 99.168.113.177 ipsec-attributes
+ pre-shared-key *
+tunnel-group 216.227.31.215 type ipsec-l2l
+tunnel-group 216.227.31.215 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.76.70.182 type ipsec-l2l
+tunnel-group 66.76.70.182 ipsec-attributes
+ pre-shared-key *
+tunnel-group 69.29.9.33 type ipsec-l2l
+tunnel-group 69.29.9.33 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.112.43.149 type ipsec-l2l
+tunnel-group 66.112.43.149 ipsec-attributes
+ pre-shared-key *
+tunnel-group 63.171.228.29 type ipsec-l2l
+tunnel-group 63.171.228.29 ipsec-attributes
+ pre-shared-key *
+tunnel-group 67.223.203.142 type ipsec-l2l
+tunnel-group 67.223.203.142 ipsec-attributes
+ pre-shared-key *
+tunnel-group 99.18.216.254 type ipsec-l2l
+tunnel-group 99.18.216.254 ipsec-attributes
+ pre-shared-key *
+tunnel-group 75.18.24.254 type ipsec-l2l
+tunnel-group 75.18.24.254 ipsec-attributes
+ pre-shared-key *
+tunnel-group 72.8.232.11 type ipsec-l2l
+tunnel-group 72.8.232.11 ipsec-attributes
+ pre-shared-key *
+tunnel-group 98.190.15.50 type ipsec-l2l
+tunnel-group 98.190.15.50 ipsec-attributes
+ pre-shared-key *
+tunnel-group 166.155.139.93 type ipsec-l2l
+tunnel-group 166.155.139.93 ipsec-attributes
+ pre-shared-key *
+tunnel-group 99.30.210.141 type ipsec-l2l
+tunnel-group 99.30.210.141 ipsec-attributes
+ pre-shared-key *
+tunnel-group 166.155.140.31 type ipsec-l2l
+tunnel-group 166.155.140.31 ipsec-attributes
+ pre-shared-key *
+tunnel-group 68.25.67.156 type ipsec-l2l
+tunnel-group 68.25.67.156 ipsec-attributes
+ pre-shared-key *
+tunnel-group 68.25.67.157 type ipsec-l2l
+tunnel-group 68.25.67.157 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.216.41.27 type ipsec-l2l
+tunnel-group 65.216.41.27 ipsec-attributes
+ pre-shared-key *
+tunnel-group 71.86.24.194 type ipsec-l2l
+tunnel-group 71.86.24.194 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.112.74.120 type ipsec-l2l
+tunnel-group 66.112.74.120 ipsec-attributes
+ pre-shared-key *
+tunnel-group 99.58.252.54 type ipsec-l2l
+tunnel-group 99.58.252.54 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.82.130.22 type ipsec-l2l
+tunnel-group 65.82.130.22 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.87.63.113 type ipsec-l2l
+tunnel-group 65.87.63.113 ipsec-attributes
+ pre-shared-key *
+tunnel-group 68.65.49.3 type ipsec-l2l
+tunnel-group 68.65.49.3 ipsec-attributes
+ pre-shared-key *
+tunnel-group 206.253.40.25 type ipsec-l2l
+tunnel-group 206.253.40.25 ipsec-attributes
+ pre-shared-key *
+tunnel-group 99.35.139.94 type ipsec-l2l
+tunnel-group 99.35.139.94 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.23.161.157 type ipsec-l2l
+tunnel-group 65.23.161.157 ipsec-attributes
+ pre-shared-key *
+tunnel-group 99.92.148.102 type ipsec-l2l
+tunnel-group 99.92.148.102 ipsec-attributes
+ pre-shared-key *
+tunnel-group 24.230.78.90 type ipsec-l2l
+tunnel-group 24.230.78.90 ipsec-attributes
+ pre-shared-key *
+tunnel-group 74.42.74.158 type ipsec-l2l
+tunnel-group 74.42.74.158 ipsec-attributes
+ pre-shared-key *
+tunnel-group 74.42.74.203 type ipsec-l2l
+tunnel-group 74.42.74.203 ipsec-attributes
+ pre-shared-key *
+tunnel-group 67.213.228.191 type ipsec-l2l
+tunnel-group 67.213.228.191 ipsec-attributes
+ pre-shared-key *
+tunnel-group 207.119.152.52 type ipsec-l2l
+tunnel-group 207.119.152.52 ipsec-attributes
+ pre-shared-key *
+tunnel-group 99.147.30.45 type ipsec-l2l
+tunnel-group 99.147.30.45 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.124.86.253 type ipsec-l2l
+tunnel-group 65.124.86.253 ipsec-attributes
+ pre-shared-key *
+tunnel-group 208.124.119.199 type ipsec-l2l
+tunnel-group 208.124.119.199 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.112.43.169 type ipsec-l2l
+tunnel-group 66.112.43.169 ipsec-attributes
+ pre-shared-key *
+tunnel-group 64.202.226.14 type ipsec-l2l
+tunnel-group 64.202.226.14 ipsec-attributes
+ pre-shared-key *
+tunnel-group 71.36.89.81 type ipsec-l2l
+tunnel-group 71.36.89.81 ipsec-attributes
+ pre-shared-key *
+tunnel-group 216.161.8.252 type ipsec-l2l
+tunnel-group 216.161.8.252 ipsec-attributes
+ pre-shared-key *
+tunnel-group 208.54.216.7 type ipsec-l2l
+tunnel-group 208.54.216.7 ipsec-attributes
+ pre-shared-key *
+tunnel-group 99.75.66.129 type ipsec-l2l
+tunnel-group 99.75.66.129 ipsec-attributes
+ pre-shared-key *
+telnet timeout 5
+ssh timeout 30
+console timeout 30
+management-access Internal
+Cryptochecksum:25f43daafa3f580406d238a364c41b92
+: end
+

@@ -1,0 +1,30 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="css/portal.css" />
+<link rel="stylesheet" type="text/css" href="css/<tmpl_var name=username>.css" />
+</head>
+<body>
+<table style="width:99%;">
+	<caption>Notifications</caption>
+	<thead>
+			<tr>
+				<th>Status</th>
+				<th>Description</th>
+				<th>Date</th>
+			</tr>
+	</thead>
+	<tmpl_loop name=notifications>
+	<tr class='<TMPL_IF NAME="__odd__">altrow</tmpl_if>'>
+		<td style="text-align:left;">
+			<tmpl_if name=up><img src="./images/up.gif" /></tmpl_if>
+			<tmpl_if name=warning><img src="./images/warning.gif" /></tmpl_if>
+			<tmpl_if name=critical><img src="./images/critical.gif" /></tmpl_if>
+			<tmpl_if name=unreachable><img src="./images/critical.gif" /></tmpl_if>
+		</td>
+		<td><tmpl_var name=subject></td>
+		<td style="width: 250px;" valign="top"><tmpl_var name=lastupdate></td>
+	</tr>
+	</tmpl_loop>
+</table>
+</body>
+</html>

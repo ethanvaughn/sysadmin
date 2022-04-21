@@ -1,0 +1,1701 @@
+!Generated on 06/01/2010 23:09:33
+!Active version: sg0750004
+
+configure
+
+
+!*************************** GLOBAL ***************************
+  username admin des-password xewexhscuf2gzgee superuser 
+  no restrict xml 
+
+  snmp community public read-only 
+
+  logging subsystem netman level info-6 
+  logging commands enable 
+  logging host 10.24.74.13 facility 6 log-level info-6 
+
+  ip route 0.0.0.0 0.0.0.0 10.24.81.1 1 
+
+!************************* INTERFACE *************************
+interface  1/1
+  bridge vlan 200 
+
+interface  1/2
+  bridge vlan 202 
+         
+interface Ethernet-Mgmt
+  admin-shutdown 
+
+!************************** CIRCUIT **************************
+circuit VLAN202
+
+  ip address 10.24.81.189 255.255.255.192 
+    ip virtual-router 101 
+    ip virtual-router 102 priority 101 preempt 
+    ip redundant-interface 101 10.24.81.161 
+    ip redundant-interface 102 10.24.81.162 
+    ip critical-service 101 FAILOVER 
+    ip critical-service 102 FAILOVER 
+
+circuit VLAN200
+
+  ip address 10.24.81.6 255.255.255.128 
+    ip virtual-router 1 
+    ip virtual-router 2 
+    ip virtual-router 5 
+    ip virtual-router 33 
+    ip virtual-router 34 
+    ip virtual-router 13 
+    ip virtual-router 14 
+    ip virtual-router 89 
+    ip virtual-router 90 
+    ip virtual-router 91 
+    ip virtual-router 24 
+    ip virtual-router 28 
+    ip virtual-router 3 
+    ip virtual-router 52 
+    ip virtual-router 40 
+    ip virtual-router 43 
+    ip virtual-router 44 
+    ip virtual-router 60 
+    ip virtual-router 61 
+    ip virtual-router 64 
+    ip virtual-router 65 
+    ip virtual-router 71 
+    ip virtual-router 72 
+    ip virtual-router 73 
+    ip virtual-router 76 
+    ip virtual-router 77 
+    ip virtual-router 78 
+    ip virtual-router 79 
+    ip virtual-router 86 
+    ip virtual-router 92 
+    ip virtual-router 93 
+    ip virtual-router 94 
+    ip virtual-router 45 
+    ip virtual-router 38 
+    ip virtual-router 39 
+    ip virtual-router 53 
+    ip virtual-router 63 
+    ip virtual-router 70 
+    ip virtual-router 103 
+    ip virtual-router 104 
+    ip virtual-router 22 
+    ip redundant-vip 1 10.24.81.50 
+    ip redundant-vip 2 10.24.81.51 
+    ip redundant-vip 3 10.24.81.52 
+    ip redundant-vip 24 10.24.81.36 
+    ip redundant-vip 28 10.24.81.37 
+    ip redundant-vip 5 10.24.81.54 
+    ip redundant-vip 34 10.24.81.66 
+    ip redundant-vip 13 10.24.81.13 
+    ip redundant-vip 14 10.24.81.14 
+    ip redundant-vip 89 10.24.81.89 
+    ip redundant-vip 90 10.24.81.90 
+    ip redundant-vip 91 10.24.81.91 
+    ip redundant-vip 52 10.24.81.32 
+    ip redundant-vip 40 10.24.81.40 
+    ip redundant-vip 43 10.24.81.43 
+    ip redundant-vip 44 10.24.81.44 
+    ip redundant-vip 45 10.24.81.45 
+    ip redundant-vip 60 10.24.81.60 
+    ip redundant-vip 61 10.24.81.61 
+    ip redundant-vip 64 10.24.81.64 
+    ip redundant-vip 71 10.24.81.71 
+    ip redundant-vip 72 10.24.81.72 
+    ip redundant-vip 73 10.24.81.73 
+    ip redundant-vip 76 10.24.81.76 
+    ip redundant-vip 77 10.24.81.77 
+    ip redundant-vip 78 10.24.81.78 
+    ip redundant-vip 79 10.24.81.79 
+    ip redundant-vip 86 10.24.81.86 
+    ip redundant-vip 92 10.24.81.92 
+    ip redundant-vip 93 10.24.81.93 
+    ip redundant-vip 94 10.24.81.94 
+    ip redundant-vip 38 10.24.81.38 
+    ip redundant-vip 39 10.24.81.39 
+    ip redundant-vip 53 10.24.81.33 
+    ip redundant-vip 63 10.24.81.63 
+    ip redundant-vip 70 10.24.81.70 
+    ip redundant-vip 103 10.24.81.101 
+    ip redundant-vip 104 10.24.81.100 
+    ip redundant-vip 65 10.24.81.65 
+    ip redundant-vip 22 10.24.81.22 
+    ip redundant-vip 33 10.24.81.67 
+    ip critical-service 1 FAILOVER 
+    ip critical-service 2 FAILOVER 
+    ip critical-service 3 FAILOVER 
+    ip critical-service 24 FAILOVER 
+    ip critical-service 28 FAILOVER 
+    ip critical-service 5 FAILOVER 
+    ip critical-service 33 FAILOVER 
+    ip critical-service 34 FAILOVER 
+    ip critical-service 13 FAILOVER 
+    ip critical-service 14 FAILOVER 
+    ip critical-service 89 FAILOVER 
+    ip critical-service 90 FAILOVER 
+    ip critical-service 91 FAILOVER 
+    ip critical-service 52 FAILOVER 
+    ip critical-service 40 FAILOVER 
+    ip critical-service 43 FAILOVER 
+    ip critical-service 44 FAILOVER 
+    ip critical-service 60 FAILOVER 
+    ip critical-service 61 FAILOVER 
+    ip critical-service 64 FAILOVER 
+    ip critical-service 65 FAILOVER 
+    ip critical-service 71 FAILOVER 
+    ip critical-service 72 FAILOVER 
+    ip critical-service 73 FAILOVER 
+    ip critical-service 76 FAILOVER 
+    ip critical-service 77 FAILOVER 
+    ip critical-service 78 FAILOVER 
+    ip critical-service 79 FAILOVER 
+    ip critical-service 86 FAILOVER 
+    ip critical-service 92 FAILOVER 
+    ip critical-service 93 FAILOVER 
+    ip critical-service 94 FAILOVER 
+    ip critical-service 45 FAILOVER 
+    ip critical-service 38 FAILOVER 
+    ip critical-service 39 FAILOVER 
+    ip critical-service 53 FAILOVER 
+    ip critical-service 63 FAILOVER 
+    ip critical-service 70 FAILOVER 
+    ip critical-service 103 FAILOVER 
+    ip critical-service 104 FAILOVER 
+    ip critical-service 22 FAILOVER 
+
+!************************** SERVICE **************************
+service FAILOVER 
+  ip address 10.24.81.9 
+  keepalive frequency 2 
+  keepalive maxfailure 2 
+  keepalive retryperiod 2 
+  keepalive type script ap-kal-pinglist "10.24.81.1 10.24.81.190" 
+  active 
+
+service Q16U20 
+  ip address 10.24.81.170 
+  keepalive type none 
+  active 
+
+service Q16U20-21 
+  ip address 10.24.81.170 
+  keepalive type tcp 
+  keepalive port 21 
+  active 
+
+service Q16U20-22 
+  ip address 10.24.81.170 
+  keepalive type tcp 
+  keepalive port 22 
+  active 
+
+service Q16U20-25 
+  ip address 10.24.81.170 
+  keepalive type tcp 
+  keepalive port 25 
+  keepalive frequency 30 
+  active 
+
+service Q16U20-80 
+  ip address 10.24.81.170 
+  keepalive type tcp 
+  keepalive port 80 
+  active 
+
+service R16U20 
+  ip address 10.24.81.171 
+  keepalive type none 
+  active 
+
+service R16U20-21 
+  ip address 10.24.81.171 
+  keepalive type tcp 
+  keepalive port 21 
+  active 
+
+service R16U20-22 
+  ip address 10.24.81.171 
+  keepalive type tcp 
+  keepalive port 22 
+  active 
+
+service R16U20-25 
+  ip address 10.24.81.171 
+  keepalive type tcp 
+  keepalive port 25 
+  keepalive frequency 30 
+  active 
+
+service R16U20-80 
+  ip address 10.24.81.171 
+  keepalive type tcp 
+  keepalive port 80 
+  active 
+
+service S16U14 
+  ip address 10.24.81.151 
+  keepalive type none 
+  active 
+
+service S16U16 
+  ip address 10.24.81.184 
+  keepalive type none 
+  active 
+
+service rat07 
+  ip address 10.24.81.178 
+  keepalive type none 
+  active 
+
+service rat12 
+  ip address 10.24.81.183 
+  keepalive type none 
+  active 
+
+service rat13 
+  ip address 10.24.81.136 
+  keepalive type none 
+  active 
+
+service rat14 
+  ip address 10.24.81.137 
+  keepalive type none 
+  active 
+         
+service rat15 
+  ip address 10.24.81.169 
+  keepalive type none 
+  active 
+
+service rat16 
+  ip address 10.24.81.167 
+  keepalive type none 
+  active 
+
+service rat18 
+  ip address 10.24.81.168 
+  keepalive type none 
+  active 
+
+service rat18-389 
+  ip address 10.24.81.168 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service rat18-636 
+  ip address 10.24.81.168 
+  keepalive type tcp 
+  keepalive port 636 
+  active 
+
+service rat18-7777 
+  ip address 10.24.81.168 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service rat18-7778 
+  ip address 10.24.81.168 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service rat18-7779 
+  ip address 10.24.81.168 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service rat18-7780 
+  ip address 10.24.81.168 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service rat18-7781 
+  ip address 10.24.81.168 
+  keepalive type tcp 
+  keepalive port 7781 
+  active 
+
+service rat18-7782 
+  ip address 10.24.81.168 
+  keepalive type tcp 
+  keepalive port 7782 
+  active 
+
+service rat18-7783 
+  ip address 10.24.81.168 
+  keepalive type tcp 
+  keepalive port 7783 
+  active 
+
+service rat19 
+  ip address 10.24.81.177 
+  keepalive type none 
+  active 
+
+service rat19-389 
+  keepalive type tcp 
+  keepalive port 389 
+  ip address 10.24.81.177 
+  active 
+
+service rat19-636 
+  ip address 10.24.81.177 
+  keepalive type tcp 
+  keepalive port 636 
+  active 
+
+service rat19-7777 
+  ip address 10.24.81.177 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service rat19-7778 
+  ip address 10.24.81.177 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service rat19-7779 
+  ip address 10.24.81.177 
+  keepalive port 7779 
+  keepalive type tcp 
+  active 
+
+service rat19-7780 
+  ip address 10.24.81.177 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service rat19-7781 
+  ip address 10.24.81.177 
+  keepalive type tcp 
+  keepalive port 7781 
+  active 
+
+service rat19-7782 
+  ip address 10.24.81.177 
+  keepalive type tcp 
+  keepalive port 7782 
+  active 
+
+service rat19-7783 
+  ip address 10.24.81.177 
+  keepalive type tcp 
+  keepalive port 7783 
+  active 
+
+service rat20 
+  ip address 10.24.81.186 
+  keepalive type none 
+  active 
+
+service rat20-389 
+  ip address 10.24.81.186 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service rat20-636 
+  ip address 10.24.81.186 
+  keepalive type tcp 
+  keepalive port 636 
+  active 
+
+service rat20-7777 
+  ip address 10.24.81.186 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service rat20-7778 
+  ip address 10.24.81.186 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service rat20-7779 
+  ip address 10.24.81.186 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service rat20-7780 
+  ip address 10.24.81.186 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service rat20-7781 
+  ip address 10.24.81.186 
+  keepalive type tcp 
+  keepalive port 7781 
+  active 
+
+service rat20-7782 
+  ip address 10.24.81.186 
+  keepalive type tcp 
+  keepalive port 7782 
+  active 
+
+service rat20-7783 
+  keepalive type tcp 
+  keepalive port 7783 
+  ip address 10.24.81.186 
+  active 
+
+service rat23 
+  ip address 10.24.81.182 
+  keepalive type none 
+  active 
+         
+service rat23-21 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 21 
+  active 
+
+service rat23-22 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 22 
+  active 
+
+service rat23-389 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service rat23-636 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 636 
+  active 
+         
+service rat23-7777 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service rat23-7778 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service rat23-7779 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service rat23-7780 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+         
+service rat23-7781 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 7781 
+  active 
+
+service rat23-7782 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 7782 
+  active 
+
+service rat23-7783 
+  ip address 10.24.81.182 
+  keepalive type tcp 
+  keepalive port 7783 
+  active 
+
+service rat24 
+  ip address 10.24.81.187 
+  keepalive type none 
+  active 
+
+service rat24-21 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 21 
+  active 
+
+service rat24-22 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 22 
+  active 
+
+service rat24-389 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service rat24-636 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 636 
+  active 
+
+service rat24-7777 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service rat24-7778 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service rat24-7779 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service rat24-7780 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service rat24-7781 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 7781 
+  active 
+
+service rat24-7782 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 7782 
+  active 
+
+service rat24-7783 
+  ip address 10.24.81.187 
+  keepalive type tcp 
+  keepalive port 7783 
+  active 
+
+service rat25 
+  ip address 10.24.81.176 
+  keepalive type none 
+  active 
+
+service rat25-389 
+  ip address 10.24.81.176 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service rat25-636 
+  ip address 10.24.81.176 
+  keepalive type tcp 
+  keepalive port 636 
+  active 
+
+service rat25-7777 
+  ip address 10.24.81.176 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service rat25-7778 
+  ip address 10.24.81.176 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service rat25-7779 
+  ip address 10.24.81.176 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service rat25-7780 
+  ip address 10.24.81.176 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service rat25-7781 
+  ip address 10.24.81.176 
+  keepalive type tcp 
+  keepalive port 7781 
+  active 
+
+service rat25-7782 
+  ip address 10.24.81.176 
+  keepalive type tcp 
+  keepalive port 7782 
+  active 
+
+service rat25-7783 
+  keepalive type tcp 
+  ip address 10.24.81.176 
+  keepalive port 7783 
+  active 
+
+service rat25-8080 
+  ip address 10.24.81.176 
+  keepalive type tcp 
+  keepalive port 8080 
+  active 
+
+service rat25-8081 
+  ip address 10.24.81.176 
+  keepalive type tcp 
+  keepalive port 8081 
+  active 
+
+service rat28 
+  keepalive type none 
+  ip address 10.24.81.173 
+  active 
+
+service rat28-16001 
+  keepalive port 16001 
+  keepalive type tcp 
+  ip address 10.24.81.173 
+  active 
+
+service rat28-16003 
+  keepalive type tcp 
+  keepalive port 16003 
+  ip address 10.24.81.173 
+  active 
+
+service rat28-16010 
+  keepalive type tcp 
+  keepalive port 16010 
+  ip address 10.24.81.173 
+  active 
+
+service rat28-16019 
+  keepalive type tcp 
+  keepalive port 16019 
+  ip address 10.24.81.173 
+  active 
+
+service rat28-16020 
+  keepalive type tcp 
+  keepalive port 16020 
+  ip address 10.24.81.173 
+  active 
+
+service rat28-16110 
+  keepalive type tcp 
+  keepalive port 16110 
+  ip address 10.24.81.173 
+  active 
+
+service rat28-8990 
+  keepalive type tcp 
+  keepalive port 8990 
+  ip address 10.24.81.173 
+  active 
+
+service rat28-8991 
+  keepalive type tcp 
+  keepalive port 8991 
+  ip address 10.24.81.173 
+  active 
+
+service rat29 
+  keepalive type none 
+  ip address 10.24.81.144 
+  active 
+
+service rat29-16001 
+  keepalive type tcp 
+  ip address 10.24.81.144 
+  keepalive port 16001 
+  active 
+
+service rat29-16003 
+  ip address 10.24.81.144 
+  keepalive type tcp 
+  keepalive port 16003 
+  active 
+
+service rat29-16010 
+  ip address 10.24.81.144 
+  keepalive type tcp 
+  keepalive port 16010 
+  active 
+
+service rat29-16019 
+  ip address 10.24.81.144 
+  keepalive type tcp 
+  keepalive port 16019 
+  active 
+
+service rat29-16020 
+  ip address 10.24.81.144 
+  keepalive type tcp 
+  keepalive port 16020 
+  active 
+
+service rat29-16110 
+  ip address 10.24.81.144 
+  keepalive type tcp 
+  keepalive port 16110 
+  active 
+
+service rat29-8990 
+  ip address 10.24.81.144 
+  keepalive type tcp 
+  keepalive port 8990 
+  active 
+
+service rat29-8991 
+  ip address 10.24.81.144 
+  keepalive type tcp 
+  keepalive port 8991 
+  active 
+
+service rat30 
+  keepalive type none 
+  ip address 10.24.81.150 
+  active 
+
+service rat30-16001 
+  keepalive type tcp 
+  keepalive port 16001 
+  ip address 10.24.81.150 
+  active 
+
+service rat30-16003 
+  ip address 10.24.81.150 
+  keepalive type tcp 
+  keepalive port 16003 
+  active 
+
+service rat30-16010 
+  ip address 10.24.81.150 
+  keepalive type tcp 
+  keepalive port 16010 
+  active 
+
+service rat30-16019 
+  ip address 10.24.81.150 
+  keepalive type tcp 
+  keepalive port 16019 
+  active 
+
+service rat30-8990 
+  ip address 10.24.81.150 
+  keepalive port 8990 
+  keepalive type tcp 
+  active 
+
+service rat30-8991 
+  ip address 10.24.81.150 
+  keepalive port 8991 
+  keepalive type tcp 
+  active 
+
+service rat31 
+  keepalive type none 
+  ip address 10.24.81.185 
+  active 
+         
+service rat31-16001 
+  ip address 10.24.81.151 
+  keepalive type tcp 
+  keepalive port 16001 
+  active 
+
+service rat31-4015 
+  ip address 10.24.81.185 
+  keepalive type tcp 
+  keepalive port 4015 
+  active 
+
+service rat31-4035 
+  ip address 10.24.81.185 
+  keepalive type tcp 
+  keepalive port 4035 
+  active 
+
+service rat31-4045 
+  ip address 10.24.81.185 
+  keepalive type tcp 
+  keepalive port 4045 
+  active 
+         
+service rat31-7111 
+  ip address 10.24.81.151 
+  keepalive type tcp 
+  keepalive port 7111 
+  active 
+
+service rat38 
+  ip address 10.24.81.181 
+  keepalive type none 
+  active 
+
+service rat41 
+  ip address 10.24.81.140 
+  keepalive type none 
+  active 
+
+service rat42 
+  ip address 10.24.81.141 
+  keepalive type none 
+  active 
+
+service rat43 
+  ip address 10.24.81.142 
+  keepalive type none 
+  active 
+
+service rat44 
+  ip address 10.24.81.138 
+  keepalive type none 
+  active 
+
+service rat45 
+  ip address 10.24.81.172 
+  keepalive type none 
+  active 
+
+service rat45-16019 
+  ip address 10.24.81.172 
+  keepalive type tcp 
+  keepalive port 16019 
+  active 
+
+service rat45-16029 
+  ip address 10.24.81.172 
+  keepalive type tcp 
+  keepalive port 16029 
+  active 
+         
+service rat45-8999 
+  ip address 10.24.81.172 
+  keepalive type tcp 
+  keepalive port 8999 
+  active 
+
+service rat46 
+  ip address 10.24.81.139 
+  keepalive type none 
+  active 
+
+service rat47 
+  ip address 10.24.81.147 
+  keepalive type none 
+  active 
+
+service rat48 
+  ip address 10.24.81.148 
+  keepalive type none 
+  active 
+
+service rat49 
+  ip address 10.24.81.149 
+  keepalive type none 
+  active 
+
+service rat50 
+  ip address 10.24.81.157 
+  keepalive type none 
+  active 
+
+service rat51 
+  ip address 10.24.81.158 
+  keepalive type none 
+  active 
+
+service rat52 
+  ip address 10.24.81.159 
+  keepalive type none 
+  active 
+
+service rat53 
+  ip address 10.24.81.143 
+  keepalive type none 
+  active 
+
+service rat54 
+  ip address 10.24.81.179 
+  keepalive type none 
+
+service rat55 
+  ip address 10.24.81.180 
+  keepalive type none 
+  active 
+
+!*************************** OWNER ***************************
+owner APP 
+
+  content 389 
+    port 389 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    vip address 10.24.81.50 
+    add service rat18-389 
+    add service rat19-389 
+    add service rat20-389 
+    active 
+
+  content 7777 
+    vip address 10.24.81.50 
+    port 7777 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat18-7777 
+    add service rat19-7777 
+    add service rat20-7777 
+    active 
+
+  content 7778 
+    vip address 10.24.81.50 
+    port 7778 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat18-7778 
+    add service rat19-7778 
+    add service rat20-7778 
+    active 
+
+  content 7779 
+    vip address 10.24.81.50 
+    protocol tcp 
+    port 7779 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat18-7779 
+    add service rat19-7779 
+    add service rat20-7779 
+    active 
+
+  content 7780 
+    vip address 10.24.81.50 
+    protocol tcp 
+    port 7780 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 60 
+    flow-timeout-multiplier 1125 
+    add service rat18-7780 
+    add service rat19-7780 
+    add service rat20-7780 
+    active 
+
+  content 7783 
+    vip address 10.24.81.50 
+    protocol tcp 
+    port 7783 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat18-7783 
+    add service rat19-7783 
+    add service rat20-7783 
+    active 
+
+owner APP-STAGED 
+
+  content 21 
+    port 21 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    vip address 10.24.81.61 
+    add service rat23-21 
+    add service rat24-21 
+    active 
+
+  content 22 
+    protocol tcp 
+    port 22 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    vip address 10.24.81.61 
+    add service rat23-22 
+    add service rat24-22 
+    active 
+
+  content 389 
+    vip address 10.24.81.61 
+    port 389 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat23-389 
+    add service rat24-389 
+    active 
+
+  content 636 
+    vip address 10.24.81.61 
+    port 636 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat23-636 
+    add service rat24-636 
+    active 
+
+  content 7777 
+    vip address 10.24.81.61 
+    port 7777 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat23-7777 
+    add service rat24-7777 
+    active 
+
+  content 7778 
+    vip address 10.24.81.61 
+    port 7778 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat23-7778 
+    add service rat24-7778 
+    active 
+
+  content 7779 
+    vip address 10.24.81.61 
+    port 7779 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat23-7779 
+    add service rat24-7779 
+    active 
+
+  content 7780 
+    vip address 10.24.81.61 
+    port 7780 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat23-7780 
+    add service rat24-7780 
+    active 
+
+  content 7781 
+    vip address 10.24.81.61 
+    port 7781 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat23-7781 
+    add service rat24-7781 
+    active 
+
+  content 7782 
+    vip address 10.24.81.61 
+    port 7782 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat23-7782 
+    add service rat24-7782 
+    active 
+         
+  content 7783 
+    vip address 10.24.81.61 
+    port 7783 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat23-7783 
+    add service rat24-7783 
+    active 
+
+owner NAT 
+
+  content Q16U20 
+    vip address 10.24.81.36 
+    add service Q16U20 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content R16U20 
+    vip address 10.24.81.37 
+    add service R16U20 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content S16U14 
+    vip address 10.24.81.79 
+    flow-timeout-multiplier 1125 
+    add service S16U14 
+    active 
+
+  content S16U16 
+    vip address 10.24.81.66 
+    flow-timeout-multiplier 1125 
+    add service S16U16 
+    active 
+
+  content rat07 
+    vip address 10.24.81.60 
+    add service rat07 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat12 
+    vip address 10.24.81.32 
+    add service rat12 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat13 
+    vip address 10.24.81.13 
+    add service rat13 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat14 
+    vip address 10.24.81.14 
+    add service rat14 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat15 
+    vip address 10.24.81.40 
+    add service rat15 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat16 
+    vip address 10.24.81.51 
+    add service rat16 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat18 
+    vip address 10.24.81.43 
+    add service rat18 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat19 
+    vip address 10.24.81.44 
+    add service rat19 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat20 
+    vip address 10.24.81.45 
+    add service rat20 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat23 
+    vip address 10.24.81.71 
+    add service rat23 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat24 
+    vip address 10.24.81.72 
+    add service rat24 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat25 
+    vip address 10.24.81.73 
+    add service rat25 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat28 
+    vip address 10.24.81.76 
+    add service rat28 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat29 
+    vip address 10.24.81.77 
+    add service rat29 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat30 
+    add service rat30 
+    flow-timeout-multiplier 1125 
+    vip address 10.24.81.78 
+    active 
+
+  content rat31 
+    vip address 10.24.81.67 
+    add service rat31 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat38 
+    vip address 10.24.81.86 
+    add service rat38 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat41 
+    vip address 10.24.81.89 
+    add service rat41 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat42 
+    vip address 10.24.81.90 
+    add service rat42 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat43 
+    vip address 10.24.81.91 
+    add service rat43 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat44 
+    vip address 10.24.81.92 
+    add service rat44 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat45 
+    vip address 10.24.81.65 
+    add service rat45 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat46 
+    vip address 10.24.81.93 
+    add service rat46 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat47 
+    vip address 10.24.81.38 
+    add service rat47 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat48 
+    vip address 10.24.81.39 
+    add service rat48 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat49 
+    vip address 10.24.81.33 
+    add service rat49 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat50 
+    add service rat50 
+    flow-timeout-multiplier 1125 
+    vip address 10.24.81.22 
+    active 
+
+  content rat51 
+    vip address 10.24.81.63 
+    add service rat51 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat52 
+    vip address 10.24.81.70 
+    add service rat52 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat53 
+    vip address 10.24.81.94 
+    add service rat53 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat54 
+    vip address 10.24.81.100 
+    add service rat54 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content rat55 
+    vip address 10.24.81.101 
+    add service rat55 
+    flow-timeout-multiplier 1125 
+    active 
+
+owner PORTAL 
+
+  content 21 
+    vip address 10.24.81.52 
+    port 21 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service Q16U20-21 
+    add service R16U20-21 
+    active 
+
+  content 22 
+    vip address 10.24.81.52 
+    protocol tcp 
+    port 22 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service Q16U20-22 
+    add service R16U20-22 
+    active 
+
+  content 25 
+    vip address 10.24.81.52 
+    protocol tcp 
+    port 25 
+    add service Q16U20-25 
+    add service R16U20-25 
+    active 
+
+  content 80 
+    vip address 10.24.81.52 
+    port 80 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service R16U20-80 
+    add service Q16U20-80 
+    active 
+
+owner POS 
+
+  content 16010 
+    add service rat28-16010 
+    add service rat29-16010 
+    vip address 10.24.81.54 
+    port 16010 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content 16019 
+    add service rat28-16019 
+    add service rat29-16019 
+    add service rat30-16019 
+    vip address 10.24.81.54 
+    protocol tcp 
+    port 16019 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    active 
+
+  content 4015 
+    vip address 10.24.81.54 
+    protocol tcp 
+    port 4015 
+    flow-timeout-multiplier 1125 
+    add service rat31-4015 
+    active 
+
+  content 4035 
+    vip address 10.24.81.54 
+    protocol tcp 
+    port 4035 
+    flow-timeout-multiplier 1125 
+    add service rat31-4035 
+    active 
+
+  content 4045 
+    vip address 10.24.81.54 
+    port 4045 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    add service rat31-4045 
+    active 
+
+  content 8990 
+    vip address 10.24.81.54 
+    protocol tcp 
+    port 8990 
+    advanced-balance sticky-srcip 
+    flow-timeout-multiplier 1125 
+    sticky-inact-timeout 300 
+    add service rat28-8990 
+    add service rat29-8990 
+    active 
+
+  content 8991 
+    vip address 10.24.81.54 
+    protocol tcp 
+    port 8991 
+    advanced-balance sticky-srcip 
+    flow-timeout-multiplier 1125 
+    add service rat28-8991 
+    add service rat29-8991 
+    sticky-inact-timeout 300 
+    active 
+
+owner prePOS 
+
+  content 16019 
+    vip address 10.24.81.64 
+    port 16019 
+    protocol tcp 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat45-16019 
+    add service rat45-16029 
+    active 
+
+  content 16029 
+    vip address 10.24.81.64 
+    protocol tcp 
+    port 16029 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat45-16029 
+    active 
+
+  content 8999 
+    vip address 10.24.81.64 
+    protocol tcp 
+    port 8999 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    flow-timeout-multiplier 1125 
+    add service rat45-8999 
+    active 
+
+!*************************** GROUP ***************************
+group APP 
+  vip address 10.24.81.50 
+  flow-timeout-multiplier 1125 
+  add service rat18 
+  add service rat19 
+  add service rat20 
+  active 
+
+group APP-STAGED 
+  vip address 10.24.81.61 
+  flow-timeout-multiplier 1125 
+  add service rat23 
+  add service rat24 
+  active 
+
+group POS 
+  add service rat28 
+  add service rat29 
+  add service rat30 
+  vip address 10.24.81.54 
+  flow-timeout-multiplier 1125 
+  active 
+
+group Q16U20 
+  vip address 10.24.81.36 
+  add service Q16U20 
+  flow-timeout-multiplier 1125 
+  active 
+
+group R16U20 
+  vip address 10.24.81.37 
+  add service R16U20 
+  flow-timeout-multiplier 1125 
+  active 
+
+group S16U14 
+  vip address 10.24.81.79 
+  flow-timeout-multiplier 1125 
+  add service S16U14 
+  active 
+
+group S16U16 
+  vip address 10.24.81.66 
+  flow-timeout-multiplier 1125 
+  add service S16U16 
+  active 
+
+group rat07 
+  vip address 10.24.81.60 
+  add service rat07 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat12 
+  vip address 10.24.81.32 
+  add service rat12 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat13 
+  vip address 10.24.81.13 
+  add service rat13 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat14 
+  vip address 10.24.81.14 
+  add service rat14 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat15 
+  vip address 10.24.81.40 
+  add service rat15 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat16 
+  vip address 10.24.81.51 
+  add service rat16 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat25 
+  vip address 10.24.81.73 
+  add service rat25 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat28 
+  vip address 10.24.81.76 
+  flow-timeout-multiplier 1125 
+
+group rat29 
+  vip address 10.24.81.77 
+  flow-timeout-multiplier 1125 
+
+group rat31 
+  vip address 10.24.81.67 
+  add service rat31 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat38 
+  vip address 10.24.81.86 
+  add service rat38 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat41 
+  vip address 10.24.81.89 
+  add service rat41 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat42 
+  vip address 10.24.81.90 
+  add service rat42 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat43 
+  vip address 10.24.81.91 
+  add service rat43 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat44 
+  vip address 10.24.81.92 
+  add service rat44 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat45 
+  vip address 10.24.81.65 
+  add service rat45 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat46 
+  vip address 10.24.81.93 
+  add service rat46 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat47 
+  vip address 10.24.81.38 
+  add service rat47 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat48 
+  vip address 10.24.81.39 
+  add service rat48 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat49 
+  vip address 10.24.81.33 
+  add service rat49 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat50 
+  add service rat50 
+  flow-timeout-multiplier 1125 
+  vip address 10.24.81.22 
+  active 
+
+group rat51 
+  vip address 10.24.81.63 
+  add service rat51 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat52 
+  vip address 10.24.81.70 
+  add service rat52 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat53 
+  vip address 10.24.81.94 
+  add service rat53 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat54 
+  vip address 10.24.81.100 
+  add service rat54 
+  flow-timeout-multiplier 1125 
+  active 
+
+group rat55 
+  vip address 10.24.81.101 
+  add service rat55 
+  flow-timeout-multiplier 1125 
+  active 

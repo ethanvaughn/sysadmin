@@ -1,0 +1,41 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $tabmenu;
+my $msg;
+my $errnav = "main";
+my $remote_user = $cgi->remote_user;
+
+
+#---- Main -------------------------------------------------------------------
+
+# Set up the tabmenu:
+#$tabmenu = www::cgi::helpers::gen_tabmenu( "MAL" );
+
+
+$htmlview = HTML::Template->new( filename => "../tmpl/401.tmpl", loop_context_vars => 1 );
+
+$htmlview->param( tabmenu      => $tabmenu );
+$htmlview->param( subtitle     => "Unable to Authenticate" );
+$htmlview->param( user         => $remote_user );
+
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

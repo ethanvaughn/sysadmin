@@ -1,0 +1,87 @@
+#!/usr/bin/perl
+
+use Getopt::Std;
+
+my @args = qw(o n);
+
+sub usage {
+    print "Usage:\n";
+    print "\tvmrename -o <OLD-NAME> -n <NEW-NAME>\n";
+    exit 0;
+}
+
+sub validate {
+    (-f "./$args{o}.vmdk") || die "Exiting: No such file $args{o}.vmdk";
+}
+
+sub getArgs {
+    my $optstr = join(':',@args);
+    $optstr.=':';
+    getopts($optstr,\%args);
+    foreach my $arg (@args) {
+	if(exists($args{$arg})) {
+	    $validated_args++;
+	}
+    }
+    if ($validated_args == scalar(@args)) {
+	return;
+    } else {
+	usage();
+    }
+    
+}
+
+sub rename_files {
+    my $newfile = "";
+
+    open(FLIST, "/bin/ls $args{o}* |");
+    while(<FLIST>) {
+	chomp($_);
+	$newfile = $_;
+	$newfile =~ s/$args{o}/$args{n}/;
+	if($newfile =~ /flat/) {
+	    `/bin/mv $_ $newfile`;
+	} else {
+	    `/bin/cp $_ $newfile`;
+	}
+    }
+    close(FLIST);
+}
+
+
+sub modify_files {
+
+    my $newfile="";
+    my $newline="";
+
+    open(FLIST, "/bin/grep $args{o} $args{o}* | cut -d ':' -f 1 | sort | uniq |");
+    while(<FLIST>) {
+	open(OFILE, $_);
+	$newfile = $_;
+	$newfile =~ s/$args{o}/$args{n}/;
+	open(NFILE, ">$newfile");
+	while(<OFILE>) {
+	    $newline=$_;
+	    $newline =~ s/$args{o}/$args{n}/g;
+	    print NFILE $newline;
+	}
+	close(NFILE);
+	close(OFILE);
+    }
+}
+
+sub cleanup {
+    `/bin/rm $args{o}*`;
+}
+
+
+
+sub main {
+	getArgs;
+	validate;
+	rename_files;
+	modify_files;
+	cleanup;
+}
+	
+main;	

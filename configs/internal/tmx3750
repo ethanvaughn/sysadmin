@@ -1,0 +1,313 @@
+
+!
+version 12.1
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+service password-encryption
+!
+hostname tmx3750
+!
+enable secret 5 $1$gY0o$EQC3wOJLmeamXNjUSiySD1
+enable password 7 106E4A1F0F121B18002D03
+!
+ip subnet-zero
+ip routing
+!
+!
+spanning-tree mode pvst
+no spanning-tree optimize bpdu transmission
+spanning-tree extend system-id
+!
+!
+interface GigabitEthernet1/0/1
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/2
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/3
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/4
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/5
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/6
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/7
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/8
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/9
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/10
+ description IT Lab Switch Server Room
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/11
+ description IDS Management Port
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/12
+ description IDS Sniffing VLAN 1 (172.21.0.0/16)
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/13
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/14
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/15
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/16
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/17
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/18
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/19
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/20
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/21
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/22
+ description Port Monitor Port
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/23
+ description Uplink from tmx3324-GL
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/24
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet1/0/25
+ description - XO Gig Line to DataCenter
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet1/0/26
+ description - Uplink from tmx3548-Serv
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet1/0/27
+ description - Uplink from tmx3548-3rd1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet1/0/28
+ description - Uplink from tmx3548-3rd2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet2/0/1
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/2
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/3
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/4
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/5
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/6
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/7
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/8
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/9
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/10
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/11
+ description BMP DSL MODEM
+ switchport access vlan 104
+ switchport mode access
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/12
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/13
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/14
+ description IDS Sniffing VLAN TMXDMZ (192.168.11.0/24)
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/15
+ description IDS Sniffing VLAN TMXCUST (192.168.12.0/24)
+ switchport access vlan 103
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/16
+ switchport access vlan 103
+ switchport mode access
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/17
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/18
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/19
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/20
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/21
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/22
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/23
+ description trainapp server
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/24
+ description traindb server
+ switchport access vlan 101
+ no ip address
+ no mdix auto
+!
+interface GigabitEthernet2/0/25
+ description - Uplink from tmx3548-3rd3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no ip address
+!
+interface GigabitEthernet2/0/26
+ no ip address
+!
+interface GigabitEthernet2/0/27
+ no ip address
+!
+interface GigabitEthernet2/0/28
+ no ip address
+!
+interface Vlan1
+ ip address 172.21.159.1 255.255.0.0
+!
+interface Vlan103
+ description TMXCUST VLAN Gateway
+ ip address 192.168.12.1 255.255.255.0
+ ip access-group tmxCust in
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 172.21.156.5
+ip route 192.168.10.0 255.255.255.0 172.21.159.2
+ip http server
+!
+ip access-list extended tmxCust
+ remark permit traffic to pix (T19U13)
+ permit ip any host 172.21.156.5
+ remark 172.21.0.0/16 - deny access to tomax internal network
+ deny   ip any 172.21.0.0 0.0.255.255
+ remark 192.168.0.0/16 - deny access to private ip range
+ deny   ip any 192.168.0.0 0.0.255.255
+ remark 10.0.0.0/8 - deny access to private ip range
+ deny   ip any 10.0.0.0 0.255.255.255
+ permit ip any any
+!
+snmp-server community tomaxtest RO
+!
+line con 0
+line vty 0 4
+ password 7 144606040105320212
+ login
+line vty 5 15
+ no login
+!
+end

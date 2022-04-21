@@ -1,0 +1,13 @@
+CREATE TABLE mal (
+	id SERIAL NOT NULL PRIMARY KEY,
+
+	hostname    VARCHAR(64) NOT NULL,
+	servicename VARCHAR(256),
+	ip          VARCHAR(64),
+	event_time  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+	msg         TEXT,
+	username    VARCHAR(128),
+	level		VARCHAR(4) NOT NULL DEFAULT 'CRIT',
+	status      TIMESTAMP WITHOUT TIME ZONE
+
+) WITHOUT OIDS;

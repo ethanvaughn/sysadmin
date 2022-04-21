@@ -1,0 +1,11 @@
+# tables.list
+# Variables that list the sequence for table creation and deletion for use
+# with the "droptables.sh" and "loadschema.sh" scripts.
+
+# List of tables in the order to create:
+TABLES="company ownerlink userlink template proplink proptemplatelink attribval"
+SEQ="company_id_seq attrib_id_seq"
+
+# List of tables in correct drop sequence (referencing tables first):
+DROPTABLES="attribval userlink ownerlink proptemplatelink proplink template company"
+

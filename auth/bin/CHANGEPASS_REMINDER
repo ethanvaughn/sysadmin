@@ -1,0 +1,27 @@
+Subject: Reminder: Datacenter Password Rotation
+If you are seeing the following messages when you log onto the hosted machines, you must change your datacenter password:
+
+        Your password will expire in 7 days. 
+
+        or
+
+        You are required to change your password immediately (password aged)
+        Changing password for evaughn
+        (current) UNIX password: 
+
+
+When you see these messages, browse to the following URL to change your password in the central database:
+
+        http://10.24.74.13/authapp/changepass
+
+
+
+Note: Once successfully changed, your password will post to the hosted machines nightly at 21:00. If you would like to have a machine updated after you have changed your password, send the IP address to the sysadmin team(sysadmin@tomax.com or respond to this email)  with the subject "Update Central Auth Request".
+
+Please notify the SysAdmin team with any questions or problems.
+
+Thank you,
+
+Tomax Outsourcing Team
+sysadmin@tomax.com
+

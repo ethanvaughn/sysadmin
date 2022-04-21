@@ -1,0 +1,151 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+use CGI qw(:standard);
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::tmxconnect;
+use lib::passwdutils;
+use lib::updateaccount;
+
+use strict;
+
+#----- errmsg ----------------------------------------------------------------
+sub errmsg {
+	my $errdlg = HTML::Template->new( filename => "../tmpl/okdlg.tmpl" );
+
+	my $msg = <<EOL;
+An error occurred while updating your password.<br>
+Your password is unchanged.<br>
+<br>
+Please contact the Sysadmin team.<br>
+<br>
+EOL
+	# TODO: send email with error msg to sysadmin@tomax.com
+	$errdlg->param( msg => $msg );
+	$errdlg->param( action => "changepass" );
+	print $errdlg->output;
+	exit (1);
+}
+
+
+
+#----- okmsg ----------------------------------------------------------------
+sub okmsg {
+	my $okdlg = HTML::Template->new( filename => "../tmpl/okdlg.tmpl" );
+
+	my $msg = <<EOL;
+Your password has been successfully reset.<br>
+<br>
+EOL
+	$okdlg->param( msg => $msg );
+	$okdlg->param( action => "changepass" );
+	print $okdlg->output;
+	exit (0);
+}
+
+
+#----- chkDB -----------------------------------------------------------------
+sub chkDB {
+	my $dbh = shift;
+
+	if (!$dbh) {
+		errmsg();
+	}
+	my $errstr = $dbh->errstr;
+	if ($errstr) {
+		dao::tmxconnect::disconnect( $dbh );
+		# Log the database error to apachelog for troubleshooting:
+		print STDERR $errstr;
+		errmsg();
+	}
+}
+
+
+#---- main -------------------------------------------------------------------
+
+# Get the POST vars
+my $POST_username = param( 'username' );
+my $POST_oldpass = param( 'oldpass' );
+my $POST_newpass = param( 'newpass' );
+my $POST_retyped = param( 'retyped' );
+
+
+## Init the  Web Page template object:
+my $html = HTML::Template->new( filename => "../tmpl/changepass.tmpl" );
+
+# HTML FORM persistence variables:
+$html->param( username => $POST_username );
+$html->param( oldpass => $POST_oldpass );
+
+#DEBUG
+#$html->param( debug => "username=[$POST_username] oldpass=[$POST_oldpass] newpass=[$POST_newpass] retyped=[$POST_retyped]" );
+
+# Check to see if this is the initial entry or a subsequent POST:
+if (!$POST_username or !$POST_oldpass or !$POST_newpass or !$POST_retyped) {
+	print $html->output;
+	exit (0);
+}
+
+
+## CONNECT To The Database
+my $dbh = dao::tmxconnect::connect();
+chkDB( $dbh );
+
+
+# Authenticate the current password:
+my $success = lib::passwdutils::authenticate( $dbh, $POST_username, $POST_oldpass );
+chkDB( $dbh );
+if (!$success) {
+	$html->param( msg => "Unable to authenticate. Please try again." );
+	# Clear the password so it doesn't persist on the from
+	$html->param( oldpass => "" );
+	print $html->output;
+	dao::tmxconnect::disconnect( $dbh );
+	exit (1);
+} 
+
+
+# Verify the new password 
+if ($POST_newpass ne $POST_retyped) {   
+	$html->param( msg => "Passwords do not match. Please try again." );
+	print $html->output;
+	dao::tmxconnect::disconnect( $dbh );
+	exit (1);
+} 
+
+
+# Validate the new password:
+my $weakpassword = lib::passwdutils::validatePassword( $dbh, $POST_username, $POST_newpass );
+chkDB( $dbh );
+if ($weakpassword) {
+	$html->param( msg => "Your new password isn't strong enough. <br> $weakpassword" );
+	print $html->output;
+	dao::tmxconnect::disconnect( $dbh );
+	exit (1);
+}
+
+
+# Update the new password
+lib::updateaccount::setPassword( $dbh, $POST_username, $POST_newpass );
+chkDB( $dbh );
+
+
+dao::tmxconnect::disconnect( $dbh );
+
+
+# Update auth files for all hosts:
+`$Bin/../../bin/mkclientdata.pl`;
+if ($? != 0) {
+	errmsg();
+}
+
+
+# Success. Show the success message:
+okmsg();
+
+
+exit (0);

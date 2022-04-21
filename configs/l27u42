@@ -1,0 +1,115 @@
+Building configuration...
+
+Current configuration : 1855 bytes
+!
+version 12.1
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+service password-encryption
+!
+hostname L27U42
+!
+enable secret 5 $1$hQ2Y$LHx2EXQZfR7IoTyQVyt.c/
+!
+ip subnet-zero
+!
+!
+spanning-tree mode pvst
+no spanning-tree optimize bpdu transmission
+spanning-tree extend system-id
+!
+!
+!
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+ description VMWARE02 service console Primary
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+ description VMWARE03 service console Primary
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+ description vmware11 Primary
+ switchport access vlan 10
+ spanning-tree portfast
+!
+interface FastEthernet0/7
+ description vmware11 Trunk
+ switchport mode trunk
+!
+interface FastEthernet0/8
+ description vmware03 VM Primary
+ switchport mode trunk
+!
+interface FastEthernet0/9
+ description VMWARE02 VM Network Primary
+ switchport mode trunk
+!
+interface FastEthernet0/10
+ description demovm01
+ switchport mode trunk
+!
+interface FastEthernet0/11
+ description vmware13 Primary
+ switchport mode trunk
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!         
+interface FastEthernet0/17
+ switchport access vlan 103
+ spanning-tree portfast
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+ switchport mode trunk
+!
+interface GigabitEthernet0/2
+ switchport mode trunk
+!
+interface Vlan1
+ no ip address
+ no ip route-cache
+ shutdown
+!
+interface Vlan405
+ ip address 10.24.79.4 255.255.255.0
+ no ip route-cache
+!
+no ip http server
+snmp-server community public RO
+!
+line con 0
+line vty 0 4
+ login
+line vty 5 15
+ login
+!
+!
+end

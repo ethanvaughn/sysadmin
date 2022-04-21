@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>Tomax Portal</title>
+</head>
+<frameset id="TopTwoRows" rows="95,*">
+	<frame name="navigation" src="navigation.pl" frameborder="0" scrolling="no">
+	<frameset id="MiddleTwoCols" cols="28%,*">
+		<frame name="action" src="bin/listhosts.pl" frameborder="0" scrolling="yes">
+		<frameset id="RightTwoRows" rows="50%, 50%">
+			<frame name="information" src="bin/printtree.pl" frameborder="0">
+			<frame name="notifications" src="notifications.pl" frameborder="0" noresize>
+		</frameset>
+		<noframes>
+      <body>
+        <h1>Sorry!</h1>
+
+        <h3>This page must be viewed by a browser that is capable of viewing frames.</h3>
+      </body>
+    </noframes>
+	</frameset>
+</frameset>
+</html>

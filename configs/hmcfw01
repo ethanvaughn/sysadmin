@@ -1,0 +1,152 @@
+: Saved
+:
+ASA Version 7.0(8)
+!
+terminal width 160
+hostname hmcfw01
+domain-name tomax.com
+enable password mYeNr0cSeWbBfOBq encrypted
+passwd mYeNr0cSeWbBfOBq encrypted
+no names
+dns-guard
+!
+interface GigabitEthernet0/0
+ nameif External
+ security-level 0
+ ip address 66.133.106.73 255.255.254.0 standby 66.133.106.74
+!
+interface GigabitEthernet0/1
+ nameif Internal
+ security-level 100
+ ip address 10.110.10.1 255.255.255.224 standby 10.110.10.2
+!
+interface GigabitEthernet0/2
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet0/3
+ description LAN Failover Interface
+!
+interface Management0/0
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+ftp mode passive
+clock timezone MST -7
+object-group network vpnLocal
+ network-object 10.110.10.0 255.255.255.224
+object-group network vpnRemote
+ network-object host 10.24.74.9
+ network-object host 10.24.74.10
+ network-object host 10.24.74.12
+ network-object host 10.24.74.13
+ network-object host 10.24.74.14
+ network-object host 10.24.74.19
+ network-object host 10.24.74.20
+ network-object 172.30.230.0 255.255.254.0
+object-group network hmcNetwork
+ network-object 10.108.0.0 255.254.0.0
+ network-object 10.200.0.0 255.248.0.0
+ network-object 169.94.0.0 255.255.0.0
+object-group network wdcTest
+ network-object 10.10.10.0 255.255.255.0
+ network-object 172.33.132.0 255.255.255.0
+access-list noNAT extended permit ip object-group vpnLocal object-group vpnRemote
+access-list noNAT extended permit ip object-group vpnLocal object-group hmcNetwork
+access-list noNAT extended permit ip object-group vpnLocal object-group wdcTest
+access-list tmxVPN extended permit ip object-group vpnLocal object-group vpnRemote
+access-list hmcVPN extended permit ip object-group vpnLocal object-group hmcNetwork
+access-list wdcTest extended permit ip object-group vpnLocal object-group wdcTest
+pager lines 24
+mtu External 1500
+mtu Internal 1500
+failover
+failover lan unit primary
+failover lan interface fail-link GigabitEthernet0/3
+failover interface ip fail-link 1.1.1.1 255.255.255.0 standby 1.1.1.2
+no asdm history enable
+arp timeout 14400
+global (External) 1 interface
+nat (Internal) 0 access-list noNAT
+nat (Internal) 1 10.110.10.0 255.255.255.224
+route External 0.0.0.0 0.0.0.0 66.133.106.1 1
+route Internal 10.110.11.0 255.255.255.0 10.110.10.29 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00
+timeout mgcp-pat 0:05:00 sip 0:30:00 sip_media 0:02:00
+timeout uauth 0:05:00 absolute
+snmp-server host Internal 10.24.74.9 community public
+no snmp-server location
+no snmp-server contact
+snmp-server community public
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+crypto ipsec transform-set 3desmd5 esp-3des esp-md5-hmac
+crypto ipsec security-association lifetime seconds 28800
+crypto ipsec security-association lifetime kilobytes 4608000
+crypto map vpn 1 match address tmxVPN
+crypto map vpn 1 set peer 66.133.106.5
+crypto map vpn 1 set transform-set 3desmd5
+crypto map vpn 1 set security-association lifetime seconds 28800
+crypto map vpn 1 set security-association lifetime kilobytes 4608000
+crypto map vpn 2 match address hmcVPN
+crypto map vpn 2 set peer 76.75.250.17
+crypto map vpn 2 set transform-set 3desmd5
+crypto map vpn 2 set security-association lifetime seconds 28800
+crypto map vpn 2 set security-association lifetime kilobytes 4608000
+crypto map vpn 3 match address wdcTest
+crypto map vpn 3 set peer 66.133.106.105
+crypto map vpn 3 set transform-set 3desmd5
+crypto map vpn 3 set security-association lifetime seconds 28800
+crypto map vpn 3 set security-association lifetime kilobytes 4608000
+crypto map vpn interface External
+isakmp identity address
+isakmp enable External
+isakmp policy 1 authentication pre-share
+isakmp policy 1 encryption 3des
+isakmp policy 1 hash md5
+isakmp policy 1 group 2
+isakmp policy 1 lifetime 86400
+isakmp nat-traversal  20
+tunnel-group 66.133.106.5 type ipsec-l2l
+tunnel-group 66.133.106.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group 76.75.250.17 type ipsec-l2l
+tunnel-group 76.75.250.17 ipsec-attributes
+ pre-shared-key *
+tunnel-group 66.133.106.105 type ipsec-l2l
+tunnel-group 66.133.106.105 ipsec-attributes
+ pre-shared-key *
+telnet timeout 5
+ssh timeout 60
+ssh version 2
+console timeout 30
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map global_policy
+ class inspection_default
+  inspect dns maximum-length 512
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect rsh
+  inspect rtsp
+  inspect esmtp
+  inspect sqlnet
+  inspect skinny
+  inspect sunrpc
+  inspect xdmcp
+  inspect sip
+  inspect netbios
+  inspect tftp
+!
+service-policy global_policy global
+Cryptochecksum:fda1b25729800fdaa6f02e92e2141592
+: end

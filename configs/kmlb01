@@ -1,0 +1,1260 @@
+!Generated on 07/27/2009 09:56:55
+!Active version: sg0810301
+
+configure
+
+
+!*************************** GLOBAL ***************************
+  username admin des-password wamebe3gbhggdgmfjaaaebgfbehe3ehh superuser 
+
+  restrict ssh 
+
+  ip route 0.0.0.0 0.0.0.0 10.250.0.1 1 
+
+!************************* INTERFACE *************************
+interface  1/1
+  bridge vlan 1001 
+
+interface  1/2
+  bridge vlan 1002 
+
+interface Ethernet-Mgmt
+  admin-shutdown 
+
+!************************** CIRCUIT **************************
+circuit VLAN1002
+
+  ip address 10.24.77.1 255.255.255.0 
+
+circuit VLAN1001
+
+  ip address 10.250.0.5 255.255.255.0 
+
+!************************** SERVICE **************************
+service km11 
+  ip address 10.24.77.14 
+  keepalive type none 
+  active 
+
+service km11-16006 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 16006 
+  active 
+
+service km11-16008 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 16008 
+  active 
+
+service km11-16009 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 16009 
+  active 
+
+service km11-16010 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 16010 
+  active 
+
+service km11-16011 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 16011 
+  active 
+
+service km11-16096 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 16096 
+  active 
+
+service km11-16098 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 16098 
+  active 
+
+service km11-16110 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 16110 
+  active 
+
+service km11-16210 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 16210 
+  active 
+
+service km11-16310 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 16310 
+  active 
+
+service km11-23 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 23 
+  active 
+
+service km11-389 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service km11-391 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 391 
+  active 
+
+service km11-393 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 393 
+  active 
+
+service km11-636 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 636 
+  active 
+
+service km11-638 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 638 
+  active 
+
+service km11-640 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 640 
+  active 
+
+service km11-7777 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service km11-7778 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service km11-7779 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service km11-7780 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service km11-7781 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7781 
+  active 
+
+service km11-7782 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7782 
+  active 
+
+service km11-7783 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7783 
+  active 
+
+service km11-7784 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7784 
+  active 
+
+service km11-7785 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7785 
+  active 
+
+service km11-7786 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7786 
+  active 
+
+service km11-7787 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7787 
+  active 
+
+service km11-7788 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7788 
+  active 
+
+service km11-7789 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7789 
+  active 
+
+service km11-7790 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7790 
+  active 
+
+service km11-7791 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7791 
+  active 
+
+service km11-7792 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7792 
+  active 
+
+service km11-7793 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 7793 
+  active 
+
+service km11-8993 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 8993 
+  active 
+
+service km11-8995 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 8995 
+  active 
+
+service km11-8997 
+  ip address 10.24.77.14 
+  keepalive type tcp 
+  keepalive port 8997 
+  active 
+
+service km12 
+  ip address 10.24.77.15 
+  keepalive type none 
+  active 
+
+service km12-16006 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 16006 
+  active 
+
+service km12-16008 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 16008 
+  active 
+
+service km12-16009 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 16009 
+  active 
+
+service km12-16010 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 16010 
+  active 
+
+service km12-16011 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 16011 
+  active 
+
+service km12-16096 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 16096 
+  active 
+
+service km12-16098 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 16098 
+  active 
+
+service km12-16110 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 16110 
+  active 
+
+service km12-16210 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 16210 
+  active 
+
+service km12-16310 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 16310 
+  active 
+
+service km12-23 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 23 
+  active 
+
+service km12-389 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service km12-391 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 391 
+  active 
+
+service km12-393 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 393 
+  active 
+
+service km12-636 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 636 
+  active 
+
+service km12-638 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 638 
+  active 
+
+service km12-640 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 640 
+  active 
+
+service km12-7777 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service km12-7778 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service km12-7779 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service km12-7780 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service km12-7781 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7781 
+  active 
+
+service km12-7782 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7782 
+  active 
+
+service km12-7783 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7783 
+  active 
+
+service km12-7784 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7784 
+  active 
+
+service km12-7785 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7785 
+  active 
+
+service km12-7786 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7786 
+  active 
+
+service km12-7787 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7787 
+  active 
+
+service km12-7788 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7788 
+  active 
+
+service km12-7789 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7789 
+  active 
+
+service km12-7790 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7790 
+  active 
+
+service km12-7791 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7791 
+  active 
+
+service km12-7792 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7792 
+  active 
+
+service km12-7793 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 7793 
+  active 
+
+service km12-8993 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 8993 
+  active 
+
+service km12-8995 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 8995 
+  active 
+
+service km12-8997 
+  ip address 10.24.77.15 
+  keepalive type tcp 
+  keepalive port 8997 
+  active 
+
+service km13 
+  ip address 10.24.77.16 
+  keepalive type none 
+  active 
+
+service km13-16002 
+  ip address 10.24.77.16 
+  keepalive type tcp 
+  keepalive port 16002 
+  active 
+
+service km13-16110 
+  ip address 10.24.77.16 
+  keepalive type tcp 
+  keepalive port 16110 
+  active 
+
+service km13-23 
+  ip address 10.24.77.16 
+  keepalive type tcp 
+  keepalive port 23 
+  active 
+
+service km13-8990 
+  ip address 10.24.77.16 
+  keepalive type tcp 
+  keepalive port 8990 
+  active 
+
+service km14 
+  ip address 10.24.77.17 
+  keepalive type none 
+  active 
+
+service km14-16002 
+  ip address 10.24.77.17 
+  keepalive type tcp 
+  keepalive port 16002 
+  active 
+
+service km14-16110 
+  ip address 10.24.77.17 
+  keepalive type tcp 
+  keepalive port 16110 
+  active 
+
+service km14-23 
+  ip address 10.24.77.17 
+  keepalive type tcp 
+  keepalive port 23 
+  active 
+
+service km14-8990 
+  ip address 10.24.77.17 
+  keepalive type tcp 
+  keepalive port 8990 
+  active 
+
+service km3 
+  ip address 10.24.77.5 
+  keepalive type none 
+  active 
+
+service km3-389 
+  ip address 10.24.77.5 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service s19u22 
+  ip address 10.24.77.7 
+  keepalive type none 
+  active 
+
+service s19u22-389 
+  ip address 10.24.77.7 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service s19u22-7777 
+  ip address 10.24.77.7 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service s19u22-7778 
+  ip address 10.24.77.7 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service s19u22-7779 
+  ip address 10.24.77.7 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service s19u22-7780 
+  ip address 10.24.77.7 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service s19u22-8000 
+  ip address 10.24.77.7 
+  keepalive type tcp 
+  keepalive port 8000 
+  active 
+
+service s19u24 
+  ip address 10.24.77.8 
+  keepalive type none 
+  active 
+
+service s19u24-389 
+  ip address 10.24.77.8 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service s19u24-7777 
+  ip address 10.24.77.7 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service s19u24-7778 
+  ip address 10.24.77.8 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service s19u24-7779 
+  ip address 10.24.77.8 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service s19u24-7780 
+  ip address 10.24.77.8 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service s19u24-8000 
+  ip address 10.24.77.8 
+  keepalive type tcp 
+  keepalive port 8000 
+  active 
+
+service s19u34 
+  ip address 10.24.77.9 
+  keepalive type none 
+  active 
+
+service s19u34-389 
+  ip address 10.24.77.9 
+  keepalive type tcp 
+  keepalive port 389 
+  active 
+
+service s19u34-7777 
+  ip address 10.24.77.7 
+  keepalive type tcp 
+  keepalive port 7777 
+  active 
+
+service s19u34-7778 
+  ip address 10.24.77.9 
+  keepalive type tcp 
+  keepalive port 7778 
+  active 
+
+service s19u34-7779 
+  ip address 10.24.77.9 
+  keepalive type tcp 
+  keepalive port 7779 
+  active 
+
+service s19u34-7780 
+  ip address 10.24.77.9 
+  keepalive type tcp 
+  keepalive port 7780 
+  active 
+
+service s19u34-8000 
+  ip address 10.24.77.9 
+  keepalive type tcp 
+  keepalive port 8000 
+  active 
+
+!*************************** OWNER ***************************
+owner NAT 
+
+  content km11 
+    vip address 10.250.0.14 
+    flow-timeout-multiplier 1125 
+    add service km11 
+    active 
+
+  content km12 
+    vip address 10.250.0.15 
+    flow-timeout-multiplier 1125 
+    add service km12 
+    active 
+
+  content km13 
+    vip address 10.250.0.46 
+    flow-timeout-multiplier 1125 
+    add service km13 
+    active 
+
+  content km14 
+    vip address 10.250.0.47 
+    flow-timeout-multiplier 1125 
+    add service km14 
+    active 
+
+  content km3 
+    vip address 10.250.0.29 
+    flow-timeout-multiplier 1125 
+    add service km3 
+    active 
+
+  content s19u22 
+    vip address 10.250.0.24 
+    flow-timeout-multiplier 1125 
+    add service s19u22 
+    active 
+
+  content s19u24 
+    vip address 10.250.0.26 
+    flow-timeout-multiplier 1125 
+    add service s19u24 
+    active 
+
+  content s19u34 
+    vip address 10.250.0.28 
+    flow-timeout-multiplier 1125 
+    add service s19u34 
+    active 
+
+owner NON-PROD 
+
+  content 16006 
+    vip address 10.250.0.16 
+    port 16006 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-16006 
+    add service km12-16006 
+    active 
+
+  content 16008 
+    protocol tcp 
+    vip address 10.250.0.20 
+    port 16008 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-16008 
+    add service km12-16008 
+    active 
+
+  content 16009 
+    protocol tcp 
+    vip address 10.250.0.25 
+    port 16009 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-16009 
+    add service km12-16009 
+    active 
+
+  content 16010 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 16010 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-16010 
+    add service km12-16010 
+    active 
+
+  content 16011 
+    protocol tcp 
+    vip address 10.250.0.20 
+    port 16011 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-16011 
+    add service km12-16011 
+    active 
+
+  content 16096 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 16096 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-16096 
+    add service km12-16096 
+    active 
+
+  content 16098 
+    vip address 10.250.0.25 
+    protocol tcp 
+    port 16098 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-16098 
+    add service km12-16098 
+    active 
+
+  content 16110 
+    vip address 10.250.0.25 
+    protocol tcp 
+    port 16110 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-16110 
+    add service km12-16110 
+    active 
+
+  content 16210 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 16210 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-16210 
+    add service km12-16210 
+    active 
+
+  content 16310 
+    vip address 10.250.0.20 
+    protocol tcp 
+    port 16310 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-16310 
+    add service km12-16310 
+    active 
+
+  content 23 
+    vip address 10.250.0.25 
+    protocol tcp 
+    port 23 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-23 
+    add service km12-23 
+    active 
+
+  content 389 
+    vip address 10.250.0.25 
+    protocol tcp 
+    port 389 
+    flow-timeout-multiplier 1125 
+    add service km11-389 
+    add service km12-389 
+    active 
+
+  content 391 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 391 
+    flow-timeout-multiplier 1125 
+    add service km11-391 
+    add service km12-391 
+    active 
+
+  content 393 
+    protocol tcp 
+    vip address 10.250.0.20 
+    port 393 
+    flow-timeout-multiplier 1125 
+    add service km11-393 
+    add service km12-393 
+    active 
+
+  content 636 
+    protocol tcp 
+    vip address 10.250.0.25 
+    port 636 
+    flow-timeout-multiplier 1125 
+    add service km11-636 
+    add service km12-636 
+    active 
+
+  content 638 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 638 
+    flow-timeout-multiplier 1125 
+    add service km11-638 
+    add service km12-638 
+    active 
+
+  content 640 
+    vip address 10.250.0.20 
+    protocol tcp 
+    port 640 
+    flow-timeout-multiplier 1125 
+    add service km11-640 
+    add service km12-640 
+    active 
+
+  content 7777 
+    vip address 10.250.0.25 
+    protocol tcp 
+    port 7777 
+    flow-timeout-multiplier 1125 
+    add service km11-7777 
+    add service km12-7777 
+    active 
+
+  content 7778 
+    vip address 10.250.0.25 
+    protocol tcp 
+    port 7778 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7778 
+    add service km12-7778 
+    active 
+
+  content 7779 
+    vip address 10.250.0.25 
+    protocol tcp 
+    port 7779 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7779 
+    add service km12-7779 
+    active 
+
+  content 7780 
+    flow-timeout-multiplier 1125 
+    vip address 10.250.0.25 
+    protocol tcp 
+    port 7780 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7780 
+    add service km12-7780 
+    active 
+
+  content 7781 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 7781 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7781 
+    add service km12-7781 
+    active 
+
+  content 7782 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 7782 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7782 
+    add service km12-7782 
+    active 
+
+  content 7783 
+    vip address 10.250.0.16 
+    port 7783 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7783 
+    add service km12-7783 
+    active 
+
+  content 7784 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 7784 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7784 
+    add service km12-7784 
+    active 
+
+  content 7785 
+    vip address 10.250.0.20 
+    protocol tcp 
+    port 7785 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7785 
+    add service km12-7785 
+    active 
+
+  content 7786 
+    vip address 10.250.0.20 
+    protocol tcp 
+    port 7786 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7786 
+    add service km12-7786 
+    active 
+
+  content 7787 
+    vip address 10.250.0.20 
+    protocol tcp 
+    port 7787 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7787 
+    add service km12-7787 
+    active 
+
+  content 7788 
+    vip address 10.250.0.20 
+    protocol tcp 
+    port 7788 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-7788 
+    add service km12-7788 
+    active 
+
+  content 7789 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 7789 
+    flow-timeout-multiplier 1125 
+    add service km11-7789 
+    add service km12-7789 
+    active 
+
+  content 7790 
+    vip address 10.250.0.16 
+    port 7790 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    add service km11-7790 
+    add service km12-7790 
+    active 
+
+  content 7791 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 7791 
+    flow-timeout-multiplier 1125 
+    add service km11-7791 
+    add service km12-7791 
+    active 
+
+  content 7792 
+    protocol tcp 
+    vip address 10.250.0.16 
+    port 7792 
+    flow-timeout-multiplier 1125 
+    add service km11-7792 
+    add service km12-7792 
+    active 
+
+  content 7793 
+    vip address 10.250.0.16 
+    protocol tcp 
+    port 7793 
+    flow-timeout-multiplier 1125 
+    add service km11-7793 
+    add service km12-7793 
+    active 
+
+  content 8993 
+    vip address 10.250.0.25 
+    port 8993 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-8993 
+    add service km12-8993 
+    active 
+
+  content 8995 
+    vip address 10.250.0.16 
+    port 8995 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-8995 
+    add service km12-8995 
+    active 
+
+  content 8997 
+    vip address 10.250.0.20 
+    protocol tcp 
+    port 8997 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km11-8997 
+    add service km12-8997 
+    active 
+
+owner PROD 
+
+  content 16002 
+    vip address 10.250.0.18 
+    port 16002 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km13-16002 
+    add service km14-16002 
+    active 
+
+  content 16110 
+    vip address 10.250.0.18 
+    port 16110 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km13-16110 
+    add service km14-16110 
+    active 
+
+  content 23 
+    vip address 10.250.0.18 
+    protocol tcp 
+    port 23 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km13-23 
+    add service km14-23 
+    active 
+
+  content 389 
+    vip address 10.250.0.13 
+    protocol tcp 
+    port 389 
+    flow-timeout-multiplier 1125 
+    add service km3-389 
+    add service s19u22-389 
+    add service s19u24-389 
+    add service s19u34-389 
+    active 
+
+  content 7777 
+    vip address 10.250.0.13 
+    protocol tcp 
+    port 7777 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service s19u22-7777 
+    add service s19u24-7777 
+    add service s19u34-7777 
+    active 
+
+  content 7778 
+    vip address 10.250.0.13 
+    port 7778 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service s19u22-7778 
+    add service s19u24-7778 
+    add service s19u34-7778 
+    active 
+
+  content 7779 
+    vip address 10.250.0.13 
+    port 7779 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service s19u22-7779 
+    add service s19u24-7779 
+    add service s19u34-7779 
+    active 
+
+  content 7780 
+    vip address 10.250.0.13 
+    protocol tcp 
+    port 7780 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service s19u22-7780 
+    add service s19u24-7780 
+    add service s19u34-7780 
+    active 
+
+  content 8000 
+    vip address 10.250.0.13 
+    port 8000 
+    protocol tcp 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service s19u22-8000 
+    add service s19u24-8000 
+    add service s19u34-8000 
+    active 
+
+  content 8990 
+    vip address 10.250.0.18 
+    protocol tcp 
+    port 8990 
+    flow-timeout-multiplier 1125 
+    advanced-balance sticky-srcip 
+    sticky-inact-timeout 300 
+    add service km13-8990 
+    add service km14-8990 
+    active 
+
+!*************************** GROUP ***************************
+group 10.250.0.13 
+  vip address 10.250.0.13 
+  flow-timeout-multiplier 1125 
+  add service s19u22 
+  add service s19u24 
+  add service s19u34 
+  active 
+
+group 10.250.0.16 
+  vip address 10.250.0.16 
+  flow-timeout-multiplier 1125 
+  add service km11 
+  add service km12 
+  active 
+
+group 10.250.0.18 
+  vip address 10.250.0.18 
+  flow-timeout-multiplier 1125 
+  add service km13 
+  add service km14 
+  active 
+
+group 10.250.0.29 
+  vip address 10.250.0.29 
+  flow-timeout-multiplier 1125 
+  add service km3 
+  active 

@@ -1,0 +1,13 @@
+CUSTNAME=pamida
+SSH_KEY=/u01/home/oracle/.ssh/id_rsa-pivotlink
+SQL_DIR=/u01/home/oracle/sql
+SQL_FILE=pamida_analytics_daily.sql
+ZIP_FILE=pamida_analytics_daily.zip
+CHECKSUM_FILE=checksum.analytics.daily
+LOG_DIR=/u01/home/oracle/log
+LOG_FILE=pamida_analytics_daily.log
+ANALYTICS_DIR=/u02/oradata/analytics
+UPLOAD_HOST=pamida.upload.pivotlink.com
+BATCH_SH=pamida_daily_load.sh
+EMAIL=dba-team1-oncall-email@localhost
+ARCH_DAYS=10

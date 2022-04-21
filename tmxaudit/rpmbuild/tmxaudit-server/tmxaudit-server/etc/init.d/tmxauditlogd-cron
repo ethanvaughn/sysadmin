@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+# System startup for the tmxauditlogd-cron service.
+#
+# Author:       Ethan Vaughn
+#
+# chkconfig:    - 50 01
+#
+# description:  Enable start/stop of tmxauditlogd-cron wrapper at system start/stop.
+# processname:  tmxauditlogd-cron
+#
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+lockfile=/var/lock/subsys/tmxauditlogd-cron
+DAEMON=/usr/sbin/tmxauditlogd-cron
+
+[ -f ${DAEMON} ] || (echo "${DAEMON} missing! Unable to manage tmxauditlogd-cron service."; exit 1)
+
+RETVAL=1
+
+start() {
+	if [ -f $lockfile ]; then 
+		echo "The tmxauditlogd-cron syslog service is already running."
+		echo "Stale lockfile? [$lockfile]";
+		exit 1
+	fi
+	echo -n $"Starting tmxauditlogd-cron syslog services: "
+	${DAEMON}
+	RETVAL=$?
+	touch "$lockfile" 
+	[  $RETVAL -eq 0 ] && success || failure
+	echo
+}
+
+stop() {
+	echo -n $"Disabling tmxauditlogd-cron syslog services: "
+	PID=$(pgrep -f 'perl.*tmxauditlogd-cron')
+	[ $PID ] && kill $PID
+	RETVAL=$?
+	rm -f "$lockfile"
+	[ $RETVAL -eq 0 ] && success || failure
+	echo
+}
+
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+start)
+	start
+	;;
+stop)
+	stop
+	;;
+restart|force-reload)
+	restart
+	;;
+reload)
+	;;
+condrestart)
+	[ -f "$lockfile" ] && restart
+	;;
+status)
+	if [ -f $lockfile ]; then
+		echo $"tmxauditlogd-cron is running ..."
+		RETVAL=0
+	else
+		echo $"tmxauditlogd-cron is stopped."
+		RETVAL=3
+	fi
+	;;
+*)
+	echo $"Usage: $0 {start|stop|status|restart|reload|force-reload|condrestart}"
+	exit 1
+esac
+
+exit $RETVAL
+

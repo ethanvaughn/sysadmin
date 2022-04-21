@@ -1,0 +1,1 @@
+0 10 * * * root /usr/bin/yum -y update tmxaudit-client &> /dev/null

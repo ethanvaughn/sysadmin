@@ -1,0 +1,135 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::vo;
+use lib::mal;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+my $errnav = "main";
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+#----- viewMain ----------------------------------------------------------
+sub viewMain {
+	# Get required data.
+	my $list = lib::mal::getOpenList( $dbh );
+
+	# Paint the picture
+	$htmlview = HTML::Template->new( filename => "../tmpl/mal.tmpl", loop_context_vars => 1 );
+
+	$htmlview->param( tabmenu      => $tabmenu );
+	$htmlview->param( subtitle     => "Application Log Alerts" );
+	$htmlview->param( listloop     => $list );
+	
+}
+
+
+
+#---- Main -------------------------------------------------------------------
+
+						#DEBUG
+						print STDERR "cgi/main: ACTION=$ACTION\n";
+						foreach my $key (keys( %$vars )) {
+							print STDERR "mal:history: $key=$vars->{$key}\n";
+						};
+
+
+# Set up the tabmenu:
+#$tabmenu = www::cgi::helpers::gen_tabmenu( "MAL" );
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- list --------------------------
+if ($ACTION eq "list") {
+	viewMain();
+
+
+#---- close --------------------------
+} elsif ($ACTION eq "close") {
+	if (!$vars->{id}) {
+		print STDERR "mal::main: Unable to close. Missing id. Action = [$ACTION]\n";
+	}
+	
+	$vars->{username} = "jrandom";
+
+	lib::mal::closeRec( $dbh, $vars );
+	www::cgi::helpers::chkDB( $dbh );
+
+	viewMain();
+
+
+#---- del --------------------------
+} elsif ($ACTION eq "del") {
+	if (!$vars->{id}) {
+		print STDERR "mal::main: Unable to delete. Missing id. Action = [$ACTION]\n";
+	}
+
+	lib::mal::delRec( $dbh, $vars->{id} );
+	www::cgi::helpers::chkDB( $dbh );
+
+	viewMain();
+
+
+#---- generate --------------------------
+} elsif ($ACTION eq "generate") {
+	# Generate a test message.
+	lib::mal::genRec( $dbh );
+	www::cgi::helpers::chkDB( $dbh );
+	viewMain();
+
+
+
+#---- unknown --------------------------
+} else {
+	www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: Unknown action value [$ACTION].\n" );
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+# Misc. message to display. Useful for debugging or status messages.
+if ($msg) {
+	$htmlview->param( msg => $msg );
+}
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

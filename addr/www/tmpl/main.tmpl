@@ -1,0 +1,39 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+
+<div id="nav">
+	<tmpl_if name="ADMIN">
+		<a class="button" href='subnet?action=detailnew'>Add New Subnet</a>
+		<a class="button" href="iptype">IP Address Type Maint</a>
+	</tmpl_if>
+</div>
+
+
+<div id="subtitle">
+	<h1><tmpl_var name="subtitle"></h1>
+	<a class="button" href='ipaddr?action=list'>Full IP List</a>
+</div>
+
+<div id="content">
+	<table class="list">
+	<thead>
+	<tr>
+	    <th>Subnet</th>
+	    <th>Mask</th>
+	    <th>VLAN</th>
+	    <th>Comment</th>
+	    <th>X</th>
+	</tr>
+	</thead>
+	<tmpl_loop name="listloop">
+	<tr <tmpl_if name="__odd__">class="altrow"</tmpl_if>>
+	    <td><a href='ipaddr?action=list&id=<tmpl_var name="id">'><tmpl_var name="net"></a></td>
+	    <td><tmpl_var name="mask"></td>
+	    <td><tmpl_var name="vlan"></td>
+	    <td><tmpl_var name="comment"></td>
+	    <td class="nopad"><tmpl_var name="del"></td>
+	</tr>
+	</tmpl_loop>
+	</table>
+</div>
+
+<tmpl_include name = "../tmpl/footer.tmpl">

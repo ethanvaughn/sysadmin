@@ -1,0 +1,20 @@
+# Set environment variables specific to tmxaudit.
+# To be sourced from the .bash_profile script.
+
+# Allow multiple users to share same home directory without clobbering
+# each other's .Xauthority. This also has the nice benefit of persisting
+# the DISPLAY and XAUTHORITY environment for use after "su -".
+id | grep -q netuser
+result=$?
+if [ $result -eq 0 ]; then
+	if [ -f ~/.Xauthority ]; then
+		export XAUTHORITY=~/.Xauthority.${USER}
+		mv ~/.Xauthority $XAUTHORITY
+		chmod g+r $XAUTHORITY
+	fi
+fi
+
+
+# Since LDAP users have gid that differs from their uid, umask gets set
+# to 022 in /etc/bashrc. Set it explicitly here to allow shared files.
+umask 002

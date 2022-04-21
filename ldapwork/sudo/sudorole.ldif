@@ -1,0 +1,13 @@
+dn: ou=Sudoers,dc=tomax,dc=com
+ou: Sudoers
+objectClass: top
+objectClass: organizationalUnit
+
+
+dn: cn=role1,ou=Sudoers,dc=tomax,dc=com
+objectClass: sudoRole
+objectClass: top
+cn: role1
+sudoUser: evaughn
+sudoHost: ALL
+sudoCommand: ALL

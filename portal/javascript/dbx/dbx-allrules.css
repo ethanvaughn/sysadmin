@@ -1,0 +1,135 @@
+
+
+
+/****************************************************************
+  docking boxes core CSS: YOU MUST NOT CHANGE OR OVERRIDE THESE 
+*****************************************************************/
+.dbx-clone {
+	position:absolute;
+	visibility:hidden;
+	}
+.dbx-clone, .dbx-clone .dbx-handle-cursor {
+	cursor:move !important;
+	}
+.dbx-dummy {
+	display:block;
+	width:0;
+	height:0;
+	overflow:hidden;
+	}
+.dbx-group, .dbx-box, .dbx-handle {
+	position:relative;
+	display:block;
+	}
+
+
+
+/****************************************************************
+  avoid padding, margins or borders on dbx-box, 
+  to reduce visual discrepancies between it and the clone.  
+  overall, dbx-box is best left as visually unstyled as possible 
+*****************************************************************/
+.dbx-box {
+	margin:0;
+	padding:0;
+	border:none;
+	}
+
+
+
+/****************************************************************
+  otherwise, do what you like :) 
+*****************************************************************/
+
+
+
+
+
+/* group container(s) */
+.dbx-group {
+
+	}
+
+
+
+
+
+/* boxes */
+.dbx-box {
+	}
+	
+.dbx-box-open {
+	}
+
+.dbx-box-closed {
+	}
+
+
+
+
+
+/* inner content area */	
+.dbx-content {
+	}
+
+/* toggle state of inner content area */
+.dbx-box-open .dbx-content {
+	}
+
+.dbx-box-closed .dbx-content {
+	}
+
+
+
+
+
+/* handles */
+.dbx-handle {
+	}
+
+/* handle cursors */
+.dbx-handle-cursor {
+	}
+
+
+
+
+
+/* toggle images */
+a.dbx-toggle, a.dbx-toggle:visited {
+	}
+	
+/* open */
+a.dbx-toggle-open, a.dbx-toggle-open:visited {
+	}
+/* closed */
+a.dbx-toggle-closed, a.dbx-toggle-closed:visited {
+	}
+/* open and highlighted */
+a.dbx-toggle-hilite-open, a.dbx-toggle-hilite-open:visited {
+	}
+/* closed and highlighted */
+a.dbx-toggle-hilite-closed, a.dbx-toggle-hilite-closed:visited {
+	}
+
+
+
+
+
+/* keyboard navigation tooltip */
+.dbx-tooltip {
+	}
+
+
+
+
+
+/* additional clone styles */
+.dbx-clone {
+	}
+
+
+
+
+
+			

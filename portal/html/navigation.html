@@ -1,0 +1,41 @@
+<html>
+<head>
+<script language="JavaScript">
+function loadlegend() {
+var load = window.open('html/legend.html','','scrollbars=no,menubar=no,height=300,width=400,resizable=yes,toolbar=no,location=no,status=no');
+}
+// -->
+</script>
+<link rel="stylesheet" type="text/css" href="css/portal.css" />
+<link rel="stylesheet" type="text/css" href="css/<tmpl_var name=username>.css" />
+</head>
+<body>
+	<div id="wrapper">
+		<!--Banner-->
+		<div id="banner">
+			<div id="bannerLeft">
+				<img src="images/<tmpl_var name=customer>/banner_left.gif" alt="Tomax Customer Hosting Portal - Realtime server analysis and performance metrics" />
+			</div>
+			<div id="bannerRight">
+			<img src="images/<tmpl_var name=customer>/banner_right.gif" alt="Powered by Tomax Corporation" name="logo" width="183" height="68" border="0" id="logo" /> </div>
+		</div>
+		<!--NavBar-->
+		<div id="navbar">
+			<div id="navlinks">
+				<a href="index.pl" class="homeicon" target="_parent" title="Return Home">Home</a>
+				<a href="bin/printtree.pl" title="View Performance Reports" target="information" class="performanceicon">Performance Reports</a>
+				<a href="bin/readarchive.pl?showyears=1" title="View Archived Performance Reports" target="information" class="archivedperformance">Archived Performance Reports</a>
+<!--
+				<a href="bin/cclog.pl" title="View CC Access Log" target="information" class="performanceicon">CC Access Log</a>
+-->
+				<a href="bin/cclog.pl" title="." target="information" class="sdfgperformanceicon"></a>
+
+				<a href="javascript:loadlegend()" class="legendicon" title="Legend">Legend</a>
+			</div>
+			<div id="logout">
+			    <a href="login.html" target="_top" title="Log Me Out" class="logouticon">Logout</a>
+			</div>	
+		</div>
+	</div>
+</body>
+</html>

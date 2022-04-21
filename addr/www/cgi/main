@@ -1,0 +1,138 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::vo;
+use lib::ip;
+use lib::sn;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+my $errnav = "main";
+my $remote_user = $cgi->remote_user;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+#----- viewMain ----------------------------------------------------------
+# Parameters (["ADD"])
+# Load and display the IP Address detail page.
+# Set state accordingly when the optional parameter $STATE is passed.
+sub viewMain {
+	my $ADD = shift;
+
+	# Get required data.
+	my $snlist = lib::sn::getSnList( $dbh );
+	www::cgi::helpers::chkDB( $dbh );
+	# Add the delete field to the snlist elements to be used in the loop.
+	if ($remote_user eq 'admin') {
+		foreach my $rec (@$snlist) {
+			$rec->{del} = qq|<a title="Delete the subnet $rec->{net}" class="button" href="#" onclick="return del_post( 'main', 'action=del&id=$rec->{id}', '| .
+			$rec->{net} .
+			qq|' );">del</a>|;
+		}
+	}
+
+	# Paint the picture
+	$htmlview = HTML::Template->new( filename => "../tmpl/main.tmpl", loop_context_vars => 1 );
+
+	$htmlview->param( tabmenu   => $tabmenu );
+	$htmlview->param( subtitle  => "Network and Address Maintenance" );
+#	$htmlview->param( subnetlist => $subnetlist );
+	$htmlview->param( listloop  => $snlist );
+	$htmlview->param( user     => $remote_user );
+	$htmlview->param( ADMIN     => $remote_user ) if ($remote_user eq "admin");
+	
+}
+
+
+
+#---- Main -------------------------------------------------------------------
+
+						#DEBUG
+						#print STDERR "company: ACTION=$ACTION\n";
+						#foreach my $key (keys( %$vars )) {
+						#	print STDERR "company: $key=$vars->{$key}\n";
+						#};
+
+
+# Set up the tabmenu:
+$tabmenu = www::cgi::helpers::gen_tabmenu( "ADDR" );
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- list --------------------------
+if ($ACTION eq "list") {
+	viewMain();
+
+
+#---- del --------------------------
+} elsif ($ACTION eq "del") {
+	if ($remote_user ne "admin") {
+		viewMain();
+		print $cgi->header;
+		print $htmlview->output;
+		exit (0);		
+	}
+	
+	if (!$vars->{id}) {
+		print STDERR "addr::main: Unable to delete. Missing id. Action = [$ACTION]\n";
+	}
+
+	lib::sn::delSn( $dbh, $vars->{id} );
+	www::cgi::helpers::chkDB( $dbh );
+	$dbh->commit;
+	viewMain();
+
+
+#---- unknown --------------------------
+} else {
+	www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: Unknown action value [$ACTION].\n" );
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+# Misc. message to display. Useful for debugging or status messages.
+if ($msg) {
+	$htmlview->param( msg => $msg );
+}
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

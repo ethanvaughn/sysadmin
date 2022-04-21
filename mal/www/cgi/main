@@ -1,0 +1,25 @@
+#!/usr/bin/perl -w
+
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+
+print $cgi->header;
+
+
+print <<EOL;
+<html>
+<head>
+	<title></title>
+	<meta http-equiv="REFRESH" content="0; URL=fartypants">
+</head>
+<body>
+</body></html>
+EOL
+
+exit (0);

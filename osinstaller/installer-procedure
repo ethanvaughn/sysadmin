@@ -1,0 +1,329 @@
+===== Creating a Single Disk Minimal Install ISO ===============================
+
+The ISO must fit on a single 700Mb CDR.
+
+
+. Make the boot iso directory on the "builder" sandbox.
+
+        mkdir /custcd/RH5.5-1000
+
+
+
+. Run minimal install on the "install-min" sandbox VM.
+
+
+. Remove unneeded packages on the "install-min" sandbox. 
+
+    When you complete this cleanup, the resulting "rpm -qa" will be your list
+    of packages to include in your final, truly minimal ks.cfg file.
+
+    Note: Use the "yum remove" command in order to preserve the dependencies. 
+
+    i.   Start by iterating through the /etc/init.d and removing packages 
+         that have a corresponding init script. Use the following command to
+         get a list of the RPM info for each file in the /etc/init.d directory: 
+
+             cd /etc/init.d 
+             for i in * ; do echo; echo $i; rpm -qi $(rpm -qf $i); done > /tmp/init.list
+
+    ii.  Edit the /tmp/init.list until you have a list of the packages you want to
+         remove, for example:
+
+             Name        : autofs         Relocations: (not relocatable)
+             Name        : cpuspeed       Relocations: (not relocatable)
+             Name        : hplip          Relocations: (not relocatable)
+             Name        : iptables-ipv6  Relocations: (not relocatable)
+
+    iii. Run "yum remove <package>" for each package in your list. 
+
+         WARNING: Do not use the "-y" yum parameter! You do not want to 
+         inadvertently delete critical system files or the kernel, which 
+         can easily happen if the package is somehow linked through a 
+         dependency tree.
+     
+         Always check the dependency list first. The idea is to remove
+         discrete unwanted packages. Rule of thumb: if the dependency list
+         is more that 5 or 6, do not remove the package.
+
+         For example, it is tempting to remove the "lvm2" package, but this 
+         package has a dependency path to the kernel itself: 
+
+
+Dependencies Resolved
+
+================================================================================
+ Package                  Arch        Version              Repository      Size
+================================================================================
+Removing:
+ lvm2                     x86_64      2.02.56-8.el5        installed      7.4 M
+Removing for dependencies:
+ kernel                   x86_64      2.6.18-194.el5       installed       92 M
+ mkbootdisk               x86_64      1.5.3-2.1            installed      7.2 k
+ mkinitrd                 i386        5.1.19.6-61          installed      946 k
+ mkinitrd                 x86_64      5.1.19.6-61          installed      902 k
+ system-config-kdump      noarch      1.0.14-4.el5         installed      437 k
+
+Transaction Summary
+================================================================================
+Remove        6 Package(s)
+Reinstall     0 Package(s)
+Downgrade     0 Package(s)
+
+Is this ok [y/N]: n
+
+
+        In this case the "lvm2" package stays.
+
+
+    iv. Optional: run "rpm -qa" and apply the above analysis.
+
+        WARNING: Take care to keep packages needed by the Anaconda installer.
+        In RHEL 5.5 these include: 
+
+            o  Deployment_Guide-en-US
+            o  rhpl, wireless-tools
+            o  system-config-securitylevel-tui
+            o  iptables, iptables-ipv6 
+
+
+. Create the package and rpm file lists on the "install-min" VM.
+
+        rpm -qa --qf '%{N}\n' | grep -v 'gpg-pubkey' | sort -u > /tmp/packages.list;
+        rpm -qa --qf '%{N}-%{V}-%{R}.%{ARCH}.rpm\n' | grep -v 'gpg-pubkey' | sort -u > /tmp/rpms.list
+
+
+
+==  Assemble your boot iso on the "builder" sandbox.
+
+. Switch to the iso staging directory: 
+
+        cd /custcd/RH5.5-1000
+
+
+ 
+. Copy the list files from "install-min" to your boot iso staging directory.
+
+        scp root@install-min:anaconda-ks.cfg ks.cfg
+        scp root@install-min:/tmp/rpms.list rpms.list
+        scp root@install-min:/tmp/packages.list packages.list
+
+
+
+. Modify ks.cfg as needed (eg. partitions, %packages,  %post, etc.)
+
+        o  rootpw root
+
+        o  firewall --disabled
+
+        o  selinux --disabled
+
+        o  Uncomment the "clearpart" and "part" directives.
+
+        o  Modify the "part" directives with size information.
+
+               eg.
+               clearpart --linux
+               part /    --fstype ext3 --ondisk=sda --size=3072 --asprimary
+               part swap               --ondisk=sda --size=8192 --asprimary
+               part /u01 --fstype ext3 --ondisk=sda --size=1    --asprimary --grow
+               part /var --fstype ext3 --ondisk=sda --size=2048
+               part /tmp --fstype ext3 --ondisk=sda --size=2048
+
+        o  Delete the contents of the %packages section.
+       
+        o  Add "--nobase" to the %packages directive: "%packages --nobase".
+
+        o  Copy and paste the packages from the packages.list file to the 
+           %packages section.
+
+        o  Append the "%post --nochroot" and "%post" sections.
+               eg.
+
+
+######################## NON-CHROOT POST INSTALL SECTION ###################################
+
+# The nochroot section is used mainly for copying extra files off of the install CD
+
+%post --nochroot
+
+mkdir -p /mnt/source
+mount /tmp/cdrom /mnt/source
+
+# Copy Yum conf file
+# Note we copy both hosting and tomax -- based off of $TYPE, the right
+# one will be selected to use in the %post section later
+cp /mnt/source/extras/yum-hosting.repo /mnt/sysimage/tmp
+cp /mnt/source/extras/yum-tmx.repo /mnt/sysimage/tmp
+...
+
+######################## POST INSTALL SECTION ########################################
+
+# This section runs chrooted in the new Linux install.  It's used for installing
+# additional RPMs, configuring which services start on boot, etc.
+
+%post
+
+##### SET BUILD / TYPE HERE #####
+# Valid TYPEs are 'hosting' or 'tmx'
+TYPE=hosting
+SCRIPT=/tmp/$TYPE\_post.sh
+
+# Set build number
+cat /tmp/build_number >> /etc/issue
+cp /tmp/build_number /etc/build_number
+echo "Type: $TYPE" >> /etc/issue
+echo "" >> /etc/issue
+chmod 0644 /etc/build_number
+
+# Disable things that should not start on boot
+chkconfig kudzu off
+...
+
+
+
+
+. Copy the boot images and system files from the stock iso.
+
+        mount -o loop RHEL5.5/rhel-server-5.5-x86_64-dvd.iso /mnt/iso
+        cp /mnt/iso/* . 
+        rm -f RE*
+        cp -a /mnt/iso/images . 
+        cp -a /mnt/iso/isolinux . 
+        cp /mnt/iso/.discinfo . 
+
+
+
+. Modify isolinux/boot.msg as needed.
+
+        vi isolinux/boot.msg
+        Modify to provide Tomax-specific instructions.
+
+        eg. 
+
+------------------------- Tomax Build RHEL5.5-1000 --------------------------
+
+ -  To install or upgrade in graphical mode, press the ^O01<ENTER>^O07 key.
+
+ -  To install or upgrade in text mode, type: ^O01linux text <ENTER>^O07.
+
+ -  Use the function keys listed below for more information.
+
+ ---- Hosting Kickstarts ----
+ - ks.cfg (8 GB swap, /dev/sda only)
+ - ks-2disk.cfg (8 GB swap, /u01 on /dev/sdb1)
+ - kstest.cfg (512 MB swap, /dev/sda only)
+
+ ----- Tomax Kickstarts -----
+ - ks-tmx.cfg (8 GB swap, /dev/sda only)
+ - ks-tmx-2disk.cfg (8 GB swap, /u01 on /dev/sdb1)
+ - ks-tmx-test.cfg (512 MB swap, /dev/sda only)
+
+ --------- Examples ---------
+ - linux text ks=cdrom:/ks.cfg (no console redirection)
+ - linux text ks=cdrom:/ks.cfg console=ttyS0 (console to COM1 serial)
+
+
+
+
+. Set the build version variable.
+
+        echo "Tomax Build RH5.5-1000" > build_version
+
+
+
+. Create Tomax-specific extras (cron, scripts, etc.).
+
+        mkdir extras
+ 
+    Create and modify files as needed by the %post sections of the ks.cfg file.
+
+
+
+. Copy the RPMs from the stock iso to your iso staging dir. 
+
+        mkdir Server
+        cp -a /mnt/iso/Server/repodata Server/
+        cat rpms.list | xargs -iRPM_FILE cp -v /mnt/iso/Server/RPM_FILE Server/
+
+    Be sure to get all the i386 counterparts:
+
+        ls -1 Server/*.x86_64* > x86_64.list
+        sed -i 's/x86_64/i386/' x86_64.list
+        cat x86_64.list | xargs -iFILE cp -fv /mnt/iso/FILE Server/
+
+
+. Create the iso.
+
+        /custcd/mkiso.sh "RHEL5.5-1000" "/custcd/RH5.5-1000" \
+              /builds/custom_isos/x86_64/RHEL5.5/rhel5.5-x86_64-build_1000.iso  
+
+
+
+. Test the ks installer on the "install-test" VM.
+
+    If you get the "The file <package>.rpm cannot be opened." error during 
+    install, you can resolve it one of two ways: 
+
+        1. Remove the package using "yum remove <package>" on the "install-min"
+           server, then delete the files from the Server/ dir and repeat the
+           following steps:
+
+           o "Create the package and rpm file lists on the "install-min" VM." 
+
+           o  "Copy the list files from "install-min" to your boot iso staging directory."
+
+           o  "Modify ks.cfg as needed."
+
+           o  "Copy the RPMs from the stock iso to your iso staging dir."
+
+           o  "Create the iso."
+
+           o  "Test the ks installer ..."
+
+
+        2. Copy the missing file from the stock ISO to the Server/ dir.
+
+
+
+
+#==== NOTES ===================================================================== 
+If the minimal install ISO is too big to fit on a single CDR, you might 
+have to trim it
+
+1. Log into the "install-min" box.
+
+
+
+2. Create an initial list of RPMs:
+
+        rpm -qa --qf '%{N}-%{V}-%{R}.%{ARCH}.rpm\n' | sort > /tmp/rpm.list
+
+
+
+3. Evaluate the on-disk size of the RPM files:
+
+        cat /tmp/rpm.list | xargs -I RPM ls -l /mnt/Server/RPM | awk '{total = total + $5}END{print total}'
+
+
+
+4. Edit the list to remove non-essentials:
+   WARNING: This might create an installation with unmet dependencies. 
+
+        vim /tmp/rpm.list
+
+
+
+5. Repeat step "Evaluate the on-disk size fo the RPM files":
+
+        cat /tmp/rpm.list | xargs -I RPM ls -l /mnt/Server/RPM | awk '{total = total + $5}END{print total}'
+
+
+
+
+
+
+   
+
+
+
+

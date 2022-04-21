@@ -1,0 +1,46 @@
+#!/usr/bin/perl
+
+use FindBin qw( $Bin );
+use lib "$Bin/..";
+
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+
+use lib::statusdat;
+
+use strict;
+
+
+#---- main -------------------------------------------------------------------
+
+#----- Globals
+my $q = new CGI;
+
+# Our output is ASCII :
+print "Content-type: text/plain\n\n";
+
+
+# Get the list and print
+my @list = ();
+if ($q->param( 'host' ) ) {
+	@list = lib::statusdat::getStatusByHost( $q->param( 'host' ) );
+} elsif ($q->param( 'cust' ) ) {
+	@list = lib::statusdat::getStatusByCust( $q->param( 'cust' ) );
+} else {
+	@list = lib::statusdat::getStatus();
+}
+
+foreach my $rec (@list) {
+	if ($rec->{firstline} =~ /service/) {
+		print $rec->{host_name} . '|';
+		print $rec->{service_description} . '|';
+		print $rec->{plugin_output} . '|';
+		print $rec->{problem_has_been_acknowledged} . '|';
+		print $rec->{scheduled_downtime_depth} . '|';
+		print $rec->{current_state};
+		print "\n";
+	}
+}
+
+
+exit (0);

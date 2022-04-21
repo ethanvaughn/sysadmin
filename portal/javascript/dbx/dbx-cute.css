@@ -1,0 +1,129 @@
+
+
+
+/****************************************************************
+  Docking Boxes core CSS: YOU MUST NOT CHANGE OR OVERRIDE THESE 
+*****************************************************************/
+.dbx-clone {
+	position:absolute;
+	visibility:hidden;
+	}
+.dbx-clone, .dbx-clone .dbx-handle-cursor {
+	cursor:move !important;
+	}
+.dbx-dummy {
+	display:block;
+	width:0;
+	height:0;
+	overflow:hidden;
+	}
+.dbx-group, .dbx-box, .dbx-handle {
+	position:relative;
+	display:block;
+	}
+
+
+
+/****************************************************************
+  avoid padding, margins or borders on dbx-box, 
+  to reduce visual discrepancies between it and the clone.  
+  overall, dbx-box is best left as visually unstyled as possible 
+*****************************************************************/
+.dbx-box {
+	margin:0;
+	padding:0;
+	border:none;
+	}
+
+
+
+/****************************************************************
+  otherwise, do what you like :) 
+*****************************************************************/
+
+
+
+
+
+/* group container(s) */
+.dbx-group {
+	background:#fffff3;
+	border:1px solid #eee1e1;
+	width:98%;
+	padding:7px 0 7px 1%;
+	margin:10px 0;
+	clear:both;
+	float:left;
+	}
+* html .dbx-group {
+	width:100%;
+	}
+
+
+
+
+
+/* boxes */
+.dbx-box {
+	background:transparent;
+	float:left;
+	}
+	
+
+	
+/* handles */
+.dbx-handle {
+	display:block;
+	margin:0 7px 0 0;
+	padding:0;
+	width:40px;
+	height:40px;
+	background-position:-5px -3px !important;
+	}
+.dbx-handle img {
+	border:none;
+	}
+	
+/* handle cursors are in a class of their own
+   so they only get applied if the script is supported */
+.dbx-handle-cursor {
+	cursor:pointer;
+	}
+	
+
+
+
+
+
+
+/* keyboard navigation tooltip */
+.dbx-tooltip {
+	display:block;
+	position:absolute;
+	margin:44px 0 0 2px;
+	width:185px;
+	border:1px solid #000;
+	background:#ffd;
+	color:#000;
+	font:normal normal normal 0.85em tahoma, arial, sans-serif;
+	padding:2px 4px 3px 5px;
+	text-align:left;
+	}
+* html .dbx-tooltip { width:195px; }
+
+/* use CSS2 system colors in CSS2 browsers 
+   but not safari, which doesn't support them */
+*[class="dbx-tooltip"]:lang(en) {
+	border-color:InfoText;
+	background:InfoBackground;
+	color:InfoText;
+	font:small-caption;
+	font-weight:normal;
+	}
+
+
+
+
+
+
+

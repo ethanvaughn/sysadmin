@@ -1,0 +1,75 @@
+# Network user login accounts starting at uidNumber 60000.
+# The uidNumber will be global for all servers. Note the 
+# cn "adminUser" as way for us to further query accounts by user type.
+# This cn can be one of [ adminUser | dbaUser ].
+#
+#     o  Set adminUser gidNumbers to "sysadmin" group (60001) and
+#        home dirs to the /u01/home/sysadmin directory.
+#
+#     o  Set dbaUser gidNumbers to "dba" group (101) and
+#        home dirs to the /u01/home/oracle directory.
+
+dn: uid=evaughn,ou=People,dc=tomax,dc=com
+uid: evaughn
+cn: adminUser
+objectClass: account
+objectClass: posixAccount
+objectClass: top
+objectClass: shadowAccount
+userPassword:: e2NyeXB0fSEh
+shadowLastChange: 12474
+shadowMax: 99999
+shadowWarning: 7
+loginShell: /bin/bash
+uidNumber: 60000
+gidNumber: 60001
+homeDirectory: /u01/home/sysadmin
+
+dn: uid=dhatch,ou=People,dc=tomax,dc=com
+uid: dhatch
+cn: adminUser
+objectClass: account
+objectClass: posixAccount
+objectClass: top
+objectClass: shadowAccount
+userPassword:: e2NyeXB0fSEh
+shadowLastChange: 12474
+shadowMax: 99999
+shadowWarning: 7
+loginShell: /bin/bash
+uidNumber: 60001
+gidNumber: 60001
+homeDirectory: /u01/home/sysadmin
+
+dn: uid=jkruse,ou=People,dc=tomax,dc=com
+uid: jkruse
+cn: adminUser
+objectClass: account
+objectClass: posixAccount
+objectClass: top
+objectClass: shadowAccount
+userPassword:: e2NyeXB0fSEh
+shadowLastChange: 12474
+shadowMax: 99999
+shadowWarning: 7
+loginShell: /bin/bash
+uidNumber: 60002
+gidNumber: 60001
+homeDirectory: /u01/home/sysadmin
+
+dn: uid=csteab,ou=People,dc=tomax,dc=com
+uid: csteab
+cn: dbaUser
+objectClass: account
+objectClass: posixAccount
+objectClass: top
+objectClass: shadowAccount
+userPassword:: e2NyeXB0fSEh
+shadowLastChange: 12474
+shadowMax: 99999
+shadowWarning: 7
+loginShell: /bin/bash
+uidNumber: 60003
+gidNumber: 101
+homeDirectory: /u01/home/oracle
+

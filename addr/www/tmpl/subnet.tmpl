@@ -1,0 +1,65 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+
+<div id="nav">
+	<a class="button" href='<tmpl_var name="navback_controller">?<tmpl_var name="navback_action">'>&larr; Back to <tmpl_var name="navback_title"></a>
+	<tmpl_if name="ADMIN">
+		<a class="button" href='subnet?action=detailnew'>Add New Subnet</a>
+		<a class="button" href="iptype">IP Address Type Maint</a>
+	</tmpl_if>
+</div>
+
+<div id="subtitle">
+	<h1>Subnet Detail</h1>
+	<h2><tmpl_var name='subtitle'></h2>
+</div>
+
+<div id="content">
+	<tmpl_if name="msg">
+		<div class="message">
+		<tmpl_var name="msg">
+		</div>
+	</tmpl_if>
+
+	<form method="post" action="subnet">
+		<tmpl_if name="ADD">
+			<input type="hidden" name="action" value="add">
+		<tmpl_else>
+			<input type="hidden" name="action" value="update">
+		</tmpl_if>
+
+		<input type="hidden" name="id" value="<tmpl_var name='id'>">
+
+		<table>	
+		<tr>
+			<td>Net:</td>
+			<td><input type="text" name="net" value="<tmpl_var name='net'>"></td>
+		</tr>
+		<tr>
+			<td>Mask:</td>
+			<td><input type="text" name="mask" value="<tmpl_var name='mask'>"></td>
+		</tr>
+		<tr>
+			<td>Comment:</td>
+			<td><input type="text" name="comment" value="<tmpl_var name='comment'>"></td>
+		</tr>
+		<tr>
+			<td>VLAN:</td>
+			<td><input type="text" name="vlan" value="<tmpl_var name='vlan'>"></td>
+		</tr>
+		</table>
+
+
+		<tmpl_if name="ADMIN">
+			<div class="buttonrow">
+			<tmpl_if name="ADD">
+				<input style="width:100%" type="submit" value="Add New Subnet">
+			<tmpl_else>
+				<input style="width:100%" type="submit" value="Update">
+			</tmpl_if>
+			</div>
+		</tmpl_if>
+	</form>
+</div>
+
+
+<tmpl_include name = "../tmpl/footer.tmpl">

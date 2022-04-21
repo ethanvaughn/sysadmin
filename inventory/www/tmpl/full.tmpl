@@ -1,0 +1,54 @@
+<tmpl_include name = "../tmpl/header_report.tmpl">
+
+
+<div id="reportsubtitle">
+	<h1><tmpl_var name="subtitle"></h1>
+	<a class="button" href="full?action=csv">Download CSV</a>
+</div>
+	
+<div id="reportcontent">
+	<table>
+	<thead>
+		<tr>
+			<th>Item Name</th>
+			<th>ID</th>
+			<th>Serial No</th>
+			<th>Rack Pos</th>
+			<th>Owner</th>
+			<th>User</th>
+			<th>Comment</th>
+			<th>Datacenter</th>
+			<th>Environment</th>
+			<th>Height</th>
+			<th>HWVendor</th>
+			<th>Model</th>
+			<th>OSVendor</th>
+			<th>OSVersion</th>
+			<th>OSArch</th>
+			<th>Tier</th>
+			<th>Addr1</th>
+			<th>Addr2</th>
+			<th>Addr3</th>
+			<th>Addr4</th>
+			<th>Addr5</th>
+			<th>Addr6</th>
+			<th>Addr7</th>
+			<th>Addr8</th>
+			<th>Addr9</th>
+			<th>Addr10</th>
+		</tr>
+	</thead>
+	<tmpl_var name="rows">
+	</table>
+</div>
+
+
+<tmpl_if name="msg">
+	<div>
+	<tmpl_var name="msg">
+	</div>
+</tmpl_if>
+
+
+
+<tmpl_include name = "../tmpl/footer.tmpl">

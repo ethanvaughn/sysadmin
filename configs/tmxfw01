@@ -1,0 +1,628 @@
+: Saved
+:
+ASA Version 8.2(1) 
+!
+terminal width 160
+hostname tmxfw01
+domain-name tomax.com
+enable password /zp29/u4XwwZ0P0p encrypted
+passwd /zp29/u4XwwZ0P0p encrypted
+names
+dns-guard
+!
+interface Ethernet0/0
+ nameif outside
+ security-level 0
+ ip address 208.177.140.5 255.255.255.0 
+!
+interface Ethernet0/1
+ nameif inside
+ security-level 100
+ ip address 172.21.156.5 255.255.0.0 
+!
+interface Ethernet0/2
+ nameif dmz1
+ security-level 50
+ ip address 192.168.11.1 255.255.255.0 
+!
+interface Ethernet0/3
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface Management0/0
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+ management-only
+!
+boot system disk0:/asa821-k8.bin
+ftp mode passive
+clock timezone MST -6
+dns server-group DefaultDNS
+ domain-name tomax.com
+same-security-traffic permit intra-interface
+object-group network tmxInternal
+ network-object 172.21.0.0 255.255.0.0
+object-group network tmxExternal
+ network-object 66.133.106.0 255.255.254.0
+object-group network tmxIndia
+ network-object 192.168.9.0 255.255.255.0
+object-group network tmxDmz
+ network-object 192.168.11.0 255.255.255.0
+object-group network wdcMgmt
+ network-object 10.24.74.0 255.255.255.192
+object-group network tmxGuest
+ network-object 192.168.12.0 255.255.255.0
+ network-object 192.168.13.0 255.255.255.0
+object-group network tmxMailserver
+ network-object host 208.177.140.20
+ network-object host 208.177.140.21
+object-group network wwwTomax
+ network-object host 208.177.140.16
+ network-object host 208.177.140.15
+object-group network dnsTomax
+ network-object host 208.177.140.8
+ network-object host 208.177.140.9
+object-group network webNotes
+ network-object host 208.177.140.21
+object-group network isdTomax
+ network-object host 208.177.140.49
+object-group network authServer
+ network-object host 10.24.74.13
+object-group network acsServer
+ network-object host 10.24.74.8
+object-group network isdRouters
+ network-object host 71.97.124.82
+ network-object host 69.214.17.69
+object-group service tcpOut tcp
+ description Ports allowed out From tmxOut - tmxInternal network out to internet
+ port-object eq domain
+ port-object eq www
+ port-object eq https
+ port-object eq ftp
+ port-object eq telnet
+ port-object eq smtp
+ port-object eq ssh
+ port-object eq ldap
+ port-object eq 993
+ port-object eq ldaps
+ port-object eq 587
+ port-object eq lotusnotes
+ port-object eq 873
+ port-object eq pptp
+ port-object eq 2525
+ port-object eq sip
+ port-object eq 44233
+ port-object eq 8990
+ port-object eq 16110
+ port-object eq 7779
+ port-object eq 5003
+ port-object eq 7800
+ port-object eq 5222
+ port-object eq 7777
+ port-object eq 464
+ port-object eq 3268
+ port-object eq 3269
+ port-object eq 7071
+ port-object eq 42
+ port-object eq 135
+ port-object eq 137
+ port-object eq netbios-ssn
+ port-object eq 445
+ port-object eq 1512
+ port-object eq 49152
+ port-object eq 2666
+ port-object eq 5223
+ port-object eq 8080
+ port-object eq 2095
+ port-object eq sqlnet
+ port-object eq 3319
+ port-object eq 500
+ port-object eq 4500
+ port-object eq citrix-ica
+ port-object eq 2598
+object-group service udpOut udp
+ description 42 135 138 445 1512=activedir,873=rsync,1723=pptp
+ port-object eq ntp
+ port-object eq domain
+ port-object eq 873
+ port-object eq sip
+ port-object eq 1723
+ port-object eq 4500
+ port-object eq isakmp
+ port-object eq nameserver
+ port-object eq 135
+ port-object eq netbios-ns
+ port-object eq netbios-dgm
+ port-object eq 445
+ port-object eq 1512
+ port-object eq 1604
+object-group service creditAuth tcp
+ port-object eq 5100
+ port-object range 9980 9989
+ port-object range 17300 17500
+object-group service dnsPorts tcp-udp
+ port-object eq domain
+object-group service dominoPorts tcp
+ port-object eq lotusnotes
+ port-object eq www
+ port-object eq https
+object-group service wwwPorts tcp
+ port-object eq www
+ port-object eq https
+object-group service mailPorts tcp
+ port-object eq 993
+ port-object eq ldaps
+object-group service rdpPorts tcp-udp
+ port-object eq 3389
+object-group service isdPorts tcp
+ port-object eq ssh
+ port-object eq telnet
+ port-object eq 4005
+ port-object eq 4015
+ port-object eq 4025
+ port-object eq 4035
+ port-object eq 4045
+ port-object eq 9005
+ port-object eq 9015
+ port-object eq 9025
+ port-object eq 9035
+ port-object eq 9045
+object-group protocol vpnProtocols
+ protocol-object ah
+ protocol-object esp
+ protocol-object gre
+object-group network dominoOut
+ network-object host 192.168.11.20
+ network-object host 192.168.11.21
+ network-object host 192.168.11.41
+ network-object host 192.168.11.26
+object-group network dominoIn
+ network-object host 208.177.140.20
+ network-object host 208.177.140.21
+ network-object host 208.177.140.41
+ network-object host 208.177.140.42
+object-group network tmxCvpn
+ network-object 172.16.16.0 255.255.255.0
+ network-object 192.168.192.0 255.255.255.0
+object-group network tmxDmzNat
+ network-object 208.177.140.0 255.255.255.0
+object-group service trainingPorts tcp
+ port-object eq 8990
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 7780
+ port-object eq 8080
+object-group network trainServer
+ network-object host 208.177.140.35
+object-group network ldap01In
+ network-object host 208.177.140.30
+ network-object host 208.177.140.31
+object-group service mailports tcp
+ port-object eq smtp
+ port-object eq 257
+ port-object eq imap4
+ port-object eq 993
+ port-object eq 473
+ port-object eq 995
+ port-object eq pop3
+ port-object eq ssh
+ port-object eq www
+ port-object eq https
+object-group network cvpnRatTemp
+ network-object 172.22.10.0 255.255.255.0
+object-group network ratVMNet
+ network-object host 172.21.150.103
+ network-object host 172.21.150.104
+ network-object host 172.21.150.31
+ network-object host 172.21.150.32
+object-group network postiniHosts
+ network-object 74.125.148.0 255.255.252.0
+object-group network webDemo
+ network-object host 208.177.140.41
+object-group network sysAdminNet
+ network-object host 172.21.161.250
+ network-object host 172.21.161.251
+ network-object host 172.21.161.252
+ network-object host 172.21.161.253
+ network-object host 172.21.161.254
+object-group protocol sysAdminProtocols
+ protocol-object icmp
+ protocol-object ip
+object-group service ldapPorts tcp-udp
+ port-object eq 123
+ port-object eq 135
+ port-object eq 138
+ port-object eq 389
+ port-object eq 636
+ port-object eq 3268
+ port-object eq 3269
+ port-object eq domain
+ port-object eq 88
+ port-object eq 445
+object-group network ISD-Prod
+ network-object 10.101.0.21 255.255.255.255
+object-group network tmxLocal
+ network-object 172.21.160.0 255.255.254.0
+object-group network tickets
+ network-object host 208.177.140.11
+object-group service jabber tcp
+ port-object eq 5222
+access-list tmxOut extended permit ip object-group tmxGuest any 
+access-list tmxOut extended permit ip object-group tmxInternal object-group tmxExternal 
+access-list tmxOut extended permit ip object-group tmxInternal object-group tmxDmzNat 
+access-list tmxOut extended permit ip object-group tmxInternal object-group acsServer 
+access-list tmxOut extended deny ip object-group tmxInternal object-group wdcMgmt 
+access-list tmxOut extended permit object-group vpnProtocols object-group tmxInternal any 
+access-list tmxOut extended permit tcp object-group tmxInternal any object-group creditAuth 
+access-list tmxOut extended permit tcp object-group tmxInternal any object-group tcpOut 
+access-list tmxOut extended permit udp object-group tmxInternal any object-group udpOut 
+access-list tmxOut extended permit tcp object-group tmxInternal any object-group rdpPorts 
+access-list tmxOut extended permit udp object-group tmxInternal any object-group rdpPorts 
+access-list tmxOut extended permit udp object-group tmxInternal object-group wdcMgmt eq tftp 
+access-list tmxOut extended permit object-group sysAdminProtocols object-group sysAdminNet any 
+access-list tmxOut extended permit tcp object-group tmxInternal object-group tmxDmz object-group ldapPorts 
+access-list tmxOut extended permit udp object-group tmxInternal object-group tmxDmz object-group ldapPorts 
+access-list tmxOut extended permit ip object-group tmxLocal object-group ISD-Prod 
+access-list tmxIn extended permit tcp any object-group dominoIn object-group dominoPorts 
+access-list tmxIn extended permit tcp any object-group tmxMailserver object-group mailPorts 
+access-list tmxIn extended permit tcp any object-group wwwTomax object-group wwwPorts 
+access-list tmxIn extended permit tcp any object-group webNotes object-group wwwPorts 
+access-list tmxIn extended permit tcp any object-group dnsTomax eq domain 
+access-list tmxIn extended permit udp any object-group dnsTomax eq domain 
+access-list tmxIn extended permit tcp object-group isdRouters object-group isdTomax object-group isdPorts 
+access-list tmxIn extended permit tcp any object-group trainServer object-group trainingPorts 
+access-list tmxIn extended permit tcp object-group postiniHosts object-group tmxMailserver eq smtp 
+access-list tmxIn extended permit tcp any object-group webDemo object-group dominoPorts 
+access-list tmxIn extended permit tcp any object-group webDemo object-group wwwPorts 
+access-list tmxIn extended permit tcp any object-group webDemo eq ftp 
+access-list tmxIn extended permit tcp any object-group ldap01In object-group ldapPorts 
+access-list tmxIn extended permit udp any object-group ldap01In object-group ldapPorts 
+access-list tmxIn extended permit tcp any object-group webDemo eq ssh 
+access-list tmxIn extended permit tcp any object-group wwwTomax eq ssh 
+access-list tmxIn extended permit tcp any object-group tickets object-group wwwPorts 
+access-list tmxIn extended permit tcp any object-group tickets eq smtp 
+access-list tmxIn extended permit tcp any object-group tickets eq ssh 
+access-list tmxIn extended permit tcp any object-group tickets object-group jabber 
+access-list nonat extended permit ip object-group tmxInternal object-group wdcMgmt 
+access-list nonat extended permit ip object-group tmxInternal object-group tmxCvpn 
+access-list nonat extended permit ip object-group tmxInternal object-group tmxDmz 
+access-list nonat extended permit ip object-group ratVMNet object-group cvpnRatTemp 
+access-list nonat extended permit ip object-group wdcMgmt object-group tmxInternal 
+access-list nonat extended permit ip object-group tmxCvpn object-group tmxInternal 
+access-list nonat extended permit ip object-group tmxDmz object-group tmxInternal 
+access-list nonat extended permit ip object-group tmxLocal object-group ISD-Prod 
+access-list nonat extended permit ip object-group tmxInternal object-group tmxIndia 
+access-list dmzOut extended permit tcp object-group tmxDmz any eq smtp 
+access-list dmzOut extended permit tcp object-group tmxDmz any eq domain 
+access-list dmzOut extended permit udp object-group tmxDmz any eq domain 
+access-list dmzOut extended permit udp object-group tmxDmz any eq ntp 
+access-list dmzOut extended permit tcp object-group tmxDmz any object-group wwwPorts 
+access-list dmzOut extended permit tcp object-group tmxDmz object-group tmxInternal object-group ldapPorts 
+access-list dmzOut extended permit udp object-group tmxDmz object-group tmxInternal object-group ldapPorts 
+access-list wdcVpn extended permit ip object-group tmxInternal object-group wdcMgmt 
+access-list ST standard permit 172.21.0.0 255.255.0.0 
+access-list ratST standard permit host 172.21.150.103 
+access-list ratST standard permit host 172.21.150.104 
+access-list ratST standard permit host 172.21.150.31 
+access-list ratST standard permit host 172.21.150.32 
+access-list ISD-VPN extended permit ip object-group tmxLocal object-group ISD-Prod 
+access-list tmxIndia extended permit ip object-group tmxInternal object-group tmxIndia 
+pager lines 24
+logging enable
+logging buffered notifications
+logging facility 17
+logging host inside 172.21.157.50
+mtu outside 1500
+mtu inside 1500
+mtu dmz1 1500
+ip local pool tmxCvpn 192.168.192.1-192.168.192.254
+ip local pool ratTemp 172.22.10.1-172.22.10.20 mask 255.255.255.0
+icmp unreachable rate-limit 1 burst-size 1
+asdm image disk0:/asdm512-k8.bin
+no asdm history enable
+arp timeout 14400
+global (outside) 1 interface
+global (outside) 2 208.177.140.6
+nat (inside) 0 access-list nonat
+nat (inside) 2 192.168.12.0 255.255.255.0
+nat (inside) 1 192.168.13.0 255.255.255.0
+nat (inside) 1 172.21.0.0 255.255.0.0
+static (dmz1,outside) 208.177.140.8 192.168.11.8 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.9 192.168.11.9 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.11 192.168.11.11 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.15 192.168.11.15 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.16 192.168.11.16 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.20 192.168.11.20 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.21 192.168.11.21 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.41 192.168.11.25 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.27 192.168.11.27 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.24 192.168.11.41 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.49 192.168.11.49 netmask 255.255.255.255 
+static (inside,outside) 208.177.140.22 172.21.159.16 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.8 192.168.11.8 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.9 192.168.11.9 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.11 192.168.11.11 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.15 192.168.11.15 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.16 192.168.11.16 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.20 192.168.11.20 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.21 192.168.11.21 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.41 192.168.11.25 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.27 192.168.11.27 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.35 192.168.11.35 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.24 192.168.11.41 netmask 255.255.255.255 
+static (dmz1,inside) 208.177.140.49 192.168.11.49 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.35 192.168.11.35 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.42 192.168.11.26 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.30 192.168.11.30 netmask 255.255.255.255 
+static (dmz1,outside) 208.177.140.31 192.168.11.31 netmask 255.255.255.255 
+access-group tmxIn in interface outside
+access-group tmxOut in interface inside
+access-group dmzOut in interface dmz1
+route outside 0.0.0.0 0.0.0.0 208.177.140.1 1
+route inside 192.168.12.0 255.255.255.0 172.21.159.1 1
+route inside 192.168.13.0 255.255.255.0 172.21.159.1 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+ldap attribute-map ActiveDirectory
+  map-name  memberOf IETF-Radius-Class
+dynamic-access-policy-record DfltAccessPolicy
+dynamic-access-policy-record VPN-AnyConnect
+ description "Internal VPN AnyConnect Dynamic Access Policy"
+ network-acl nonat
+ priority 10
+dynamic-access-policy-record VPN-IPSec
+ description "Internal VPN IPSec Dynamic Access Policy"
+ network-acl nonat
+ priority 20
+aaa-server rad protocol radius
+ max-failed-attempts 4
+aaa-server rad (inside) host 172.21.159.16
+ key tmxSharedKey
+aaa-server TMXldap protocol ldap
+aaa-server TMXldap (dmz1) host 192.168.11.30
+ ldap-base-dn dc=tmx,dc=com
+ ldap-scope subtree
+ ldap-naming-attribute sAMAccountName
+ ldap-login-password *
+ ldap-login-dn cn=ldapuser,cn=users,dc=tmx,dc=com
+ server-type microsoft
+aaa-server TMXldap (dmz1) host 192.168.11.31
+ ldap-base-dn dc=tmx,dc=com
+ ldap-scope subtree
+ ldap-naming-attribute sAMAccountName
+ ldap-login-password *
+ ldap-login-dn cn=ldapuser,cn=users,dc=tmx,dc=com
+ server-type microsoft
+aaa authentication ssh console LOCAL 
+aaa authentication serial console LOCAL 
+snmp-server host inside 172.21.157.50 community tomaxint
+no snmp-server location
+no snmp-server contact
+snmp-server community *****
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+crypto ipsec transform-set desmd5 esp-des esp-md5-hmac 
+crypto ipsec transform-set 3desmd5 esp-3des esp-md5-hmac 
+crypto ipsec security-association lifetime seconds 28800
+crypto ipsec security-association lifetime kilobytes 4608000
+crypto dynamic-map tmxCvpn 1 set transform-set 3desmd5
+crypto dynamic-map tmxCvpn 1 set reverse-route
+crypto map vpn 1 match address wdcVpn
+crypto map vpn 1 set peer 66.133.106.5 
+crypto map vpn 1 set transform-set 3desmd5
+crypto map vpn 3 match address ISD-VPN
+crypto map vpn 3 set peer 70.236.223.87 
+crypto map vpn 3 set transform-set 3desmd5
+crypto map vpn 100 ipsec-isakmp dynamic tmxCvpn
+crypto map vpn interface outside
+crypto ca trustpoint internal.trustpoint
+ enrollment terminal
+ fqdn internal.tomax.com
+ subject-name CN=internal.tomax.com,OU=Hosting,O=Tomax Corporation,C=US,St=Utah,L=Salt Lake City
+ serial-number
+ keypair internal.trustpoint
+ crl configure
+crypto ca certificate chain internal.trustpoint
+ certificate ca 50ae530d2e7387954d67ed62213414a0
+    30820403 308202eb a0030201 02021050 ae530d2e 7387954d 67ed6221 3414a030 
+    0d06092a 864886f7 0d010105 0500303b 31133011 060a0992 268993f2 2c640119 
+    1603636f 6d311330 11060a09 92268993 f22c6401 19160374 6d78310f 300d0603 
+    55040313 066c6461 70303130 1e170d30 39313131 37313931 3431375a 170d3134 
+    31313137 31393233 34335a30 3b311330 11060a09 92268993 f22c6401 19160363 
+    6f6d3113 3011060a 09922689 93f22c64 01191603 746d7831 0f300d06 03550403 
+    13066c64 61703031 30820122 300d0609 2a864886 f70d0101 01050003 82010f00 
+    3082010a 02820101 00a220db 0cd7b975 8b4f970b 23d34847 1c02cb04 2c9b9670 
+    3055c274 3c05759e 13c3f36d c410394a 21d99166 a1176457 504c0061 73f5f7e2 
+    2e491107 3fd20f3e 5af4f5c0 30ea113c 044ce4ac c5e85ddd 08a1886b fe4ac224 
+    6e7d0370 9c41abcc 3ab01f50 d7667350 6c9bdac5 a64a2192 a17a79f6 a5c85abf 
+    0c226845 9f784fc1 eef59081 f6001291 2dec2b6a c785c682 188212dd 671f8104 
+    af5525a6 8ff1957e 5a654e62 ba43abe3 4f6e6efb 42c671ab f136ccff afb6951c 
+    73f02523 997cc3ee 856d87cb 3a16fc71 7fa78d90 8b955c48 9ce23665 46e5d790 
+    287af242 749ca632 eaa1799e 9539230b c54e9d78 2b82d2b1 774ee0f1 6ba601d5 
+    a2ed7415 ef4a9b75 83020301 0001a382 01013081 fe301306 092b0601 04018237 
+    14020406 1e040043 0041300b 0603551d 0f040403 02018630 0f060355 1d130101 
+    ff040530 030101ff 301d0603 551d0e04 160414e9 cb4156dc 5e36dff0 d5608c17 
+    8f00880e b9bc8130 71060355 1d1f046a 30683066 a064a062 862e6874 74703a2f 
+    2f6c6461 7030312e 746d782e 636f6d2f 43657274 456e726f 6c6c2f6c 64617030 
+    31283129 2e63726c 86306669 6c653a2f 2f5c5c6c 64617030 312e746d 782e636f 
+    6d5c4365 7274456e 726f6c6c 5c6c6461 70303128 31292e63 726c3012 06092b06 
+    01040182 37150104 05020301 00013023 06092b06 01040182 37150204 16041466 
+    34cfd71c 84092e20 d9babde9 92154fa5 55670730 0d06092a 864886f7 0d010105 
+    05000382 01010064 a2516bf0 5697567f 4cae8c27 e6a00a41 8bd644f2 e46b035a 
+    5af2b72d 650f3cef 6bad5f4f db78f658 6d324003 baddab43 6551175a b36ca991 
+    5e17254e 37772196 25a353cd 02258494 9aa1b2ee 8a0a142c d29a5469 40a14318 
+    bd37d859 7454ac01 00980980 c9974e4f 64da7d9b b8222f88 4b8d39f7 2d29105e 
+    f2c4f202 669bd1a0 90731cc6 ae5a109e 3bc162eb ea7d9f62 e30e8ae9 61664a4c 
+    e772dcd1 cb5d42c0 fba6285a 64085567 60cacab2 0c232eb0 e5472485 62badc13 
+    efffa750 8e56f090 ec4fa327 031af9c4 a381c048 46ee69e5 1d2061bc 9b6e260a 
+    db2412d7 717774c8 52b39a6a befdcb1d b642875f 4801183d 12c67778 705cd0f4 
+    c0559378 bf0382
+  quit
+ certificate 153df7e2000200000173
+    3082044f 30820337 a0030201 02020a15 3df7e200 02000001 73300d06 092a8648 
+    86f70d01 01050500 303b3113 3011060a 09922689 93f22c64 01191603 636f6d31 
+    13301106 0a099226 8993f22c 64011916 03746d78 310f300d 06035504 0313066c 
+    64617030 31301e17 0d303931 31323032 30353532 375a170d 31303131 32303231 
+    30353237 5a308180 310b3009 06035504 06130255 53310d30 0b060355 04081304 
+    55746168 31173015 06035504 07130e53 616c7420 4c616b65 20436974 79311a30 
+    18060355 040a1311 546f6d61 7820436f 72706f72 6174696f 6e311030 0e060355 
+    040b1307 486f7374 696e6731 1b301906 03550403 1312696e 7465726e 616c2e74 
+    6f6d6178 2e636f6d 30819f30 0d06092a 864886f7 0d010101 05000381 8d003081 
+    89028181 00b4b22a dab15ab2 f436a03b 391eed8c c5b71745 c5b204e8 7975a546 
+    9914fc0c 8ad8d0ce 43d00157 07eeac42 8c82138f ba74496d 454bf46c 2a70cbcb 
+    ba1e9baf e798d7d6 670b2222 305c5635 0f1f0eae 6dd70e0a a020310c a2edb384 
+    ccb2884a 0087a952 7c6cf062 831f385d c11e0cbe 457b7265 fbae94a9 74eaf664 
+    156f5913 8f020301 0001a382 01913082 018d300e 0603551d 0f0101ff 04040302 
+    05a0301d 0603551d 11041630 14821269 6e746572 6e616c2e 746f6d61 782e636f 
+    6d301d06 03551d0e 04160414 64270cc4 9b67e91d de082ae6 16e77fd8 39fcd137 
+    301f0603 551d2304 18301680 14e9cb41 56dc5e36 dff0d560 8c178f00 880eb9bc 
+    81307106 03551d1f 046a3068 3066a064 a062862e 68747470 3a2f2f6c 64617030 
+    312e746d 782e636f 6d2f4365 7274456e 726f6c6c 2f6c6461 70303128 31292e63 
+    726c8630 66696c65 3a2f2f5c 5c6c6461 7030312e 746d782e 636f6d5c 43657274 
+    456e726f 6c6c5c6c 64617030 31283129 2e63726c 3081a806 082b0601 05050701 
+    0104819b 30819830 4906082b 06010505 07300286 3d687474 703a2f2f 6c646170 
+    30312e74 6d782e63 6f6d2f43 65727445 6e726f6c 6c2f6c64 61703031 2e746d78 
+    2e636f6d 5f6c6461 70303128 32292e63 7274304b 06082b06 01050507 3002863f 
+    66696c65 3a2f2f5c 5c6c6461 7030312e 746d782e 636f6d5c 43657274 456e726f 
+    6c6c5c6c 64617030 312e746d 782e636f 6d5f6c64 61703031 2832292e 63727430 
+    0d06092a 864886f7 0d010105 05000382 01010080 0d1898b8 d86e3d68 4c99837c 
+    7ed09d76 af229b46 c2db0e9a 4d0dde1c 3b27623b a0ae4e06 ffffe71f e98ffa5e 
+    a42c17cc 9d114cb3 57d81621 50ab08fa 524ccb1f bc9f761f 55a393ac 9276c157 
+    01f22983 e93f31c1 c623abfb d79b30bc 9e421a32 f14e7852 6e520ccc 4f911fa8 
+    ff3ded38 04921e10 a374ec28 1966942c e14ebfbf 992068dc c13d8444 dcd95542 
+    da8502ac ba1bf6c0 7c59c168 4403d3ac 80cd42f8 1da3c2a9 e51aa22c ed08d16f 
+    d995998d 5fbe7b93 98fc356f c208b91f 9ee3b81b 22e1120b 75bcdbaf 4d08cc70 
+    8a2c39bd ec379509 0e0ba123 af9c304b 46e7c0a2 14cfde16 f9068caa 0a72dd81 
+    3c190aab 3764137a 886df929 ec6efadf 4ef9c8
+  quit
+crypto isakmp identity hostname 
+crypto isakmp enable outside
+crypto isakmp policy 1
+ authentication pre-share
+ encryption 3des
+ hash md5
+ group 2
+ lifetime 86400
+crypto isakmp policy 2
+ authentication pre-share
+ encryption des
+ hash md5
+ group 2
+ lifetime 86400
+crypto isakmp ipsec-over-tcp port 10000 
+telnet timeout 5
+ssh 0.0.0.0 0.0.0.0 outside
+ssh 0.0.0.0 0.0.0.0 inside
+ssh timeout 5
+console timeout 30
+threat-detection basic-threat
+threat-detection statistics access-list
+no threat-detection statistics tcp-intercept
+tftp-server dmz1 192.168.11.2 /asa724-k8.bin
+ssl trust-point internal.trustpoint outside
+ssl certificate-authentication interface outside port 443
+webvpn
+ enable outside
+ svc image disk0:/anyconnect-win-2.3.2016-k9.pkg 1
+ svc image disk0:/anyconnect-linux-2.3.2016-k9.pkg 2
+ svc image disk0:/anyconnect-macosx-i386-2.3.2016-k9.pkg 3
+ svc enable
+ tunnel-group-list enable
+group-policy ratTemp1 internal
+group-policy ratTemp1 attributes
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value ratST
+group-policy tmxCvpn internal
+group-policy tmxCvpn attributes
+ dns-server value 172.21.159.10 172.21.159.11
+ vpn-idle-timeout 240
+ vpn-session-timeout none
+ vpn-tunnel-protocol IPSec svc 
+ password-storage disable
+ group-lock value tmxCvpn
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value ST
+ default-domain value tmx.com
+ split-dns value tomax.com tmx.com 
+group-policy tomax internal
+group-policy tomax attributes
+ dns-server value 172.21.159.10 172.21.159.11
+ vpn-idle-timeout 300
+ vpn-session-timeout none
+ vpn-tunnel-protocol IPSec svc 
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value ST
+ default-domain value tmx.com
+ split-dns value tomax.com tmx.com 
+username ratvpn password Odjfx9RBFWwL.TeP encrypted
+username ratvpn attributes
+ vpn-group-policy ratTemp1
+ vpn-simultaneous-logins 10
+ vpn-session-timeout 720
+ password-storage enable
+ group-lock value ratTemp
+username root password FFsJEN2uUGS2JoNd encrypted privilege 15
+tunnel-group 66.133.106.5 type ipsec-l2l
+tunnel-group 66.133.106.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group tmxCvpn type remote-access
+tunnel-group tmxCvpn general-attributes
+ address-pool tmxCvpn
+ authentication-server-group rad
+ default-group-policy tmxCvpn
+tunnel-group tmxCvpn ipsec-attributes
+ pre-shared-key *
+ isakmp keepalive disable
+tunnel-group ratTemp type remote-access
+tunnel-group ratTemp general-attributes
+ address-pool ratTemp
+ default-group-policy ratTemp1
+tunnel-group ratTemp ipsec-attributes
+ pre-shared-key *
+tunnel-group tomaxInternal type remote-access
+tunnel-group tomaxInternal general-attributes
+ address-pool tmxCvpn
+ authentication-server-group TMXldap
+ authorization-server-group TMXldap
+ default-group-policy tomax
+tunnel-group tomaxInternal webvpn-attributes
+ authentication aaa certificate
+ group-alias Internal enable
+tunnel-group 70.236.223.87 type ipsec-l2l
+tunnel-group 70.236.223.87 ipsec-attributes
+ pre-shared-key *
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns migrated_dns_map_1
+ parameters
+  message-length maximum 4096
+policy-map global_policy
+ class inspection_default
+  inspect dns migrated_dns_map_1 
+  inspect ftp 
+  inspect rsh 
+  inspect rtsp 
+  inspect sqlnet 
+  inspect skinny  
+  inspect sunrpc 
+  inspect xdmcp 
+  inspect sip  
+  inspect netbios 
+  inspect tftp 
+  inspect pptp 
+  inspect icmp 
+!
+service-policy global_policy global
+prompt hostname context 
+Cryptochecksum:f401b40ed52f4425b837edc91ee8317c
+: end

@@ -1,0 +1,11 @@
+
+
+gunzip sudo-1.6.8p9-sol9-sparc-local.gz 
+pkgadd -d sudo-1.6.8p9-sol9-sparc-local
+
+sh-2.05# find /usr/perl5/ |grep -i smtp
+/usr/perl5/5.6.1/man/man3/Net::SMTP.3
+/usr/perl5/site_perl/5.6.1/Net/SMTP.pm
+
+
+

@@ -1,0 +1,477 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::property;
+use lib::template;
+use lib::vo;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+my $msg2;
+my $errnav = "property";
+my $remote_user = $cgi->remote_user;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+
+#----- mkTypeSelect --------------------------------------------------------------
+# Make the property type drop-down. 
+# Note: This is the autoritative list of property types.
+sub mkTypeSelect {
+	my $selected_type = shift;
+	my $tabindex      = shift;
+
+	$selected_type = "" if (!$selected_type);
+	
+	my @prop_types = (
+		"PROP",
+		"STRING",
+		"DATE"
+	);
+
+	my $select_type = qq|<select tabindex=$tabindex name="proptype">\n|;
+	foreach my $type (@prop_types) {
+		$select_type .= qq|<option|;
+		$select_type .= qq| selected| if ($type eq $selected_type);
+		$select_type .= qq|>$type</option>\n|;
+	}
+	$select_type .= qq|</select>\n|;
+
+	return $select_type; 
+}
+
+
+
+
+#----- viewProperty ----------------------------------------------------------
+# Parameters: none.
+# Load and display the propertylist.tmpl
+sub viewProperty {
+	my $debug;
+
+	# Get a list of properties.
+	my $prop_list = lib::property::getPropList( $dbh ); 
+	www::cgi::helpers::chkDB( $dbh );
+
+	# Assemble the main property <select> drop-down: 	
+	my $select_prop = qq|\n<select tabindex=1 id="select_prop" name="prop_id" onchange="reloadSelect( 'select_prop', 'property', 'prop_id' )">\n|;
+	$select_prop .= qq|<option selected value="0">-- Select Property --</option>| if (!$vars->{prop_id});
+	foreach my $propname (sort keys( %{$prop_list} )) {
+		$select_prop .= qq|<option |;
+		$select_prop .= qq|value="$prop_list->{$propname}->{id}" |;
+		if ($vars->{prop_id} && $vars->{prop_id} eq $prop_list->{$propname}->{id}) {
+			$select_prop .= qq|selected |;
+			$vars->{propname} = $prop_list->{$propname}->{name};
+			$vars->{proptype} = $prop_list->{$propname}->{type};
+		}
+		$select_prop .= qq|>$prop_list->{$propname}->{name}</option>\n|;
+	}
+	$select_prop .= qq|</select>\n|;
+
+	# Assemble the property type <select> drop-downs:
+	my $select_edit_type = mkTypeSelect( $vars->{proptype}, 3 );
+	my $select_add_type = mkTypeSelect( '', 7 );
+
+
+	# If type = PROP, get the list of values and make the loop data structure.
+	my $propval_list;
+    my @propval_loop;
+	my $PROP=0;
+	if ($vars->{proptype} && $vars->{proptype} eq 'PROP') {
+		$PROP=1;
+		$propval_list = lib::property::getPropValues( $dbh, $vars->{prop_id} );
+		www::cgi::helpers::chkDB( $dbh );
+
+		my $tabindex = 11;
+		# Format the data for the view: 
+		foreach my $value (sort keys( %{$propval_list} )) {
+			my $rec = {
+				tabindex   => $tabindex++,
+				propval_id  => $propval_list->{$value}->{propval_id},
+				propname   => $propval_list->{$value}->{name},
+				propval    => $propval_list->{$value}->{value},
+				prop_id     => $propval_list->{$value}->{id}
+			};
+			push( @propval_loop, $rec );
+		}
+	}
+
+
+    my @t_loop;
+	if ($vars->{prop_id}) {
+		# Get a list of templates. 
+		my $t_list = lib::template::getTemplateList( $dbh );
+		www::cgi::helpers::chkDB( $dbh );
+
+		# Get the related templates for the selected property: 
+		my $t_prop_list = lib::property::getPropTemplateList( $dbh, $vars->{prop_id} );
+		www::cgi::helpers::chkDB( $dbh );
+
+		my $tabindex = 200;
+		# Make the template loop data structure
+		foreach my $name (sort keys( %{$t_list} )) {
+			my $checked = "";
+			$checked = ' checked ' if (exists( $t_prop_list->{$name} ));
+			my $rec = {
+				tabindex => $tabindex++,
+				checked  => $checked,
+				tmplid   => $t_list->{$name}->{id},
+				tmplname => $t_list->{$name}->{name}
+			};
+			push( @t_loop, $rec );
+		}
+	}	
+
+
+	# DEBUG
+	# Comment the lines between /DEBUG to silence. 
+#	$debug .= "<p>ACTION=$ACTION</p>";
+#	foreach my $key (keys( %$vars )) {
+#		$debug .= "$key=$vars->{$key}<br/>";
+#	};
+	# /DEBUG
+
+
+	# Set up the view: 
+	$htmlview = HTML::Template->new( filename => "../tmpl/property.tmpl", loop_context_vars => 1 );
+	$htmlview->param( tabmenu          => $tabmenu );
+	$htmlview->param( subtitle         => "Property Maintenance" );
+	$htmlview->param( user             => $remote_user );
+	$htmlview->param( ADMIN            => $remote_user ) if ($remote_user eq "admin");
+	$htmlview->param( navback          => $vars->{navback} ) if ($vars->{navback});
+	$htmlview->param( navbackaction    => $vars->{navbackaction} ) if ($vars->{navbackaction});
+	$htmlview->param( navbackid        => $vars->{navbackid} ) if ($vars->{navbackid});
+	$htmlview->param( navbackdescr     => $vars->{navbackdescr} ) if ($vars->{navbackdescr});
+	$htmlview->param( msg              => $msg )   if ($msg);
+	$htmlview->param( msg2             => $msg2 )  if ($msg2);
+	$htmlview->param( debug            => $debug ) if ($debug);
+
+	$htmlview->param( select_prop      => $select_prop );
+	$htmlview->param( select_edit_type => $select_edit_type );
+	$htmlview->param( select_add_type  => $select_add_type );
+	$htmlview->param( prop_id           => $vars->{prop_id} )   if ($vars->{prop_id});
+	$htmlview->param( propname         => $vars->{propname} ) if ($vars->{propname});
+	$htmlview->param( proptype         => $vars->{proptype} ) if ($vars->{proptype});
+
+	$htmlview->param( PROP             => $PROP ) if ($PROP);
+	$htmlview->param( valueloop        => \@propval_loop ) if (@propval_loop);
+	$htmlview->param( propval_id        => $vars->{propval_id} )   if ($vars->{propval_id});
+	$htmlview->param( propval          => $vars->{propval} )     if ($vars->{propval});
+
+	$htmlview->param( tloop        => \@t_loop ) if (@t_loop);
+
+	print $cgi->header;
+	print $htmlview->output;
+	exit (0);
+}
+
+
+
+#---- Main -------------------------------------------------------------------
+
+
+# Set up the tabmenu:
+$tabmenu = www::cgi::helpers::gen_tabmenu( "INV" );
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- list --------------------------
+if ($ACTION eq "list") {
+	viewProperty();
+
+
+#----- update -----------------------------
+} elsif ($ACTION eq "update") {
+	if (!$vars->{prop_id}) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'prop_id' for ACTION: [$ACTION]\n" );
+	}
+
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{propname}) {
+		$msg = "Name field is required.";
+		viewProperty();
+	}
+
+	if (!$vars->{proptype}) {
+		$msg = "Name field is required.";
+		viewProperty();
+	}
+	
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+
+	if (!lib::property::updateProperty( $dbh, $vars )) {
+		$msg = $dbh->errstr;
+		if ($msg =~ /duplicate.*unique/) {
+			$msg = "The property name '$vars->{propname}' already exists.<br/>Please choose a new property name.";
+		} else {
+			$msg = "Unable to update property.<br/>Please contact administrator.";
+			print STDERR "Updating property: $vars->{propname}, prop_id=$vars->{prop_id}\n";
+			$dbh->rollback;
+			www::cgi::helpers::exitonerr( "$errnav?prop_id=" . $vars->{prop_id}, $msg );
+		}
+		$dbh->rollback;
+		viewProperty();
+	}
+	$dbh->commit;
+	viewProperty();
+
+
+
+
+#----- add -----------------------------
+} elsif ($ACTION eq "add") {
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{propname} || $vars->{propname} eq '') {
+		$msg = "Name field is required.";
+		viewProperty();
+	}
+
+	if (!$vars->{proptype}) {
+		$msg = "Type field is required.";
+		viewProperty();
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	my $tmp_id = lib::property::addProperty( $dbh, $vars );
+	if (!$tmp_id) {
+		$msg = $dbh->errstr;
+		if ($msg =~ /duplicate.*unique/) {
+			$msg = "The property name '$vars->{propname}' already exists.<br/>Please choose a new property name.";
+		} else {
+			$msg = "Unable to add property.<br/>Please contact administrator.";
+			print STDERR "Adding property: $vars->{propname}, prop_id=$vars->{prop_id}\n";
+			$dbh->rollback;
+			www::cgi::helpers::exitonerr( "$errnav?prop_id=" . $vars->{prop_id}, $msg );
+		}
+		$dbh->rollback;
+		viewProperty();
+	}
+	$dbh->commit;
+
+	$vars->{prop_id} = $tmp_id;
+
+	# Reset the form variables and show add form again:
+	delete($vars->{propname});
+	delete($vars->{proptype});
+	viewProperty();
+
+
+
+
+#----- del -----------------------------
+} elsif ($ACTION eq "del") {
+	if (!$vars->{id}) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'prop_id' for ACTION: [$ACTION]\n" );
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	lib::property::delPropertyById( $dbh, $vars->{id} ) ? $dbh->commit : $dbh->rollback;
+	delete( $vars->{id} );
+	delete( $vars->{propname} );
+	delete( $vars->{proptype} );
+	viewProperty();
+	
+	
+
+
+
+#----- updatepropval -----------------------------
+} elsif ($ACTION eq "updatepropval") {
+	if (!$vars->{prop_id}) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'prop_id' for ACTION: [$ACTION]\n" );
+	}
+
+	if (!$vars->{propval_id}) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'propval_id' for ACTION: [$ACTION]\n" );
+	}
+
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{propval}) {
+		$msg2 = "Value field is required.";
+		viewProperty();
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+	
+	# Update the database
+	lib::property::updatePropVal( $dbh, $vars ) ? $dbh->commit : $dbh->rollback;
+	delete($vars->{propval});
+	delete($vars->{propval_id});
+	viewProperty();
+
+
+
+
+#----- addpropval -----------------------------
+} elsif ($ACTION eq "addpropval") {
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{propval}) {
+		$msg2 = "Value field is required.";
+		viewProperty();
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	# Update the database
+	lib::property::addPropVal( $dbh, $vars ) ? $dbh->commit : $dbh->rollback;
+	# Reset the form variables and show add form again:
+	delete($vars->{propval});
+	viewProperty();
+
+
+
+
+
+#----- delpropval -----------------------------
+} elsif ($ACTION eq "delpropval") {
+	if (!$vars->{propval_id}) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'propval_id' for ACTION: [$ACTION]\n" );
+	}
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	lib::property::delPropVal( $dbh, $vars->{propval_id} ) ? $dbh->commit : $dbh->rollback;
+	delete( $vars->{propval_id} );
+	viewProperty();
+	
+	
+
+
+	
+#----- cancelvalupdate -----------------------------
+} elsif ($ACTION eq "cancelvalupdate") {
+	# Return back to a non-update state. 
+	delete( $vars->{propval_id} );
+	delete( $vars->{propval} );
+	viewProperty();
+	
+	
+
+
+	
+#----- updateproptmpl -----------------------------
+} elsif ($ACTION eq "updateproptmpl") {
+	if (!$vars->{prop_id}) {
+		www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: missing param 'prop_id' for ACTION: [$ACTION]\n" );
+	}
+
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( $errnav,
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+	
+	# Update the database
+	my @tmplids;
+	foreach my $key (keys( %{$vars} )) {
+		if ($key =~ /^chk/) {
+			push( @tmplids, $vars->{$key} );
+		}
+	}
+	lib::property::setTmplLinks( $dbh, $vars->{prop_id}, \@tmplids ) ? $dbh->commit : $dbh->rollback;
+	viewProperty();
+
+
+
+
+
+#---- unknown --------------------------
+} else {
+	www::cgi::helpers::exitonerr( $errnav, "CGI: $errnav: Unknow action value [$ACTION].\n" );
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+# Misc. message to display. Useful for debugging or status messages.
+if ($msg) {
+	$htmlview->param( msg => $msg );
+}
+
+# Catch-all
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

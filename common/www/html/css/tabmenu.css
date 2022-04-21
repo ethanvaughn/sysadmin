@@ -1,0 +1,56 @@
+#tabmenu {
+/*	background-color: white;*/
+	background: white url(../images/tabmenu-bg2.png) repeat;
+	color: black;
+	border-bottom: 1px solid black;
+	margin: 0px 0px 20px 0px;
+	z-index: 1;
+	padding-left: 10px;
+	padding-top: 12px;
+	position: relative;
+}
+
+#tabmenu li {
+	display: inline;
+	overflow: hidden;
+	list-style-type: none;
+}
+
+#tabmenu a, a.active {
+	color: black;
+	background-color: #bbbbbb;
+	font: normal normal 10pt/14pt Arial, sans-serif;
+	border: 1px solid black;
+	padding: 5px 5px 0px 5px;
+	margin: 0px;
+	text-decoration: none;
+}
+
+#tabmenu a.active {
+	color: white;
+	background-color: #696969;
+	border-bottom: 3px solid #696969; 
+}
+
+#tabmenu a:hover {
+	color: white;
+	background-color: #696969;
+}
+
+#tabmenu .logo {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	border-left: 1px solid black;
+}
+/*
+#tabmenu a.active:hover {
+	color: black;
+	background: #696969;
+}
+
+#tabmenu a:visited {
+	color: #E8E9BE;
+	color: black;
+}
+*/

@@ -1,0 +1,105 @@
+: Saved
+:
+PIX Version 7.2(2)
+!
+terminal width 160
+hostname wdctermfw01
+domain-name tomax.com
+enable password mYeNr0cSeWbBfOBq encrypted
+no names
+!
+interface Ethernet0
+ nameif External
+ security-level 0
+ ip address 66.133.106.55 255.255.254.0
+!
+interface Ethernet1
+ nameif TERM
+ security-level 100
+ ip address 10.24.51.253 255.255.255.0
+!
+passwd mYeNr0cSeWbBfOBq encrypted
+boot system flash:/pix722.bin
+ftp mode passive
+clock timezone MST -6
+dns server-group DefaultDNS
+ domain-name tomax.com
+object-group network vpnLocal
+ network-object 10.24.50.0 255.255.255.0
+ network-object 10.24.52.0 255.255.255.0
+object-group network vpnRemote
+ network-object host 10.24.74.9
+ network-object host 10.24.74.10
+ network-object host 10.24.74.12
+ network-object host 10.24.74.13
+ network-object host 10.24.74.14
+ network-object host 10.24.74.19
+ network-object host 10.24.74.20
+ network-object 172.30.230.0 255.255.254.0
+object-group network cvpnAdmin
+ network-object host 10.200.200.200
+access-list noNAT extended permit ip object-group vpnLocal object-group vpnRemote
+access-list noNAT extended permit ip object-group vpnLocal object-group cvpnAdmin
+access-list tmxVPN extended permit ip object-group vpnLocal object-group vpnRemote
+pager lines 24
+mtu External 1500
+mtu TERM 1500
+ip local pool cvpnAdmin 10.200.200.200
+failover
+icmp unreachable rate-limit 1 burst-size 1
+no asdm history enable
+arp timeout 14400
+global (External) 1 interface
+nat (TERM) 0 access-list noNAT
+route External 0.0.0.0 0.0.0.0 66.133.106.1 1
+route TERM 10.24.50.0 255.255.255.0 10.24.51.254 1
+route TERM 10.24.52.0 255.255.255.0 10.24.51.254 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout uauth 0:05:00 absolute
+username root password dIcLRMksuxPkvH6w encrypted
+no snmp-server location
+no snmp-server contact
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+crypto ipsec transform-set 3desmd5 esp-3des esp-md5-hmac
+crypto dynamic-map cvpn 1 set transform-set 3desmd5
+crypto dynamic-map cvpn 1 set reverse-route
+crypto map vpn 1 match address tmxVPN
+crypto map vpn 1 set peer 66.133.106.5
+crypto map vpn 1 set transform-set 3desmd5
+crypto map vpn 100 ipsec-isakmp dynamic cvpn
+crypto map vpn interface External
+crypto isakmp identity address
+crypto isakmp enable External
+crypto isakmp policy 1
+ authentication pre-share
+ encryption 3des
+ hash md5
+ group 2
+ lifetime 86400
+crypto isakmp policy 65535
+ authentication pre-share
+ encryption 3des
+ hash sha
+ group 2
+ lifetime 86400
+crypto isakmp nat-traversal  20
+tunnel-group 66.133.106.5 type ipsec-l2l
+tunnel-group 66.133.106.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group cvpnAdmin type ipsec-ra
+tunnel-group cvpnAdmin general-attributes
+ address-pool cvpnAdmin
+tunnel-group cvpnAdmin ipsec-attributes
+ pre-shared-key *
+telnet timeout 5
+ssh 0.0.0.0 0.0.0.0 External
+ssh timeout 60
+console timeout 30
+!
+!
+prompt hostname context
+Cryptochecksum:399642af68df906f3cec098c9ecb5832
+: end

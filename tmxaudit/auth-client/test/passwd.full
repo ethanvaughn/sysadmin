@@ -1,0 +1,10 @@
+root:x:0:0::/root:/bin/bash
+sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin
+at:x:544:544::/tmp:/bin/nologin
+tomax:x:100:100::/u01/home/tomax:/bin/bash
+oracle:x:101:101::/u01/home/oracle:/bin/bash
+oas:x:102:101::/u01/home/oas:/bin/bash
+evaughn:x:40000:40000:Ethan Vaughn:/u01/home/sysadmin:/bin/bash
+jeicher:x:40001:40000:Jon Eicher:/u01/home/sysadmin:/bin/bash
+dhatch:x:40003:40000:Don Hatch:/u01/home/sysadmin:/bin/bash
+tmxaudit:x:40004:40000:tmxaudit:/u01/home/sysadmin:/bin/bash

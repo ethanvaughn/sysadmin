@@ -1,0 +1,1760 @@
+!Generated on 06/09/2010 01:47:08
+!Active version: sg0810106
+
+configure
+
+
+!*************************** GLOBAL ***************************
+  no restrict web-mgmt
+  username admin des-password zeuhahiglc6hgbxh superuser
+  no restrict xml
+
+  snmp community public read-only
+
+  logging subsystem netman level info-6
+  logging commands enable
+  logging host 10.24.74.13 facility 6 log-level info-6
+  logging host 10.1.2.201 facility 7 log-level debug-7
+
+  ip route 0.0.0.0 0.0.0.0 172.33.1.1 1
+
+!************************* INTERFACE *************************
+interface  1/1
+  bridge vlan 10
+
+interface  1/2
+  trunk
+
+  vlan 17
+
+  vlan 101
+
+  vlan 102
+
+  vlan 103
+
+  vlan 104
+
+  vlan 105
+
+  vlan 201
+
+!************************** CIRCUIT **************************
+circuit VLAN17
+
+  ip address 10.17.1.11 255.255.255.0
+    ip virtual-router 7 priority 101 preempt
+    ip redundant-interface 7 10.17.1.10
+    ip critical-service 7 Failover
+
+circuit VLAN10
+
+  ip address 172.33.1.11 255.255.255.0
+    ip virtual-router 10 priority 101 preempt
+    ip redundant-vip 10 172.33.1.140
+    ip redundant-vip 10 172.33.1.34
+    ip redundant-vip 10 172.33.1.44
+    ip redundant-vip 10 172.33.1.45
+    ip redundant-vip 10 172.33.1.46
+    ip redundant-interface 10 172.33.1.10
+    ip redundant-vip 10 172.33.1.20
+    ip redundant-vip 10 172.33.1.30
+    ip redundant-vip 10 172.33.1.40
+    ip redundant-vip 10 172.33.1.50
+    ip redundant-vip 10 172.33.1.60
+    ip redundant-vip 10 172.33.1.124
+    ip redundant-vip 10 172.33.1.134
+    ip redundant-vip 10 172.33.1.144
+    ip redundant-vip 10 172.33.1.91
+    ip redundant-vip 10 172.33.1.21
+    ip redundant-vip 10 172.33.1.22
+    ip redundant-vip 10 172.33.1.23
+    ip redundant-vip 10 172.33.1.31
+    ip redundant-vip 10 172.33.1.32
+    ip redundant-vip 10 172.33.1.41
+    ip redundant-vip 10 172.33.1.42
+    ip redundant-vip 10 172.33.1.43
+    ip redundant-vip 10 172.33.1.51
+    ip redundant-vip 10 172.33.1.52
+    ip redundant-vip 10 172.33.1.61
+    ip critical-service 10 Failover
+
+circuit VLAN101
+
+  ip address 10.18.1.11 255.255.255.0
+    ip virtual-router 1 priority 101 preempt
+    ip redundant-interface 1 10.18.1.10
+    ip critical-service 1 Failover
+
+circuit VLAN102
+
+  ip address 10.18.2.11 255.255.255.0
+    ip virtual-router 2 priority 101 preempt
+    ip redundant-interface 2 10.18.2.10
+    ip critical-service 2 Failover
+
+circuit VLAN103
+
+  ip address 10.18.3.11 255.255.255.0
+    ip virtual-router 3 priority 101 preempt
+    ip redundant-interface 3 10.18.3.10
+    ip critical-service 3 Failover
+
+circuit VLAN104
+
+  ip address 10.18.4.11 255.255.255.0
+    ip virtual-router 4 priority 101 preempt
+    ip redundant-interface 4 10.18.4.10
+    ip critical-service 4 Failover
+
+circuit VLAN105
+
+  ip address 10.18.5.11 255.255.255.0
+    ip virtual-router 5 priority 101 preempt
+    ip redundant-interface 5 10.18.5.10
+    ip critical-service 5 Failover
+
+circuit VLAN201
+
+  ip address 10.21.1.11 255.255.255.0
+    ip virtual-router 201 priority 101 preempt
+    ip redundant-interface 201 10.21.1.10
+    ip critical-service 201 Failover
+
+!************************** SERVICE **************************
+service APP01
+  ip address 10.18.2.31
+  keepalive type tcp
+  active
+
+service APP01-389
+  ip address 10.18.2.31
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service APP01-636
+  ip address 10.18.2.31
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service APP01-7777
+  ip address 10.18.2.31
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service APP01-7778
+  ip address 10.18.2.31
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service APP01-7782
+  ip address 10.18.2.31
+  keepalive type tcp
+  keepalive port 7782
+  active
+
+service APP02
+  ip address 10.18.2.32
+  keepalive type tcp
+  active
+
+service APP02-389
+  ip address 10.18.2.32
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service APP02-636
+  ip address 10.18.2.32
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service APP02-7777
+  ip address 10.18.2.32
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service APP02-7778
+  ip address 10.18.2.32
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service APP02-7782
+  ip address 10.18.2.32
+  keepalive type tcp
+  keepalive port 7782
+  active
+
+service APP03
+  ip address 10.18.2.33
+  keepalive type tcp
+  active
+
+service APP03-389
+  ip address 10.18.2.33
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service APP03-636
+  ip address 10.18.2.33
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service APP03-7777
+  ip address 10.18.2.33
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service APP03-7778
+  ip address 10.18.2.33
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service APP03-7782
+  ip address 10.18.2.33
+  keepalive type tcp
+  keepalive port 7782
+  active
+
+service APP04
+  ip address 10.18.2.34
+  keepalive type tcp
+  active
+
+service APP04-389
+  ip address 10.18.2.34
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service APP04-636
+  ip address 10.18.2.34
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service APP04-7777
+  ip address 10.18.2.34
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service APP04-7778
+  ip address 10.18.2.34
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service APP04-7782
+  ip address 10.18.2.34
+  keepalive type tcp
+  keepalive port 7782
+  active
+
+service APP04PROD
+  ip address 10.18.2.34
+  keepalive type tcp
+  active
+
+service APP04PROD-389
+  ip address 10.18.2.34
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service APP04PROD-636
+  ip address 10.18.2.34
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service APP04PROD-7777
+  ip address 10.18.2.34
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service APP04PROD-7778
+  ip address 10.18.2.34
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service APP04PROD-7782
+  ip address 10.18.2.34
+  keepalive type tcp
+  keepalive port 7782
+  active
+
+service APP05-389
+  ip address 10.21.1.35
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service APP05-636
+  ip address 10.21.1.35
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service APP05-7777
+  ip address 10.21.1.35
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service APP05-7778
+  ip address 10.21.1.35
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service APP05-7782
+  ip address 10.21.1.35
+  keepalive type tcp
+  keepalive port 7782
+  active
+
+service APP05QA
+  ip address 10.21.1.35
+  active
+
+service APP06-389
+  ip address 10.21.1.36
+  keepalive type tcp
+  keepalive port 389
+  active
+
+service APP06-636
+  ip address 10.21.1.36
+  keepalive type tcp
+  keepalive port 636
+  active
+
+service APP06-7777
+  ip address 10.21.1.36
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service APP06-7778
+  ip address 10.21.1.36
+  keepalive type tcp
+  keepalive port 7778
+  active
+
+service APP06-7782
+  ip address 10.21.1.36
+  keepalive type tcp
+  keepalive port 7782
+  active
+
+service APP06QA
+  ip address 10.21.1.36
+  active
+
+service APPDEV
+  ip address 10.21.1.34
+  active
+
+service BKUP
+  ip address 10.17.1.91
+  active
+
+service Boomi
+  ip address 10.18.2.39
+  active
+
+service Boomi_DEV
+  ip address 10.18.2.38
+  active
+
+service CRD03QA
+  ip address 10.21.1.53
+  active
+
+service CRD03QA-4035
+  ip address 10.21.1.53
+  keepalive type tcp
+  keepalive port 4035
+  active
+
+service CRD03QA-7036
+  ip address 10.21.1.53
+  keepalive type tcp
+  keepalive port 7036
+  active
+
+service DB01
+  ip address 10.18.1.21
+  keepalive type tcp
+  keepalive port 1521
+  active
+
+service DB02
+  ip address 10.18.1.22
+  keepalive type tcp
+  keepalive port 1521
+  active
+
+service DB03
+  ip address 10.18.1.23
+  keepalive type tcp
+  keepalive port 1521
+  active
+
+service DB05QA
+  ip address 10.21.1.25
+  active
+
+service DB06QA
+  ip address 10.21.1.26
+  active
+
+service DBDEV
+  ip address 10.21.1.24
+  active
+
+service EVANT
+  ip address 10.18.1.31
+  active
+
+service EVANT_QA
+  ip address 10.21.1.101
+  active
+
+service Failover
+  ip address 172.33.1.1
+  active
+
+service POS01-16009
+  ip address 10.18.3.41
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service POS01-16109
+  ip address 10.18.3.41
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service POS01-16209
+  ip address 10.18.3.41
+  keepalive type tcp
+  keepalive port 16209
+  active
+
+service POS01-16309
+  ip address 10.18.3.41
+  keepalive type tcp
+  keepalive port 16309
+  active
+
+service POS01-8550
+  ip address 10.18.3.41
+  keepalive type tcp
+  keepalive port 8550
+  active
+
+service POS01-8990
+  ip address 10.18.3.41
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service POS01-8995
+  ip address 10.18.3.41
+  keepalive type tcp
+  keepalive port 8995
+  active
+
+service POS01-8999
+  ip address 10.18.3.41
+  keepalive type tcp
+  keepalive port 8999
+  active
+
+service POS02-16009
+  ip address 10.18.3.42
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service POS02-16109
+  ip address 10.18.3.42
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service POS02-16209
+  ip address 10.18.3.42
+  keepalive type tcp
+  keepalive port 16209
+  active
+
+service POS02-16309
+  ip address 10.18.3.42
+  keepalive type tcp
+  keepalive port 16309
+  active
+
+service POS02-8550
+  ip address 10.18.3.42
+  keepalive type tcp
+  keepalive port 8550
+  active
+
+service POS02-8990
+  ip address 10.18.3.42
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service POS02-8995
+  ip address 10.18.3.42
+  keepalive type tcp
+  keepalive port 8995
+  active
+
+service POS02-8999
+  ip address 10.18.3.42
+  keepalive type tcp
+  keepalive port 8999
+  active
+
+service POS03-16009
+  ip address 10.18.3.43
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service POS03-16021
+  ip address 10.18.3.43
+  keepalive type tcp
+  keepalive port 16021
+  active
+
+service POS03-16109
+  ip address 10.18.3.43
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service POS03-16209
+  ip address 10.18.3.43
+  keepalive type tcp
+  keepalive port 16209
+  active
+
+service POS03-16309
+  ip address 10.18.3.43
+  keepalive type tcp
+  keepalive port 16309
+  active
+
+service POS03-8550
+  ip address 10.18.3.43
+  keepalive type tcp
+  keepalive port 8550
+  active
+
+service POS03-8990
+  ip address 10.18.3.43
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service POS03-8995
+  ip address 10.18.3.43
+  keepalive type tcp
+  keepalive port 8995
+  active
+
+service POS04PROD-16009
+  ip address 10.18.3.44
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service POS05-16009
+  ip address 10.21.1.45
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service POS05-16109
+  ip address 10.21.1.45
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service POS05-16209
+  ip address 10.21.1.45
+  keepalive type tcp
+  keepalive port 16209
+  active
+
+service POS05-16309
+  ip address 10.21.1.45
+  keepalive type tcp
+  keepalive port 16309
+  active
+
+service POS05-8550
+  ip address 10.21.1.45
+  keepalive type tcp
+  keepalive port 8550
+  active
+
+service POS05-8990
+  ip address 10.21.1.45
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service POS05-8995
+  ip address 10.21.1.45
+  keepalive type tcp
+  keepalive port 8995
+  active
+
+service POS05PROD-16009
+  ip address 10.18.3.45
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service POS05PROD-16109
+  ip address 10.18.3.45
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service POS05PROD-16209
+  ip address 10.18.3.45
+  keepalive type tcp
+  keepalive port 16209
+  active
+
+service POS05PROD-16309
+  ip address 10.18.3.45
+  keepalive type tcp
+  keepalive port 16309
+  active
+
+service POS05PROD-8550
+  ip address 10.18.3.45
+  keepalive type tcp
+  keepalive port 8550
+  active
+
+service POS05PROD-8990
+  ip address 10.18.3.45
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service POS05PROD-8995
+  ip address 10.18.3.45
+  keepalive type tcp
+  keepalive port 8995
+  active
+
+service POS05PROD-8999
+  ip address 10.18.3.45
+  keepalive type tcp
+  keepalive port 8999
+  active
+
+service POS05QA
+  ip address 10.21.1.45
+  active
+
+service POS06-16009
+  ip address 10.21.1.46
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service POS06-16109
+  ip address 10.21.1.46
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service POS06-16209
+  ip address 10.21.1.46
+  keepalive type tcp
+  keepalive port 16209
+  active
+
+service POS06-16309
+  ip address 10.21.1.46
+  keepalive type tcp
+  keepalive port 16309
+  active
+
+service POS06-8550
+  ip address 10.21.1.46
+  keepalive type tcp
+  keepalive port 8550
+  active
+
+service POS06-8990
+  ip address 10.21.1.46
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service POS06-8995
+  ip address 10.21.1.46
+  keepalive type tcp
+  keepalive port 8995
+  active
+
+service POS06PROD-16009
+  ip address 10.18.3.46
+  keepalive type tcp
+  keepalive port 16009
+  active
+
+service POS06PROD-16109
+  ip address 10.18.3.46
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service POS06PROD-16209
+  ip address 10.18.3.46
+  keepalive type tcp
+  keepalive port 16209
+  active
+
+service POS06PROD-16309
+  ip address 10.18.3.46
+  keepalive type tcp
+  keepalive port 16309
+  active
+
+service POS06PROD-8550
+  ip address 10.18.3.46
+  keepalive type tcp
+  keepalive port 8550
+  active
+
+service POS06PROD-8990
+  ip address 10.18.3.46
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service POS06PROD-8995
+  ip address 10.18.3.46
+  keepalive type tcp
+  keepalive port 8995
+  active
+
+service POS06PROD-8999
+  ip address 10.18.3.46
+  keepalive type tcp
+  keepalive port 8999
+  active
+
+service POS06QA
+  ip address 10.21.1.46
+  active
+
+service POS07-16109
+  ip address 10.18.3.47
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service POS07-16209
+  ip address 10.18.3.47
+  keepalive type tcp
+  keepalive port 16209
+  active
+
+service POS07-8550
+  ip address 10.18.3.47
+  keepalive type tcp
+  keepalive port 8550
+  active
+
+service POS07-8990
+  ip address 10.18.3.47
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service POS07-8995
+  ip address 10.18.3.47
+  keepalive type tcp
+  keepalive port 8995
+  active
+
+service POS07-8999
+  ip address 10.18.3.47
+  keepalive type tcp
+  keepalive port 8999
+  active
+
+service POS08-16109
+  ip address 10.18.3.48
+  keepalive type tcp
+  keepalive port 16109
+  active
+
+service POS08-16209
+  ip address 10.18.3.48
+  keepalive type tcp
+  keepalive port 16209
+  active
+
+service POS08-8550
+  ip address 10.18.3.48
+  keepalive type tcp
+  keepalive port 8550
+  active
+
+service POS08-8990
+  ip address 10.18.3.48
+  keepalive type tcp
+  keepalive port 8990
+  active
+
+service POS08-8995
+  ip address 10.18.3.48
+  keepalive type tcp
+  keepalive port 8995
+  active
+
+service POS08-8999
+  ip address 10.18.3.48
+  keepalive type tcp
+  keepalive port 8999
+  active
+
+service POSDEV
+  ip address 10.21.1.44
+  active
+
+service RF01
+  ip address 10.18.5.61
+  keepalive type tcp
+  keepalive port 23
+  active
+
+service RF02QA
+  ip address 10.21.1.62
+  active
+
+service RF03
+  ip address 10.18.5.63
+  keepalive type tcp
+  keepalive port 23
+  active
+
+service appsrv01
+  ip address 10.18.2.31
+  active
+
+service appsrv02
+  ip address 10.18.2.32
+  active
+
+service appsrv03
+  ip address 10.18.2.33
+  active
+
+service appsrv04prod
+  ip address 10.18.2.34
+  active
+
+service crd01-4035
+  ip address 10.18.4.51
+  keepalive type tcp
+  keepalive port 4035
+  active
+
+service crd01-7036
+  ip address 10.18.4.51
+  keepalive type tcp
+  keepalive port 7036
+  active
+
+service crd01-7777
+  ip address 10.18.4.51
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service crd01-8888
+  ip address 10.18.4.51
+  keepalive type tcp
+  keepalive port 8888
+  active
+
+service crd02-7777
+  ip address 10.18.4.52
+  keepalive type tcp
+  keepalive port 7777
+  active
+
+service crd02-8888
+  ip address 10.18.4.52
+  keepalive type tcp
+  keepalive port 8888
+  active
+
+service crdsrv01
+  ip address 10.18.4.51
+  active
+
+service crdsrv02
+  ip address 10.18.4.52
+  active
+
+service dbsrv01
+  ip address 10.18.1.21
+  active
+
+service dbsrv02
+  ip address 10.18.1.22
+  active
+
+service dbsrv03
+  ip address 10.18.1.23
+  active
+
+service possrv01
+  ip address 10.18.3.41
+  active
+
+service possrv02
+  ip address 10.18.3.42
+  active
+
+service possrv03
+  ip address 10.18.3.43
+  active
+
+service possrv04prod
+  ip address 10.18.3.44
+  active
+
+service possrv05prod
+  ip address 10.18.3.45
+  active
+
+service possrv06prod
+  ip address 10.18.3.46
+  active
+
+service possrv07
+  ip address 10.18.3.47
+  active
+
+service possrv08
+  ip address 10.18.3.48
+  active
+
+service rfsrv01
+  ip address 10.18.5.61
+  active
+
+service rfsrv03
+  ip address 10.18.5.63
+  active
+
+!*************************** OWNER ***************************
+owner APPQA
+
+  content 389
+    vip address 172.33.1.130
+    port 389
+    protocol tcp
+    add service APP05-389
+    add service APP06-389
+    flow-timeout-multiplier 1125
+    active
+
+  content 636
+    protocol tcp
+    vip address 172.33.1.130
+    port 636
+    add service APP05-636
+    add service APP06-636
+    flow-timeout-multiplier 1125
+    active
+
+  content 7777
+    vip address 172.33.1.130
+    add service APP05-7777
+    add service APP06-7777
+    flow-timeout-multiplier 1125
+    advanced-balance arrowpoint-cookie
+    protocol tcp
+    port 7777
+    url "/*"
+    active
+
+  content 7778
+    vip address 172.33.1.130
+    add service APP05-7778
+    add service APP06-7778
+    flow-timeout-multiplier 1125
+    advanced-balance arrowpoint-cookie
+    port 7778
+    protocol tcp
+    url "/*"
+    active
+
+  content 7782
+    vip address 172.33.1.130
+    add service APP05-7782
+    add service APP06-7782
+    flow-timeout-multiplier 1125
+    advanced-balance arrowpoint-cookie
+    protocol tcp
+    port 7782
+    url "/*"
+    active
+
+owner Application_Server
+
+  content 389
+    add service APP01-389
+    add service APP02-389
+    add service APP03-389
+    add service APP04PROD-389
+    protocol tcp
+    vip address 172.33.1.30
+    port 389
+    flow-timeout-multiplier 1125
+    active
+
+  content 636
+    add service APP01-636
+    add service APP02-636
+    add service APP03-636
+    add service APP04PROD-636
+    protocol tcp
+    vip address 172.33.1.30
+    port 636
+    flow-timeout-multiplier 1125
+    active
+
+  content 7777
+    add service APP01-7777
+    add service APP02-7777
+    add service APP03-7777
+    add service APP04PROD-7777
+    vip address 172.33.1.30
+    flow-timeout-multiplier 1125
+    port 7777
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    active
+
+  content 7778
+    add service APP01-7778
+    add service APP02-7778
+    add service APP03-7778
+    add service APP04PROD-7778
+    vip address 172.33.1.30
+    flow-timeout-multiplier 1125
+    port 7778
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    active
+
+  content 7782
+    add service APP01-7782
+    add service APP02-7782
+    add service APP03-7782
+    add service APP04PROD-7782
+    vip address 172.33.1.30
+    flow-timeout-multiplier 1125
+    protocol tcp
+    port 7782
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    active
+
+owner CRDQA
+
+  content CRD03QA-4035
+    vip address 172.33.1.150
+    protocol tcp
+    port 4035
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    add service CRD03QA-4035
+    active
+
+  content CRD03QA-7036
+    vip address 172.33.1.150
+    port 7036
+    protocol tcp
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    add service CRD03QA-7036
+    active
+
+owner Credit_Server
+
+  content 4035
+    vip address 172.33.1.50
+    protocol tcp
+    port 4035
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    add service crd01-4035
+    active
+
+  content 7036
+    protocol tcp
+    vip address 172.33.1.50
+    port 7036
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    add service crd01-7036
+    active
+
+  content 7777
+    vip address 172.33.1.50
+    protocol tcp
+    port 7777
+    advanced-balance sticky-srcip
+    flow-timeout-multiplier 1125
+    sticky-inact-timeout 300
+    add service crd01-7777
+    active
+
+  content 8888
+    protocol tcp
+    vip address 172.33.1.50
+    port 8888
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    advanced-balance sticky-srcip
+    add service crd01-8888
+    active
+
+owner DataBase_Server
+
+  content 1521
+    protocol tcp
+    vip address 172.33.1.20
+    port 1521
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service DB01
+    add service DB03
+    active
+
+owner NAT_APP
+
+  content app01
+    vip address 172.33.1.31
+    flow-timeout-multiplier 1125
+    add service appsrv01
+    active
+
+  content app02
+    vip address 172.33.1.32
+    flow-timeout-multiplier 1125
+    add service appsrv02
+    active
+
+  content app03
+    vip address 172.33.1.33
+    flow-timeout-multiplier 1125
+    add service appsrv03
+    active
+
+  content app04prod
+    vip address 172.33.1.34
+    flow-timeout-multiplier 1125
+    add service appsrv04prod
+    active
+
+owner NAT_BKUP
+
+  content bkup01
+    vip address 172.33.1.91
+    add service BKUP
+    active
+
+owner NAT_Boomi
+
+  content Boomi
+    vip address 172.33.1.39
+    flow-timeout-multiplier 1125
+    add service Boomi
+    active
+
+  content Boomi_DEV
+    vip address 172.33.1.38
+    flow-timeout-multiplier 1125
+    add service Boomi_DEV
+    active
+
+owner NAT_Credit
+
+  content crd01
+    vip address 172.33.1.51
+    flow-timeout-multiplier 1125
+    add service crdsrv01
+    active
+
+  content crd02
+    vip address 172.33.1.52
+    flow-timeout-multiplier 1125
+    add service crdsrv02
+    active
+
+owner NAT_DB
+
+  content db01
+    vip address 172.33.1.21
+    flow-timeout-multiplier 1125
+    add service dbsrv01
+    active
+
+  content db02
+    vip address 172.33.1.22
+    flow-timeout-multiplier 1125
+    add service dbsrv02
+    active
+
+  content db03
+    vip address 172.33.1.23
+    flow-timeout-multiplier 1125
+    add service dbsrv03
+    active
+
+owner NAT_DEV
+
+  content APPDev
+    vip address 172.33.1.134
+    flow-timeout-multiplier 1125
+    add service APPDEV
+    active
+
+  content DBdev
+    vip address 172.33.1.124
+    flow-timeout-multiplier 1125
+    add service DBDEV
+    active
+
+  content POSDev
+    vip address 172.33.1.144
+    flow-timeout-multiplier 1125
+    add service POSDEV
+    active
+
+owner NAT_EVANT
+
+  content EVANT
+    vip address 172.33.1.231
+    flow-timeout-multiplier 1125
+    add service EVANT
+    active
+
+owner NAT_EVANT_QA
+
+  content EVANT_QA
+    vip address 172.33.1.101
+    flow-timeout-multiplier 1125
+    add service EVANT_QA
+    active
+
+owner NAT_POS
+
+  content pos01
+    vip address 172.33.1.41
+    flow-timeout-multiplier 1125
+    add service possrv01
+    active
+
+  content pos02
+    vip address 172.33.1.42
+    flow-timeout-multiplier 1125
+    add service possrv02
+    active
+
+  content pos03
+    vip address 172.33.1.43
+    flow-timeout-multiplier 1125
+    add service possrv03
+    active
+
+  content pos04prod
+    vip address 172.33.1.44
+    flow-timeout-multiplier 1125
+    add service possrv04prod
+    active
+
+  content pos05prod
+    vip address 172.33.1.45
+    flow-timeout-multiplier 1125
+    add service possrv05prod
+    active
+
+  content pos06prod
+    vip address 172.33.1.46
+    flow-timeout-multiplier 1125
+    add service possrv06prod
+    active
+
+  content pos07
+    vip address 172.33.1.47
+    flow-timeout-multiplier 1125
+    add service possrv07
+    active
+
+  content pos08
+    vip address 172.33.1.48
+    flow-timeout-multiplier 1125
+    add service possrv08
+    active
+
+owner NAT_QA
+
+  content APP05QA
+    vip address 172.33.1.135
+    flow-timeout-multiplier 1125
+    add service APP05QA
+    active
+
+  content APP06QA
+    vip address 172.33.1.136
+    flow-timeout-multiplier 1125
+    add service APP06QA
+    active
+
+  content CRD03QA
+    vip address 172.33.1.153
+    flow-timeout-multiplier 1125
+    add service CRD03QA
+    active
+
+  content DB05QA
+    vip address 172.33.1.125
+    flow-timeout-multiplier 1125
+    add service DB05QA
+    active
+
+  content DB06QA
+    vip address 172.33.1.126
+    flow-timeout-multiplier 1125
+    add service DB06QA
+    active
+
+  content POS05QA
+    vip address 172.33.1.145
+    flow-timeout-multiplier 1125
+    add service POS05QA
+    active
+
+  content POS06QA
+    vip address 172.33.1.146
+    flow-timeout-multiplier 1125
+    add service POS06QA
+    active
+
+  content RF02QA
+    vip address 172.33.1.162
+    flow-timeout-multiplier 1125
+    add service RF02QA
+    active
+
+owner NAT_RF
+
+  content rf01
+    vip address 172.33.1.61
+    flow-timeout-multiplier 1125
+    add service rfsrv01
+    active
+
+  content rf03
+    vip address 172.33.1.63
+    flow-timeout-multiplier 1125
+    add service rfsrv03
+    active
+
+owner POS_QA
+
+  content 16009
+    port 16009
+    protocol tcp
+    vip address 172.33.1.140
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS06-16009
+    active
+
+  content 16109
+    vip address 172.33.1.140
+    port 16109
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS05-16109
+    add service POS06-16109
+    active
+
+  content 16209
+    vip address 172.33.1.140
+    protocol tcp
+    port 16209
+    advanced-balance sticky-srcip
+    flow-timeout-multiplier 1125
+    add service POS05-16209
+    add service POS06-16209
+    active
+
+  content 16309
+    port 16309
+    protocol tcp
+    vip address 172.33.1.140
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS05-16309
+    add service POS06-16309
+    active
+
+  content 8550
+    protocol tcp
+    port 8550
+    vip address 172.33.1.140
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS05-8550
+    add service POS06-8550
+    active
+
+  content 8990
+    protocol tcp
+    port 8990
+    vip address 172.33.1.140
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS05-8990
+    add service POS06-8990
+    active
+
+  content 8995
+    vip address 172.33.1.140
+    port 8995
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS05-8995
+    add service POS06-8995
+    active
+
+owner POS_Server
+
+  content 16009
+    add service POS04PROD-16009
+    vip address 172.33.1.40
+    protocol tcp
+    port 16009
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    active
+
+  content 16021
+    vip address 172.33.1.40
+    port 16021
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS03-16021
+    active
+
+  content 16109
+    protocol tcp
+    vip address 172.33.1.40
+    port 16109
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS01-16109
+    add service POS02-16109
+    add service POS08-16109
+    add service POS03-16109
+    add service POS07-16109
+    add service POS05PROD-16109
+    add service POS06PROD-16109
+    active
+
+  content 16209
+    add service POS05PROD-16209
+    add service POS06PROD-16209
+    vip address 172.33.1.40
+    port 16209
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS01-16209
+    add service POS02-16209
+    add service POS08-16209
+    active
+
+  content 16309
+    vip address 172.33.1.40
+    protocol tcp
+    port 16309
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS03-16309
+    active
+
+  content 8550
+    add service POS05PROD-8550
+    add service POS06PROD-8550
+    vip address 172.33.1.40
+    port 8550
+    protocol tcp
+    add service POS01-8550
+    add service POS02-8550
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS08-8550
+    active
+
+  content 8990
+    vip address 172.33.1.40
+    port 8990
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS01-8990
+    add service POS02-8990
+    add service POS08-8990
+    add service POS03-8990
+    add service POS07-8990
+    add service POS05PROD-8990
+    add service POS06PROD-8990
+    active
+
+  content 8995
+    add service POS05PROD-8995
+    add service POS06PROD-8995
+    vip address 172.33.1.40
+    port 8995
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS01-8995
+    add service POS02-8995
+    add service POS08-8995
+    active
+
+  content 8999
+    add service POS05PROD-8999
+    add service POS06PROD-8999
+    vip address 172.33.1.40
+    port 8999
+    protocol tcp
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service POS01-8999
+    add service POS02-8999
+    add service POS08-8999
+    active
+
+owner RF_Server
+
+  content 23
+    vip address 172.33.1.60
+    protocol tcp
+    port 23
+    advanced-balance sticky-srcip
+    sticky-inact-timeout 300
+    flow-timeout-multiplier 1125
+    add service RF01
+    add service RF03
+    active
+
+!*************************** GROUP ***************************
+group APP
+  add service appsrv01
+  add service appsrv02
+  add service appsrv03
+  add service appsrv04prod
+  vip address 172.33.1.30
+  flow-timeout-multiplier 1125
+  active
+
+group APP05QA
+  vip address 172.33.1.135
+  flow-timeout-multiplier 1125
+  add service APP05QA
+  active
+
+group APP06QA
+  vip address 172.33.1.136
+  flow-timeout-multiplier 1125
+  add service APP06QA
+  active
+
+group APPQA
+  vip address 172.33.1.130
+  flow-timeout-multiplier 1125
+
+group APPdev
+  vip address 172.33.1.134
+  flow-timeout-multiplier 1125
+  add service APPDEV
+  active
+
+group BKUP
+  vip address 172.33.1.91
+  flow-timeout-multiplier 1125
+  add service BKUP
+  active
+
+group Boomi
+  vip address 172.33.1.39
+  flow-timeout-multiplier 1125
+  add service Boomi
+  active
+
+group Boomi_DEV
+  vip address 172.33.1.38
+  flow-timeout-multiplier 1125
+  add service Boomi_DEV
+  active
+
+group CRDQA
+  vip address 172.33.1.150
+  flow-timeout-multiplier 1125
+  add service CRD03QA
+  active
+
+group Credit
+  vip address 172.33.1.50
+  flow-timeout-multiplier 1125
+  add service crdsrv01
+  add service crdsrv02
+  active
+
+group DB
+  vip address 172.33.1.20
+  flow-timeout-multiplier 1125
+  add service dbsrv01
+  add service dbsrv02
+  add service dbsrv03
+  active
+
+group DBQA
+  vip address 172.33.1.120
+  flow-timeout-multiplier 1125
+  add service DB05QA
+  add service DB06QA
+  active
+
+group DBdev
+  vip address 172.33.1.124
+  flow-timeout-multiplier 1125
+  add service DBDEV
+  active
+
+group EVANT
+  vip address 172.33.1.231
+  flow-timeout-multiplier 1125
+  add service EVANT
+  active
+
+group EVANT_QA
+  vip address 172.33.1.101
+  flow-timeout-multiplier 1125
+  add service EVANT_QA
+  active
+
+group POS
+  add service possrv05prod
+  add service possrv04prod
+  add service possrv06prod
+  vip address 172.33.1.40
+  flow-timeout-multiplier 1125
+  add service possrv01
+  add service possrv02
+  add service possrv03
+  add service possrv07
+  add service possrv08
+  active
+
+group POS04PROD
+  vip address 172.33.1.44
+  flow-timeout-multiplier 1125
+
+group POS06PROD
+  vip address 172.33.1.46
+  flow-timeout-multiplier 1125
+
+group POSQA
+  vip address 172.33.1.140
+  flow-timeout-multiplier 1125
+  add service POS05QA
+  add service POS06QA
+  active
+
+group POSdev
+  vip address 172.33.1.144
+  flow-timeout-multiplier 1125
+  add service POSDEV
+  active
+
+group RF
+  vip address 172.33.1.60
+  flow-timeout-multiplier 1125
+  add service rfsrv01
+  add service rfsrv03
+  active
+
+group RFQA
+  vip address 172.33.1.160
+  flow-timeout-multiplier 1125
+  add service RF02QA
+  active

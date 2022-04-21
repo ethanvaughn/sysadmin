@@ -1,0 +1,841 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::item;
+use lib::company;
+use lib::property;
+use lib::template;
+use lib::vo;
+use lib::ip;
+
+use strict;
+
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "list";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+my $debug;
+my $errnav = "main";
+my $remote_user = $cgi->remote_user;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+#----- viewItemList ----------------------------------------------------------
+# Parameters: none.
+# Load and display the itemlist.tmpl
+sub viewItemList {
+	my $select_tmpl;
+	my $item_list;
+	my $display_fields;
+	my $field_list;
+	my $listrows;
+	my @listheaderloop;
+
+	# Set the defalt template to be HOSTED_SERVER
+	$vars->{tmplid} = 1 if (!exists( $vars->{tmplid} )); 
+	
+	if ($vars->{tmplid} > 0) {
+		# Show only the items for this template. (See 'else' for "LIST ALL" case.)
+		$item_list = lib::item::getItemListByType( $dbh, $vars->{tmplid} ); 
+		www::cgi::helpers::chkDB( $dbh );
+
+		# Create the header loop based on the itemlistfields table: 
+		$field_list = lib::template::getFieldList( $dbh, $vars->{tmplid} );
+		$display_fields = lib::template::getTemplateFieldList( $dbh, $vars->{tmplid} );
+		www::cgi::helpers::chkDB( $dbh );
+		my @tmp; # A buffer for arranging the headers; to be written to listheaderloop
+		my $nextpos = 0;
+		foreach my $field_name (sort keys( %$display_fields )) {
+			my $i = $display_fields->{$field_name}->{field_order};
+			if (!$tmp[$i]) {
+				# Position is available, write the field header.
+				$tmp[$i] = { 
+					field_label => $field_list->{$field_name}->{field_label},
+					field_name => $field_name
+				};
+			} else {
+				# Postition already taken. Append to the end.
+				my $len = @tmp;
+				$len++;
+				$tmp[$len] = { 
+					field_label => $field_list->{$field_name}->{field_label},
+					field_name => $field_name
+				};
+			}
+		}
+		# Now ensure that the listheaderloop starts at index 0 and has no gaps: 
+		my $i = 0;
+		foreach my $rec (@tmp) {
+			if ($rec->{field_label}) {
+				$listheaderloop[$i] = $rec;
+				$i++;
+			}
+		}
+	} else {
+		# Show all items with the default fields.
+		$item_list = lib::item::getItemList( $dbh ); 
+		www::cgi::helpers::chkDB( $dbh );
+
+		# Create the header loop for the default fields from the item table:
+		$listheaderloop[0] =  { 
+			field_label => 'Item Name',
+			field_name => 'itemname'
+		};
+		$listheaderloop[1] =  { 
+			field_label => 'Serial No',
+			field_name => 'serialno'
+		};
+		$listheaderloop[2] =  { 
+			field_label => 'Comment',
+			field_name => 'comment'
+		};
+	}
+
+
+	# Loop once through the item records to create the view array and 
+	# decorate the fields as needed.
+	my $rowcnt = 0;
+
+	foreach my $itemname (sort keys( %$item_list )) {
+
+		# Load the display fields into columns in the proper order:
+		my $evenrow = "";
+		$evenrow = ' class="altrow"' if (($rowcnt % 2) == 0);
+		$listrows .= "<tr$evenrow>\n";
+		# Print the values for this item.
+		foreach my $rec (@listheaderloop) {
+			my $value = $item_list->{$itemname}->{$rec->{field_name}};
+
+			if ($rec->{field_name} eq "itemname") {
+				my $id = $item_list->{$itemname}->{id};
+				$value = qq|<a href="main?action=detail&id=$id">$itemname</a>|;
+			}
+			#if (exists( $display_fields->{auth_check} ) && $item_list->{$itemname}->{auth_check}) {
+			if ($rec->{field_name} eq "auth_check" && $item_list->{$itemname}->{auth_check}) {
+				$value = '<img src="../../commonhtml/images/check_green.jpg"';
+				if (!lib::item::chkAuthDate( $item_list->{$itemname}->{auth_check} )) {
+					$value = '<img src="../../commonhtml/images/check_red.jpg"';
+				}
+			}
+			if ($rec->{field_name} eq "adminip") {
+				foreach my $key (keys( %{$item_list->{$itemname}} )) {
+					# Locate the adminip field:
+					if ($key =~ /(.*)_ADMINIP/) {
+						# eg. The keys for adminip='PHYSICAL_ADMINIP' and  adminid='PHYSICAL_ID'
+						my $iptype_key = $1 . "_ID";
+						my $adminip = $item_list->{$itemname}->{$key};
+						my $adminid = $item_list->{$itemname}->{$iptype_key};
+						$value = qq|<a href="../addr/ipaddr?action=detail&id=$adminid">$adminip</a>|;
+						last;
+					}
+				}
+			}
+			if ($rec->{field_name} eq "ownername") {
+				$value =  $item_list->{$itemname}->{ownercode};
+				$value .= " (" . $item_list->{$itemname}->{ownername} . ")";
+			}
+			if ($rec->{field_name} eq "username") {
+				$value =  $item_list->{$itemname}->{usercode};
+			}
+
+			# Final check for a null $value:
+			$value = " " if (!$value);
+
+			$listrows .= "<td>$value</td>\n";
+		}
+
+		# Create the delete button.
+		$listrows .= qq|<td class="nopad"><a title="Delete the item [$itemname]." class="button" href="javascript:del_post( 'main', 'action=del&tmplid=$vars->{tmplid}&id=$item_list->{$itemname}->{id}', '$itemname' );">|;
+		$listrows .= qq|del</a></td>|;
+		$listrows .= "</tr>\n";
+
+		$rowcnt++;
+	} # end item loop
+	
+	# Clean-up: field_name is superfluous in the listheaderloop
+	# (but was useful above for getting the field values...)
+	foreach my $rec (@listheaderloop) {
+		delete( $rec->{field_name} )
+	}
+
+
+	# template
+	my $tmpl_list = lib::template::getTemplateList( $dbh );
+	www::cgi::helpers::chkDB( $dbh );
+	$select_tmpl = lib::template::getTemplateDropdown( 
+		"reloadSelect( 'select_tmpl', 'main', 'tmplid' )",
+		$vars, 
+		$tmpl_list,
+		1
+	);
+
+
+	# This is the initial and default screen for the inventory application.
+	$htmlview = HTML::Template->new( filename => "../tmpl/itemlist.tmpl", loop_context_vars => 1 );
+	$htmlview->param( tabmenu        => $tabmenu );
+	$htmlview->param( subtitle       => "List of Items" );
+	                                
+	$htmlview->param( user           => $remote_user );
+	$htmlview->param( ADMIN          => $remote_user ) if ($remote_user eq "admin");
+                                    
+	$htmlview->param( select_tmpl    => $select_tmpl );
+
+	$htmlview->param( listheaderloop => \@listheaderloop );
+	$htmlview->param( listrows       => $listrows );
+}
+
+
+
+
+#----- viewItemDetail ----------------------------------------------------------
+# Load and display the item detail page.
+sub viewItemDetail {
+	my $rec;
+	my $auth_exp;
+	my $owner;
+	my $useFieldUsers = 0;
+	my $users;
+	my @userids;
+	my $itemprops;
+	my $proprows;
+	my @ipdata;
+
+	
+	# template
+	my $tmpl_list = lib::template::getTemplateList( $dbh );
+	www::cgi::helpers::chkDB( $dbh );
+
+	# company (for owner and user)
+	my $co_list = lib::company::getCompanyList( $dbh );
+	www::cgi::helpers::chkDB( $dbh );
+	my @co_id_list;
+	my %co_labels;
+	foreach my $name (sort keys( %{$co_list} )) {
+		push( @co_id_list, $co_list->{$name}->{id} );
+		$co_labels{$co_list->{$name}->{id}} = $name . " [" . $co_list->{$name}->{code} . "]";
+	}
+
+
+	if ($vars->{id} && !$vars->{itemname}) {
+		# Load data for Edit/Update
+
+		$rec = lib::item::getItem( $dbh, [ 'id', $vars->{id} ] ); 
+		www::cgi::helpers::chkDB( $dbh );
+
+		# Check for an expired auth last-check date:
+		if (defined $rec->{auth_check}) {
+			if (!lib::item::chkAuthDate( $rec->{auth_check} )) {
+				$auth_exp = ' class="warn"';
+			}
+		}
+
+		if (lib::template::useFieldUsers( $dbh, $rec->{tmplid} )) {
+			# Get the currently selected users:
+			$users = lib::item::getItemUsers( $dbh, $rec->{itemname} );
+			www::cgi::helpers::chkDB( $dbh );
+			# Assemble the ids into a list for use with cgi->scrolling_list (see below)
+			foreach my $name (sort keys( %{$users} )) {
+				push( @userids, $users->{$name}->{id} );
+			}
+		}
+		
+		$itemprops = lib::item::getItemProps( $dbh, $rec->{itemname} );
+
+		my $iplist = lib::item::getItemAddrs( $dbh, $rec->{itemname} );
+		# Assemble IPs in "loop" format:
+		foreach my $key (keys( %{$iplist} )) {
+			if ($iplist->{$key}->{adminip}) {
+				$iplist->{$key}->{flag} = www::cgi::helpers::getFlag();
+			}
+			push( @ipdata, $iplist->{$key} );
+		}
+	}
+
+	# Set the tmplid accordingly .. 
+	my $tmplid; 
+	$tmplid = $vars->{tmplid} if ($vars->{tmplid}); # Add "select_tmpl onchange"
+	$tmplid = $rec->{tmplid} if ($rec->{tmplid});   # Edit
+
+	$useFieldUsers = lib::template::useFieldUsers( $dbh, $tmplid );
+
+	# Build the <select> components:
+
+	# template
+	# The template dropdown has three states: Add, Add+post, Edit
+	my $onchange = "tmplChangeAdd( 'select_tmpl', 'main?action=detailnew', 'tmplid', '' )"; # Add
+	if ($tmplid) {
+		# Add+post
+		$onchange = "tmplChangeAdd( 'select_tmpl', 'main?action=detailnew', 'tmplid', '$tmplid' )";
+	}
+	my $select_tmpl;
+	# Default to the Add state. This will get overwritten below if Edit (see below)
+	$select_tmpl = lib::template::getTemplateDropdown( 
+		$onchange, 
+		$vars, 
+		$tmpl_list
+	);
+	if ($rec->{tmplid}) {
+		# Edit
+		$select_tmpl = lib::template::getTemplateDropdown( 
+			"tmplChangeConfirm( 'select_tmpl', 'main?action=detail&id=$vars->{id}', 'tmplid', '$rec->{tmplid}' )", 
+			$rec, 
+			$tmpl_list
+		);
+	}
+
+	
+	# Set the enabled state of the select controls accordingly.
+    my $select_owner;
+	my $select_users;
+	if ($vars->{action} eq 'detailnew' && !$vars->{tmplid}) {
+		# owner
+		$select_owner = sprintf( "%s",
+	        $cgi->popup_menu(
+	            -name    => 'owner',
+	            -values  => \@co_id_list,
+	            -default => $rec->{ownerid},
+	            -labels  => \%co_labels,
+				-tabindex => 4,
+				-disabled => 1
+	        )
+	    );
+	
+		if ($useFieldUsers) {
+			# users
+			$select_users = sprintf( "%s", 
+				$cgi->scrolling_list(
+					-name     => 'users',
+					-values   => \@co_id_list,
+					-default  => \@userids,
+					-labels   => \%co_labels,
+					-multiple => 1,
+					-size     => 5,
+					-tabindex => 5,
+					-disabled => 1
+				)
+			);
+		}
+		
+	} else {
+		# owner
+		$select_owner = sprintf( "%s",
+	        $cgi->popup_menu(
+	            -name    => 'owner',
+	            -values  => \@co_id_list,
+	            -default => $rec->{ownerid},
+	            -labels  => \%co_labels,
+				-tabindex => 4,
+	        )
+	    );
+
+		if ($useFieldUsers) {
+			# users
+			$select_users = sprintf( "%s", 
+				$cgi->scrolling_list(
+					-name     => 'users',
+					-values   => \@co_id_list,
+					-default  => \@userids,
+					-labels   => \%co_labels,
+					-multiple => 1,
+					-size     => 5,
+					-tabindex => 5,
+				)
+			);
+		}
+	}
+	
+
+
+	if ($tmplid) {
+		# Get a list of all properties for the associated template.
+		my $tmpl_prop_list = lib::template::getTemplatePropList( $dbh, $tmplid );
+		www::cgi::helpers::chkDB( $dbh );
+
+		# If edit, get the list of atrribute values for this item:
+		my $attribvals;
+		$attribvals = lib::item::getItemAttribs( $dbh, $rec->{id} ) if ($rec);
+
+		my $tabindex = 100;
+		# Build the properties html form elements (select, text, etc.)
+		foreach my $name (sort keys( %$tmpl_prop_list )) {
+			$proprows .= qq|<tr>\n|;
+			$proprows .= qq|<td>$name</td>\n|;
+			if ($tmpl_prop_list->{$name}->{proptype} eq "PROP") {
+				# PROPERTIES
+				$proprows .= qq|<td>\n|;
+				$proprows .= qq|<select tabindex=$tabindex++ name="PROP_$tmpl_prop_list->{$name}->{id}">\n|;
+				$proprows .= qq|<option value="0">-- N/A --</option>\n|;
+				# Get the list of values for this property and create the options:
+				my $propvals = lib::property::getPropValues( $dbh, $tmpl_prop_list->{$name}->{id} );
+				foreach my $value (sort keys( %$propvals )) {
+					$proprows .= qq|<option |;
+					# Depending on state (Add/Edit), set the selected option:
+					if ($vars->{id}) {
+						# Edit
+						if (exists( $itemprops->{$name}->{value} ) && $itemprops->{$name}->{value} eq $value) {
+							$proprows .= qq|selected |;
+						}
+					} else {
+						# Add
+						my $tmp = 'PROP_' . $tmpl_prop_list->{$name}->{id};
+						if ($vars->{$tmp} && $vars->{$tmp} eq $propvals->{$value}->{propval_id}) {
+							$proprows .= qq|selected |;
+						}
+					}
+					$proprows .= qq|value="$propvals->{$value}->{propval_id}">$value</option>\n|;
+				}
+				$proprows .= qq|</select>\n|;
+				$proprows .= qq|</td>\n|;
+			} else {
+				# ATTRIBUTES
+				$proprows .= qq|<td>\n|;
+				$proprows .= qq|<input tabindex=$tabindex++ class="stdw" type="text" name="ATTRIB_$tmpl_prop_list->{$name}->{id}" value="|;
+				# Set the value depending on state (add_blank, add_repost, edit)
+				if ($vars->{'ATTRIB_' . $tmpl_prop_list->{$name}->{id}}) {
+					# The POST value exists in $vars, re-display it.
+					$proprows .= $vars->{'ATTRIB_' . $tmpl_prop_list->{$name}->{id}};
+				}
+				if ($rec->{id}) {
+					# Mode is edit/update, display the previous value: 
+					my $prop_id = $tmpl_prop_list->{$name}->{id};
+					if ($attribvals->{$prop_id}->{value}) {
+						$proprows .= $attribvals->{$prop_id}->{value};
+					}
+				}
+				$proprows .= qq|">\n|;
+				$proprows .= qq|</td>\n|;
+			}
+
+			$proprows .= qq|</tr>\n|;
+		}
+	}
+
+
+	# DEBUG
+	# Comment the lines between /DEBUG to silence. 
+#	$debug .= "<p>ACTION=$ACTION</p>";
+#	foreach my $key (keys( %$vars )) {
+#		$debug .= "$key=$vars->{$key}<br/>";
+#	};
+	# /DEBUG
+
+
+
+	# Populate the view accordingly:
+	$htmlview = HTML::Template->new( filename => "../tmpl/item.tmpl", loop_context_vars => 1 );
+
+
+	$htmlview->param( tabmenu         => $tabmenu );
+	$htmlview->param( ADMIN           => $remote_user ) if ($remote_user eq "admin");
+	$htmlview->param( msg             => $msg ) if ($msg);
+	$htmlview->param( user            => $remote_user );
+	$htmlview->param( debug           => $debug ) if ($debug);
+
+	$htmlview->param( select_tmpl     => $select_tmpl );
+	$htmlview->param( select_owner    => $select_owner );
+	$htmlview->param( select_users    => $select_users );
+	$htmlview->param( proprows        => $proprows );
+	$htmlview->param( DISPLAY_USERS   => "1" ) if ($useFieldUsers);
+
+	if ($vars->{id}) {
+		$htmlview->param( subtitle        => "View/Update Item" );
+		$htmlview->param( id              => $rec->{id} );
+		$htmlview->param( itemname        => $rec->{itemname} );
+		$htmlview->param( auth_check      => $rec->{auth_check} ) if ($rec->{auth_check});
+		$htmlview->param( warn            => $auth_exp ) if ($auth_exp);
+		$htmlview->param( serialno        => $rec->{serialno} );
+		$htmlview->param( comment         => $rec->{comment} );
+		$htmlview->param( admin_notes     => $rec->{admin_notes} );
+		$htmlview->param( notes           => $rec->{notes} );
+		$htmlview->param( iploop          => \@ipdata );
+		$htmlview->param( HIDE_IFACE       => "1" ) if (!@ipdata);
+	} else {
+		$htmlview->param( subtitle        => "Add New Item" );
+		$htmlview->param( ADD             => "1" );
+		$htmlview->param( HIDE_IFACE      => "1" );
+		$htmlview->param( DISABLED        => "disabled" )           if (!$vars->{tmplid});
+		$htmlview->param( itemname        => $vars->{itemname} )    if ($vars->{itemname});
+		$htmlview->param( serialno        => $vars->{serialno} )    if ($vars->{serialno});
+		$htmlview->param( comment         => $vars->{comment} )     if ($vars->{comment});
+		$htmlview->param( admin_notes     => $vars->{admin_notes} ) if ($vars->{admin_notes});
+		$htmlview->param( notes           => $vars->{notes} )       if ($vars->{notes});
+	}
+}
+
+
+
+
+#----- writePOSTProps ---------------------------------------------------------
+# Process the property values from POST.
+# This is part of a larger transaction. Commit from the calling function.
+sub writePOSTProps {
+	my $item_id      = shift;
+	
+	foreach my $name (%$vars) {
+		if ($name =~ /PROP_(.*)/) {
+			my $prop_id = $1;
+			my $propval_id = $vars->{$name};
+			next if (!$propval_id);
+		
+			if (!lib::item::setProperty( $dbh, $item_id, $prop_id, $propval_id )) {
+				my $str = $dbh->errstr;
+				print STDERR "Writing property. item_id=$item_id, prop_id=$prop_id, propval_id=$propval_id: $str\n";
+				$msg = "An error occurred writing data. :: MAINWPPS<br/>Please contact administrator.";
+				$dbh->rollback;
+				if ($ACTION eq "edit") {
+					$errnav .= "?action=detail&id=$item_id";
+				} else {
+					$errnav .= "?action=detailnew&tmplid=$vars->{tmplid}";
+				}
+				www::cgi::helpers::exitonerr( $errnav, $msg );
+			}
+			next;
+		}
+	}
+	
+	return 1;
+}
+
+
+
+
+#----- writePOSTAttribs ---------------------------------------------------------
+# Process the attributes values from POST.
+# This is part of a larger transaction. Commit from the calling function.
+sub writePOSTAttribs { 
+	my $item_id  = shift;
+
+	foreach my $name (%$vars) {
+		if ($name =~ /ATTRIB_(.*)/) {
+			my $prop_id = $1;
+			my $value = $vars->{$name};
+			next if (!$value);
+			if (!lib::item::setAttribute( $dbh, $item_id, $prop_id, $value )) {
+				my $str = $dbh->errstr;
+				print STDERR "Writing attribute. item_id=$item_id, prop_id=$prop_id, value=$value: $str\n";
+				$msg = "An error occurred writing data. :: MAINWPPS<br/>Please contact administrator.";
+				$dbh->rollback;
+				if ($ACTION eq "edit") {
+					$errnav .= "?action=detail&id=$item_id";
+				} else {
+					$errnav .= "?action=detailnew&tmplid=$vars->{tmplid}";
+				}
+				www::cgi::helpers::exitonerr( $errnav, $msg );
+			}
+			next;
+		}
+	}
+	
+	return 1;
+}
+
+
+
+
+#----- updateDB --------------------------------------------------------------
+# Returns boolean 1 on success, boolean 0 on failure
+# Warning: will short-circuit to generic error screen on untrapped error.
+sub updateDB {
+#print STDERR "main::updateDB ... \n";
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		www::cgi::helpers::exitonerr( 
+			"main?action=detail&id=" . $cgi->param( 'id' ),
+			"Module $errnav: Permission denied for user $remote_user."
+		);
+	}
+
+	my @users = $cgi->param( 'users' );
+
+	my $rec;
+	my $item_id;
+
+	if ($ACTION eq "add") {
+		if (!lib::item::addItem( $dbh, $vars )) {
+			$msg = $dbh->errstr;
+			if ($msg =~ /duplicate.*unique.*item_itemname_key/) {
+				# Duplicate itemname error, keep the values and show the message.
+				$msg = "The itemname '$vars->{itemname}' already exists.<br/>Please choose a new itemname.";
+				$dbh->rollback;
+				return 0;
+			}
+			# General error, log specific message and show a generic error. 
+			print STDERR "Writing item record: $msg\n";
+			$msg = "Unable to add the new item.<br/>Please contact administrator.";
+			$dbh->rollback;
+			www::cgi::helpers::exitonerr( "$errnav?action=detailnew&tmplid=" . $vars->{tmplid}, $msg );
+		}
+
+		# Success, get the new item id
+		$item_id = lib::item::getItemId( $dbh, $vars->{itemname} ) || return 0;
+		
+	} else {
+		$item_id = $vars->{id};
+		if (!lib::item::updateItem( $dbh, $vars )) {
+			$msg = $dbh->errstr;
+			if ($msg =~ /duplicate.*unique.*item_itemname_key/) {
+				# Duplicate itemname error, keep the values and show the message.
+				$msg = "The itemname '$vars->{itemname}' already exists.<br/>Please choose a new itemname.";
+				$dbh->rollback;
+				return 0;
+			}
+			# General error, log specific message and show a generic error. 
+			print STDERR "Updating item record: $msg\n";
+			$msg = "Unable to update the item.<br/>Please contact administrator.";
+			$dbh->rollback;
+			www::cgi::helpers::exitonerr( "$errnav?action=detailnew&tmplid=" . $vars->{tmplid}, $msg );
+		}
+
+
+		lib::item::clearProperties( $dbh, $item_id ) || return 0;
+		lib::item::clearAttribs(    $dbh, $item_id ) || return 0;
+		lib::item::clearOwner(      $dbh, $item_id ) || return 0;
+		lib::item::clearUsers(      $dbh, $item_id ) || return 0;
+	}
+
+	# Write the properties and attributes: 
+	writePOSTProps( $item_id )   || return 0; 
+	writePOSTAttribs( $item_id ) || return 0; 
+
+	if (!lib::item::setOwner( $dbh, $item_id, $vars->{owner} )) {
+		$msg = $dbh->errstr;
+		$dbh->rollback;
+		return 0;
+	}
+
+	
+	if (!lib::item::setUsers( $dbh, $item_id, \@users )) {
+		$msg = $dbh->errstr;
+		$dbh->rollback;
+		return 0;
+	}
+
+#	$dbh->rollback;
+
+	$dbh->commit;
+
+	return 1;
+}
+
+
+
+
+#---- Main -------------------------------------------------------------------
+
+# Set up the tabmenu:
+$tabmenu = www::cgi::helpers::gen_tabmenu( "INV" );
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+
+#DEBUG
+#print STDERR "DEBUG ACTION=$ACTION\n";
+#foreach my $key (keys( %$vars )) {
+#	print STDERR "main item: $key=$vars->{$key}\n";
+#};
+
+
+
+#---- list (VIEW) --------------------------
+if ($ACTION eq "list") {
+	viewItemList();
+
+
+
+
+#----- detail (VIEW) -----------------------------
+} elsif ($ACTION eq "detail") {
+	if ($vars->{tmplid}) {
+		# A new template has been selected: update the db and then view the item. 
+		# Note: this will remove all properties for the item.
+		lib::item::updateItemTemplate( $dbh, $vars->{id}, $vars->{tmplid} ) ? $dbh->commit : $dbh->rollback;
+	}
+	delete( $vars->{tmplid} );
+	delete( $vars->{tmplname} );
+	viewItemDetail();
+
+	
+
+
+#----- detailnew (VIEW) --------------------------
+} elsif ($ACTION eq "detailnew") {
+	viewItemDetail();
+
+
+
+
+#----- update -----------------------------
+} elsif ($ACTION eq "update") {
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		viewItemDetail();
+		print $cgi->header;
+		print $htmlview->output;
+		exit (0);
+	}
+
+	if (!$cgi->param( 'id' )) {
+		$msg = "CGI: $errnav: missing param 'id' for ACTION: [$ACTION]\n";
+		$msg .= "Please contact SysAdmin.\n";
+		www::cgi::helpers::exitonerr( $errnav, $msg );
+	}
+
+	
+#DEBUG
+#print STDERR "update:: action = $ACTION\n";
+#foreach my $key (keys( %$vars )) {
+#	print STDERR "updateitem: update: $key=$vars->{$key}\n";
+#};
+
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+
+	if (!$vars->{itemname} || $vars->{itemname} eq '') {
+		$msg = "Item Name field is required.";
+		viewItemDetail();
+		print $cgi->header;
+		print $htmlview->output;
+		exit (0);
+	}
+	
+	$vars->{itemname} = lib::vo::lcase( $vars->{itemname} );
+	if (!lib::vo::validate_itemname( $vars->{itemname} )) {
+		$msg = "Invalid itemname. Please remove spaces and special characters.";
+		viewItemDetail();
+		print $cgi->header;
+		print $htmlview->output;
+		exit (0);
+	}
+	
+	updateDB();
+	viewItemList();
+
+
+
+
+#----- add -----------------------------
+} elsif ($ACTION eq "add") {
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		viewItemDetail();
+		print $cgi->header;
+		print $htmlview->output;
+		exit (0);
+	}
+
+	# Verify and validate POST values
+	$vars = lib::vo::scrub( $vars );
+	$vars->{itemname} = lib::vo::lcase( $vars->{itemname} );
+
+	# Check for duplicate itemname.
+	if (lib::item::getItemId( $dbh, $vars->{itemname} )) {
+		$msg = "Item name $vars->{itemname} already in use.<br/>Please select a new name.";
+		viewItemDetail( "ADD" );
+		print $cgi->header;
+		print $htmlview->output;
+		exit (0);
+	} 	
+	
+	if (!$vars->{itemname} || $vars->{itemname} eq '') {
+		$msg = "Item Name field is required.";
+		viewItemDetail( "ADD" );
+		print $cgi->header;
+		print $htmlview->output;
+		exit (0);
+	} 
+
+	if (!lib::vo::validate_itemname( $vars->{itemname} )) {
+		$msg = "Invalid itemname. Please remove spaces and special characters.";
+		viewItemDetail( "ADD" );
+		print $cgi->header;
+		print $htmlview->output;
+		exit (0);
+	}
+	
+	if (updateDB()) {
+		# Success. Reset the form for subsequent add: preserve essential POST
+		# vars, clear the rest ... 
+		my $tmplid = $vars->{tmplid};
+		$cgi->delete_all();
+		$vars->{tmplid} = $tmplid;
+		$vars->{action} = 'detailnew';
+	}
+	viewItemDetail( "ADD" );
+
+
+
+
+#----- del -----------------------------
+} elsif ($ACTION eq 'del') {
+print STDERR "action = del\n";
+
+	# Short circuit if we're not logged in as admin:
+	if ($remote_user ne "admin") {
+		viewItemList();
+		print $cgi->header;
+		print $htmlview->output;
+		exit (0);
+	}
+
+	if (!$vars->{id}) {
+		$msg = "CGI: $errnav: missing param 'id' for ACTION: [$ACTION]\n";
+		$msg .= "Please contact SysAdmin.\n";
+		www::cgi::helpers::exitonerr( $errnav, $msg );
+	}
+	
+	lib::item::delItemById( $dbh, $cgi->param( 'id' ) ) ? $dbh->commit : $dbh->rollback;
+
+	viewItemList();
+
+
+
+
+#---- unknown --------------------------
+} else {
+	$msg = "CGI: $errnav: Unknow action value [$ACTION].\n";
+	$msg .= "Please contact SysAdmin.\n";
+	www::cgi::helpers::exitonerr( $errnav, $msg );
+}
+
+
+
+
+#----- END Controller Engine -------------------------------------------------
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+
+print $cgi->header;
+print $htmlview->output;
+
+exit (0);

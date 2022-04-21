@@ -1,0 +1,56 @@
+
+
+* Thu 25 Jul 2006 Ethan Vaughn
+
+Summary
+---------------------------------------
+nQuery is a Perl CGI application that presents an HTTP-RPC set of functions
+for querying data from the Nagios configuration files.
+
+The first incarnation will have canned functions for returning lists of 
+hosts based on various criteria (all hosts, all hosts for a cust, 
+lab hosts, lab hosts for a cust, etc). 
+
+The application is meant to reside on the Nagios server box in order
+to have direct access to the objects.cache file. For our installs at
+Tomax, this file is found at the following path:
+
+    /u01/app/nagios/var/objects.cache
+
+
+
+API
+---------------------------------------
+The following functions are provided:
+
+http://server/nquery/listcusts
+
+    o Return list of all cust IDs.
+
+    o Data comes from the "hostgroup_name" field of the top-level 
+      "hostgroup" rec.
+      eg.
+
+      define hostgroup {
+          hostgroup_name  atg
+          alias   ATG
+          members v19u19,v19u05,v19u11,v19u6,v19u4,v19u3
+          }
+
+
+
+http://server/nquery/listhosts
+
+    o No query string.
+
+    o Return a text list of all hosts.
+
+	o Data comes from the "members" field of the top-level
+      "hostgroup" rec.
+	
+
+
+http://server/nquery/listhosts?cust={custid}
+    o  {custid} is the Nagios customer ID 
+
+

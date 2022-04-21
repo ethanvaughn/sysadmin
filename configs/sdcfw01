@@ -1,0 +1,797 @@
+: Saved
+:
+ASA Version 7.2(4) 
+!
+terminal width 160
+hostname sdcfw01
+domain-name tomax.com
+enable password /zp29/u4XwwZ0P0p encrypted
+passwd /zp29/u4XwwZ0P0p encrypted
+no names
+!
+interface GigabitEthernet0/0
+ nameif External
+ security-level 0
+ ip address 66.133.118.5 255.255.255.128 standby 66.133.118.6 
+!
+interface GigabitEthernet0/1
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet0/1.1
+ shutdown
+ vlan 54
+ nameif TERM
+ security-level 100
+ ip address 10.9.14.1 255.255.255.0 standby 10.9.14.2 
+!
+interface GigabitEthernet0/1.2
+ vlan 55
+ nameif AND
+ security-level 100
+ ip address 10.9.15.129 255.255.255.240 standby 10.9.15.130 
+!
+interface GigabitEthernet0/1.4
+ vlan 57
+ nameif SND
+ security-level 100
+ ip address 10.9.15.225 255.255.255.224 standby 10.9.15.226 
+!
+interface GigabitEthernet0/1.5
+ vlan 58
+ nameif AFS
+ security-level 100
+ ip address 10.9.15.161 255.255.255.240 standby 10.9.15.162 
+!
+interface GigabitEthernet0/1.6
+ vlan 59
+ nameif ADR
+ security-level 100
+ ip address 10.9.15.193 255.255.255.224 standby 10.9.15.194 
+!
+interface GigabitEthernet0/1.7
+ vlan 9
+ nameif SDS
+ security-level 100
+ ip address 10.24.74.209 255.255.255.240 standby 10.24.74.210 
+!
+interface GigabitEthernet0/1.8
+ vlan 60
+ nameif SAV
+ security-level 100
+ ip address 10.9.16.1 255.255.255.224 standby 10.9.16.2 
+!
+interface GigabitEthernet0/1.9
+ vlan 61
+ nameif ZUR
+ security-level 100
+ ip address 10.9.16.33 255.255.255.224 standby 10.9.16.34 
+!
+interface GigabitEthernet0/1.10
+ vlan 62
+ nameif APW
+ security-level 100
+ ip address 10.9.16.65 255.255.255.224 standby 10.9.16.66 
+!
+interface GigabitEthernet0/1.11
+ vlan 65
+ nameif UFA
+ security-level 100
+ ip address 10.9.16.161 255.255.255.224 standby 10.9.16.162 
+!
+interface GigabitEthernet0/1.12
+ vlan 64
+ nameif DWR
+ security-level 100
+ ip address 10.9.15.97 255.255.255.224 standby 10.9.15.98 
+!
+interface GigabitEthernet0/1.13
+ vlan 66
+ nameif RAC
+ security-level 100
+ ip address 10.9.16.193 255.255.255.224 standby 10.9.16.194 
+!
+interface GigabitEthernet0/2
+ nameif ADM
+ security-level 90
+ ip address 10.9.15.1 255.255.255.240 standby 10.9.15.2 
+!
+interface GigabitEthernet0/3
+ description LAN Failover Interface
+!
+interface Management0/0
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+boot system disk0:/asa724-k8.bin
+ftp mode passive
+clock timezone MST -7
+dns server-group DefaultDNS
+ domain-name tomax.com
+object-group network vpnLocal
+ network-object 10.9.15.128 255.255.255.240
+ network-object 10.9.15.144 255.255.255.240
+ network-object 10.9.15.0 255.255.255.224
+ network-object 10.9.15.160 255.255.255.240
+ network-object 10.9.15.192 255.255.255.224
+ network-object 10.24.74.208 255.255.255.240
+ network-object 10.9.16.0 255.255.255.224
+ network-object 10.9.16.32 255.255.255.224
+ network-object 10.9.16.64 255.255.255.224
+ network-object 10.9.15.96 255.255.255.224
+ network-object 10.9.16.160 255.255.255.224
+ network-object 10.9.16.192 255.255.255.224
+object-group network vpnRemote
+ network-object host 10.24.74.9
+ network-object host 10.24.74.10
+ network-object host 10.24.74.13
+ network-object host 10.24.74.20
+ network-object 172.30.230.0 255.255.254.0
+ network-object host 10.24.74.12
+ network-object host 10.24.74.35
+ network-object host 10.24.74.45
+ network-object host 10.24.74.14
+ network-object host 10.24.74.19
+object-group network cvpnAND
+ network-object 10.200.2.176 255.255.255.240
+object-group network andLocal
+ network-object 10.9.15.128 255.255.255.240
+object-group network termLocal
+ network-object 10.9.14.0 255.255.255.0
+object-group network tmxInternal
+ network-object 172.21.0.0 255.255.0.0
+object-group network sndLocal
+ network-object 10.9.15.224 255.255.255.224
+object-group network paLocal
+ network-object host 10.9.15.227
+object-group network paRemote
+ network-object host 193.1.1.109
+object-group network admLocal
+ network-object host 10.9.15.10
+object-group service admOutTCP tcp
+ port-object eq smtp
+ port-object eq domain
+object-group service admOutUDP udp
+ port-object eq domain
+ port-object eq ntp
+ port-object eq snmp
+object-group service mgmtTCP tcp
+ port-object eq smtp
+ port-object eq ssh
+ port-object eq domain
+object-group service mgmtUDP udp
+ port-object eq domain
+object-group network afsLocal
+ network-object 10.9.15.160 255.255.255.240
+object-group network adrLocal
+ network-object 10.9.15.192 255.255.255.224
+object-group network adrHQ
+ network-object 10.6.0.0 255.255.0.0
+object-group network sdsLocal
+ network-object 10.24.74.208 255.255.255.240
+object-group network sdsRemote
+ network-object 10.20.0.0 255.255.252.0
+ network-object host 192.168.254.39
+object-group network sdsPaymentech
+ network-object host 65.124.118.120
+ network-object host 65.124.118.127
+ network-object host 65.124.118.170
+ network-object host 65.124.118.177
+ network-object host 12.96.58.170
+ network-object host 12.96.58.177
+ network-object host 12.96.58.187
+ network-object host 12.96.58.180
+ network-object host 12.96.58.120
+ network-object host 65.124.118.180
+ network-object host 65.124.118.187
+ network-object host 12.96.58.185
+object-group network sdsFTP
+ network-object host 207.243.205.9
+ network-object host 207.24.197.2
+object-group network novaLocal
+ network-object host 10.24.74.215
+object-group network novaRemote
+ network-object host 198.203.191.98
+ network-object host 198.203.192.212
+ network-object host 198.203.192.132
+ network-object host 198.203.191.104
+ network-object host 198.203.192.217
+ network-object host 198.203.191.35
+ network-object host 198.203.191.112
+ network-object host 198.203.191.201
+ network-object host 198.203.191.38
+object-group network novaNAT
+ network-object host 172.22.130.50
+object-group network afsRemote
+ network-object 192.168.1.0 255.255.255.0
+object-group network novaLocal2
+ network-object host 10.24.74.220
+object-group network novaNAT2
+ network-object host 172.22.130.51
+object-group network savLocal
+ network-object 10.9.16.0 255.255.255.224
+object-group network isd
+ network-object host 69.214.17.69
+object-group network adrLab
+ network-object host 10.9.15.201
+object-group network savRemote
+ network-object host 207.104.54.251
+object-group network adrProd
+ network-object host 10.9.15.200
+ network-object host 10.9.15.203
+object-group network awiRemote
+ network-object 172.29.0.0 255.255.0.0
+ network-object 172.18.0.0 255.255.0.0
+ network-object 172.19.0.0 255.255.0.0
+object-group network amexLocal
+ network-object host 10.9.15.150
+ network-object host 10.9.15.151
+ network-object host 10.9.15.152
+ network-object host 10.9.15.155
+ network-object host 10.9.15.156
+object-group network amexNAT
+ network-object host 66.133.118.24
+ network-object 66.133.118.20 255.255.255.252
+object-group network amexRemote
+ network-object 148.171.39.0 255.255.255.128
+ network-object 148.171.220.0 255.255.252.0
+object-group network zurLocal
+ network-object 10.9.16.32 255.255.255.224
+object-group network seatabFtp
+ network-object host 72.5.221.11
+object-group network cvpnZUR
+ network-object 10.200.2.192 255.255.255.240
+object-group network apwLocal
+ network-object 10.9.16.64 255.255.255.224
+object-group network dwrLocal
+ network-object 10.9.15.96 255.255.255.224
+object-group network dwrRemote
+ network-object 10.10.20.0 255.255.252.0
+ network-object 192.168.39.0 255.255.255.0
+ network-object 192.168.26.0 255.255.255.0
+ network-object 192.168.19.0 255.255.255.0
+ network-object 10.10.19.0 255.255.255.0
+ network-object 192.168.13.0 255.255.255.0
+ network-object 192.168.14.0 255.255.255.0
+ network-object 192.168.15.0 255.255.255.0
+ network-object 192.168.32.0 255.255.255.0
+ network-object 192.168.47.0 255.255.255.0
+ network-object 192.168.48.0 255.255.255.0
+ network-object 192.168.6.0 255.255.255.0
+ network-object 192.168.74.0 255.255.255.0
+ network-object 192.168.84.0 255.255.255.0
+ network-object 192.168.88.0 255.255.255.0
+object-group network pivotLink
+ network-object 72.5.220.0 255.255.254.0
+object-group network comdataLocal
+ network-object 10.9.15.96 255.255.255.224
+object-group network comdataNAT
+ network-object host 66.133.118.10
+object-group network comdataRemote
+ network-object host 216.76.27.251
+ network-object host 216.76.27.231
+object-group network revionicsRemote
+ network-object host 65.74.174.107
+object-group network ufaLocal
+ network-object 10.9.16.160 255.255.255.224
+object-group network ufaRemote
+ network-object 172.20.134.0 255.255.255.0
+ network-object 172.20.135.0 255.255.255.0
+ network-object 172.20.136.0 255.255.255.0
+ network-object 172.20.137.0 255.255.255.0
+ network-object 172.20.138.0 255.255.255.0
+ network-object 172.20.139.0 255.255.255.0
+ network-object 172.20.109.0 255.255.255.0
+object-group network ufaRemote2
+ network-object 10.0.100.0 255.255.255.0
+object-group network ufaRemote3
+ network-object 10.0.5.0 255.255.255.0
+object-group network racLocal
+ network-object 10.9.16.192 255.255.255.224
+object-group network racRemote
+ network-object 10.111.0.0 255.255.0.0
+object-group network ufaLocalSFTP
+ network-object host 10.9.16.173
+ network-object host 10.9.16.175
+object-group network ufaRemoteSFTP
+ network-object host 98.129.224.162
+object-group network GEtran
+ network-object host 12.155.51.147
+object-group network bhnLocal
+ network-object 10.9.15.128 255.255.255.240
+object-group network bhnNAT
+ network-object host 66.133.118.30
+ network-object host 66.133.118.31
+object-group network bhnRemote
+ network-object host 216.104.233.10
+ network-object host 65.203.238.170
+ network-object host 204.71.178.10
+ network-object host 64.75.26.138
+access-list tmxVPN extended permit ip object-group vpnLocal object-group vpnRemote 
+access-list noNAT extended permit ip object-group vpnLocal object-group vpnRemote 
+access-list noNAT extended permit ip object-group andLocal object-group cvpnAND 
+access-list noNAT extended permit ip object-group sndLocal object-group tmxInternal 
+access-list noNAT extended permit ip object-group paLocal object-group paRemote 
+access-list noNAT extended permit ip object-group afsLocal object-group tmxInternal 
+access-list noNAT extended permit ip object-group adrLocal object-group tmxInternal 
+access-list noNAT extended permit ip object-group adrLocal object-group adrHQ 
+access-list noNAT extended permit ip object-group andLocal object-group admLocal 
+access-list noNAT extended permit ip object-group sdsLocal object-group sdsRemote 
+access-list noNAT extended permit ip object-group sdsLocal object-group admLocal 
+access-list noNAT extended permit ip object-group afsLocal object-group afsRemote 
+access-list noNAT extended permit ip object-group savLocal object-group admLocal 
+access-list noNAT extended permit ip object-group sdsLocal object-group isd 
+access-list noNAT extended permit ip object-group savLocal object-group savRemote 
+access-list noNAT extended permit ip object-group adrLab object-group isd 
+access-list noNAT extended permit ip object-group adrProd object-group isd 
+access-list noNAT extended permit ip object-group afsLocal object-group admLocal 
+access-list noNAT extended permit ip object-group adrLocal object-group admLocal 
+access-list noNAT extended permit ip object-group afsLocal object-group awiRemote 
+access-list noNAT extended permit ip object-group andLocal object-group isd 
+access-list noNAT extended permit ip object-group zurLocal object-group admLocal 
+access-list noNAT extended permit ip object-group zurLocal object-group tmxInternal 
+access-list noNAT extended permit ip object-group vpnLocal object-group cvpnZUR 
+access-list noNAT extended permit ip object-group zurLocal object-group isd 
+access-list noNAT extended permit ip object-group apwLocal object-group admLocal 
+access-list noNAT extended permit ip object-group apwLocal object-group tmxInternal 
+access-list noNAT extended permit ip object-group apwLocal object-group isd 
+access-list noNAT extended permit ip object-group dwrLocal object-group admLocal 
+access-list noNAT extended permit ip object-group dwrLocal object-group tmxInternal 
+access-list noNAT extended permit ip object-group dwrLocal object-group isd 
+access-list noNAT extended permit ip object-group dwrLocal object-group dwrRemote 
+access-list noNAT extended permit ip object-group ufaLocal object-group ufaRemote 
+access-list noNAT extended permit ip object-group ufaLocal object-group admLocal 
+access-list noNAT extended permit ip object-group ufaLocal object-group ufaRemote2 
+access-list noNAT extended permit ip object-group ufaLocal object-group ufaRemote3 
+access-list noNAT extended permit ip object-group racLocal object-group admLocal 
+access-list noNAT extended permit ip object-group racLocal object-group racRemote 
+access-list andOut extended permit ip object-group andLocal object-group vpnRemote 
+access-list andOut extended permit ip object-group andLocal object-group cvpnAND 
+access-list andOut extended permit ip object-group andLocal object-group admLocal 
+access-list andOut extended permit ip object-group andLocal object-group isd 
+access-list andOut extended permit tcp object-group andLocal object-group pivotLink eq ftp 
+access-list andOut extended permit tcp object-group andLocal object-group pivotLink eq ssh 
+access-list andOut extended permit ip object-group bhnLocal object-group bhnRemote 
+access-list bhnVPN extended permit ip object-group bhnNAT object-group bhnRemote 
+access-list termOut extended permit ip object-group termLocal object-group vpnRemote 
+access-list termOut extended permit ip object-group termLocal object-group admLocal 
+access-list sndOut extended permit ip object-group sndLocal object-group tmxInternal 
+access-list sndOut extended permit ip object-group paLocal object-group paRemote 
+access-list tmxInternal extended permit ip object-group sndLocal object-group tmxInternal 
+access-list paVPN extended permit ip object-group paLocal object-group paRemote 
+access-list admOut extended permit tcp object-group admLocal any object-group admOutTCP 
+access-list admOut extended permit udp object-group admLocal any object-group admOutUDP 
+access-list admOut extended permit ip object-group admLocal object-group vpnRemote 
+access-list admOut extended permit ip object-group admLocal object-group andLocal 
+access-list admOut extended permit ip object-group admLocal object-group termLocal 
+access-list admOut extended permit ip object-group admLocal object-group sdsLocal 
+access-list admOut extended permit ip object-group admLocal object-group savLocal 
+access-list admOut extended permit ip object-group admLocal object-group afsLocal 
+access-list admOut extended permit ip object-group admLocal object-group adrLocal 
+access-list admOut extended permit ip object-group admLocal object-group zurLocal 
+access-list admOut extended permit ip object-group admLocal object-group apwLocal 
+access-list admOut extended permit ip object-group admLocal object-group dwrLocal 
+access-list admOut extended permit ip object-group admLocal object-group ufaLocal 
+access-list admOut extended permit ip object-group admLocal object-group racLocal 
+access-list bhnPAT extended permit ip object-group bhnLocal object-group bhnRemote 
+access-list afsOut extended permit ip object-group afsLocal object-group vpnRemote 
+access-list afsOut extended permit ip object-group afsLocal object-group afsRemote 
+access-list afsOut extended permit ip object-group afsLocal object-group admLocal 
+access-list afsOut extended permit icmp object-group afsLocal object-group awiRemote 
+access-list afsOut extended permit ip object-group afsLocal object-group awiRemote 
+access-list adrOut extended permit ip object-group adrLocal object-group vpnRemote 
+access-list adrOut extended permit ip object-group adrLocal object-group admLocal 
+access-list adrOut extended permit ip object-group adrLocal object-group adrHQ 
+access-list adrOut extended permit ip object-group adrLab object-group isd 
+access-list adrOut extended permit ip object-group adrProd object-group isd 
+access-list adrOut extended permit ip object-group adrLocal object-group revionicsRemote 
+access-list adrOut extended permit ip object-group adrLocal any 
+access-list adrOut extended permit ip object-group adrProd object-group GEtran 
+access-list bhnPAT2 extended permit ip object-group bhnLocal object-group bhnRemote 
+access-list adrHQ extended permit ip object-group adrLocal object-group adrHQ 
+access-list sdsVPN extended permit ip object-group sdsLocal object-group sdsRemote 
+access-list sdsOut extended permit ip object-group sdsLocal object-group sdsRemote 
+access-list sdsOut extended permit tcp object-group sdsLocal object-group sdsPaymentech eq https 
+access-list sdsOut extended permit ip object-group sdsLocal object-group sdsFTP 
+access-list sdsOut extended permit tcp object-group sdsLocal any eq smtp 
+access-list sdsOut extended permit ip object-group sdsLocal object-group admLocal 
+access-list sdsOut extended permit ip object-group sdsLocal object-group vpnRemote 
+access-list sdsOut extended permit ip object-group sdsLocal object-group novaRemote 
+access-list sdsOut extended permit ip object-group sdsLocal object-group isd 
+access-list novaNAT extended permit ip object-group novaLocal object-group novaRemote 
+access-list novaVPN extended permit ip object-group novaNAT object-group novaRemote 
+access-list novaVPN extended permit ip object-group novaNAT2 object-group novaRemote 
+access-list afsVPN extended permit ip object-group afsLocal object-group afsRemote 
+access-list novaNAT2 extended permit ip object-group novaLocal2 object-group novaRemote 
+access-list savOut extended permit ip object-group savLocal object-group vpnRemote 
+access-list savOut extended permit ip object-group savLocal object-group admLocal 
+access-list savOut extended permit ip object-group savLocal object-group savRemote 
+access-list savOut extended permit ip host 10.9.16.8 any 
+access-list isdVPN extended permit ip object-group sdsLocal object-group isd 
+access-list isdVPN extended permit ip object-group adrLab object-group isd 
+access-list isdVPN extended permit ip object-group adrProd object-group isd 
+access-list isdVPN extended permit ip object-group andLocal object-group isd 
+access-list isdVPN extended permit ip object-group zurLocal object-group isd 
+access-list isdVPN extended permit ip object-group apwLocal object-group isd 
+access-list isdVPN extended permit ip object-group dwrLocal object-group isd 
+access-list savVPN extended permit ip object-group savLocal object-group savRemote 
+access-list awiVPN extended permit icmp object-group afsLocal object-group awiRemote 
+access-list awiVPN extended permit ip object-group afsLocal object-group awiRemote 
+access-list ufaVPN extended permit ip object-group ufaLocal object-group ufaRemote 
+access-list amexVPN extended permit ip object-group amexNAT object-group amexRemote 
+access-list amexPAT extended permit ip object-group amexLocal object-group amexRemote 
+access-list zurOut extended permit ip object-group zurLocal object-group vpnRemote 
+access-list zurOut extended permit ip object-group zurLocal object-group admLocal 
+access-list zurOut extended permit ip object-group zurLocal object-group isd 
+access-list apwOut extended permit ip object-group apwLocal object-group vpnRemote 
+access-list apwOut extended permit ip object-group apwLocal object-group admLocal 
+access-list apwOut extended permit ip object-group apwLocal object-group isd 
+access-list apwOut extended permit tcp object-group apwLocal object-group pivotLink eq ssh 
+access-list ufaOut extended permit ip object-group ufaLocal object-group ufaRemote 
+access-list ufaOut extended permit ip object-group ufaLocal object-group admLocal 
+access-list ufaOut extended permit ip object-group ufaLocal object-group vpnRemote 
+access-list ufaOut extended permit ip object-group ufaLocal object-group ufaRemote2 
+access-list ufaOut extended permit ip object-group ufaLocal object-group ufaRemote3 
+access-list ufaOut extended permit tcp object-group ufaLocalSFTP object-group ufaRemoteSFTP eq ssh 
+access-list dwrOut extended permit ip object-group dwrLocal object-group vpnRemote 
+access-list dwrOut extended permit ip object-group dwrLocal object-group admLocal 
+access-list dwrOut extended permit ip object-group dwrLocal object-group isd 
+access-list dwrOut extended permit ip object-group dwrLocal object-group dwrRemote 
+access-list dwrOut extended permit ip object-group comdataLocal object-group comdataRemote 
+access-list dwrVPN extended permit ip object-group dwrLocal object-group dwrRemote 
+access-list comdataVPN extended permit ip object-group comdataNAT object-group comdataRemote 
+access-list comdataPAT extended permit ip object-group comdataLocal object-group comdataRemote 
+access-list ufaVPN2 extended permit ip object-group ufaLocal object-group ufaRemote2 
+access-list ufaVPN3 extended permit ip object-group ufaLocal object-group ufaRemote3 
+access-list racOut extended permit ip object-group racLocal object-group vpnRemote 
+access-list racOut extended permit ip object-group racLocal object-group admLocal 
+access-list racOut extended permit ip object-group racLocal object-group racRemote 
+access-list racVPN extended permit ip object-group racLocal object-group racRemote 
+pager lines 24
+logging enable
+logging monitor warnings
+logging buffered debugging
+logging trap debugging
+logging asdm informational
+logging host TERM 10.24.74.13
+mtu External 1500
+mtu TERM 1500
+mtu AND 1500
+mtu SND 1500
+mtu AFS 1500
+mtu ADR 1500
+mtu SDS 1500
+mtu SAV 1500
+mtu ZUR 1500
+mtu APW 1500
+mtu UFA 1500
+mtu DWR 1500
+mtu ADM 1500
+mtu RAC 1500
+ip local pool AND 10.200.2.177-10.200.2.190
+ip local pool ZUR 10.200.2.193-10.200.2.206
+failover
+failover lan unit primary
+failover lan interface fail-link GigabitEthernet0/3
+failover interface ip fail-link 1.1.1.1 255.255.255.0 standby 1.1.1.2
+monitor-interface TERM
+monitor-interface AND
+monitor-interface SND
+monitor-interface AFS
+monitor-interface ADR
+monitor-interface SDS
+monitor-interface SAV
+monitor-interface ZUR
+monitor-interface APW
+monitor-interface DWR
+icmp unreachable rate-limit 1 burst-size 1
+asdm image disk0:/asdm-501.bin
+no asdm history enable
+arp timeout 14400
+global (External) 1 interface
+global (External) 3 172.22.130.50
+global (External) 4 172.22.130.51
+global (External) 2 66.133.118.24
+global (External) 5 66.133.118.10
+global (External) 6 66.133.118.30
+global (External) 6 66.133.118.31
+nat (TERM) 0 access-list noNAT
+nat (AND) 0 access-list noNAT
+nat (AND) 6 access-list bhnPAT
+nat (AND) 7 access-list bhnPAT2
+nat (AND) 1 10.9.15.128 255.255.255.240
+nat (SND) 0 access-list noNAT
+nat (AFS) 0 access-list noNAT
+nat (ADR) 0 access-list noNAT
+nat (ADR) 1 10.9.15.192 255.255.255.224
+nat (SDS) 0 access-list noNAT
+nat (SDS) 3 access-list novaNAT
+nat (SDS) 4 access-list novaNAT2
+nat (SDS) 1 10.24.74.208 255.255.255.240
+nat (SAV) 0 access-list noNAT
+nat (SAV) 1 10.9.16.8 255.255.255.255
+nat (ZUR) 0 access-list noNAT
+nat (ZUR) 1 10.9.16.32 255.255.255.224
+nat (APW) 0 access-list noNAT
+nat (APW) 1 10.9.16.64 255.255.255.224
+nat (UFA) 0 access-list noNAT
+nat (UFA) 1 10.9.16.160 255.255.255.224
+nat (DWR) 0 access-list noNAT
+nat (DWR) 5 access-list comdataPAT
+nat (DWR) 1 10.9.15.96 255.255.255.224
+nat (ADM) 0 access-list noNAT
+nat (ADM) 1 10.9.15.10 255.255.255.255
+nat (RAC) 0 access-list noNAT
+nat (RAC) 1 10.9.16.192 255.255.255.224
+access-group termOut in interface TERM
+access-group andOut in interface AND
+access-group afsOut in interface AFS
+access-group adrOut in interface ADR
+access-group sdsOut in interface SDS
+access-group savOut in interface SAV
+access-group zurOut in interface ZUR
+access-group apwOut in interface APW
+access-group ufaOut in interface UFA
+access-group dwrOut in interface DWR
+access-group admOut in interface ADM
+access-group racOut in interface RAC
+route External 0.0.0.0 0.0.0.0 66.133.118.1 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+snmp-server host ADM 10.9.15.10 community public
+no snmp-server location
+no snmp-server contact
+snmp-server community public
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+service resetoutside
+crypto ipsec transform-set 3desmd5 esp-3des esp-md5-hmac 
+crypto ipsec transform-set 3dessha esp-3des esp-sha-hmac 
+crypto ipsec transform-set aes256 esp-aes-256 esp-sha-hmac 
+crypto dynamic-map cvpn 1 set transform-set 3desmd5
+crypto dynamic-map cvpn 1 set reverse-route
+crypto map vpn 1 match address tmxVPN
+crypto map vpn 1 set peer 66.133.106.5 
+crypto map vpn 1 set transform-set 3desmd5
+crypto map vpn 2 match address tmxInternal
+crypto map vpn 2 set peer 208.177.140.5 
+crypto map vpn 2 set transform-set 3desmd5
+crypto map vpn 3 match address paVPN
+crypto map vpn 3 set peer 12.25.177.82 
+crypto map vpn 3 set transform-set 3desmd5
+crypto map vpn 6 match address adrHQ
+crypto map vpn 6 set peer 12.28.112.36 
+crypto map vpn 6 set transform-set 3desmd5
+crypto map vpn 8 match address sdsVPN
+crypto map vpn 8 set peer 67.128.237.205 
+crypto map vpn 8 set transform-set 3desmd5
+crypto map vpn 9 match address novaVPN
+crypto map vpn 9 set peer 198.203.192.170 
+crypto map vpn 9 set transform-set 3desmd5
+crypto map vpn 10 match address afsVPN
+crypto map vpn 10 set peer 63.226.84.109 
+crypto map vpn 10 set transform-set 3desmd5
+crypto map vpn 11 match address isdVPN
+crypto map vpn 11 set peer 69.214.17.66 
+crypto map vpn 11 set transform-set 3desmd5
+crypto map vpn 12 match address savVPN
+crypto map vpn 12 set peer 207.104.54.253 
+crypto map vpn 12 set transform-set 3desmd5
+crypto map vpn 13 match address bhnVPN
+crypto map vpn 13 set peer 64.75.23.1 
+crypto map vpn 13 set transform-set 3desmd5
+crypto map vpn 17 match address awiVPN
+crypto map vpn 17 set peer 65.216.228.2 
+crypto map vpn 17 set transform-set 3desmd5
+crypto map vpn 19 match address amexVPN
+crypto map vpn 19 set peer 12.10.219.57 
+crypto map vpn 19 set transform-set 3desmd5 3dessha
+crypto map vpn 19 set security-association lifetime seconds 3600
+crypto map vpn 20 match address dwrVPN
+crypto map vpn 20 set peer 209.125.57.139 
+crypto map vpn 20 set transform-set 3desmd5
+crypto map vpn 21 match address comdataVPN
+crypto map vpn 21 set peer 65.82.130.22 
+crypto map vpn 21 set transform-set aes256
+crypto map vpn 22 match address ufaVPN
+crypto map vpn 22 set peer 67.69.167.130 
+crypto map vpn 22 set transform-set 3desmd5
+crypto map vpn 23 match address ufaVPN2
+crypto map vpn 23 set peer 142.179.170.66 
+crypto map vpn 23 set transform-set 3desmd5
+crypto map vpn 24 match address ufaVPN3
+crypto map vpn 24 set peer 75.155.2.47 
+crypto map vpn 24 set transform-set 3desmd5
+crypto map vpn 25 match address racVPN
+crypto map vpn 25 set peer 67.214.249.50 
+crypto map vpn 25 set transform-set 3desmd5
+crypto map vpn 100 ipsec-isakmp dynamic cvpn
+crypto map vpn interface External
+crypto ca trustpoint MANUAL
+ enrollment terminal
+ crl configure
+crypto isakmp enable External
+crypto isakmp policy 1
+ authentication pre-share
+ encryption 3des
+ hash md5
+ group 2
+ lifetime 86400
+crypto isakmp policy 2
+ authentication pre-share
+ encryption 3des
+ hash sha
+ group 2
+ lifetime 86400
+crypto isakmp policy 3
+ authentication pre-share
+ encryption aes-256
+ hash sha
+ group 2
+ lifetime 86400
+crypto isakmp nat-traversal  20
+telnet timeout 5
+ssh 208.177.140.0 255.255.255.0 External
+ssh timeout 30
+console timeout 30
+management-access TERM
+group-policy DfltGrpPolicy attributes
+ banner none
+ wins-server none
+ dns-server none
+ dhcp-network-scope none
+ vpn-access-hours none
+ vpn-simultaneous-logins 3
+ vpn-idle-timeout none
+ vpn-session-timeout none
+ vpn-filter none
+ vpn-tunnel-protocol IPSec webvpn
+ password-storage disable
+ ip-comp disable
+ re-xauth disable
+ group-lock none
+ pfs disable
+ ipsec-udp disable
+ ipsec-udp-port 10000
+ split-tunnel-policy tunnelall
+ split-tunnel-network-list none
+ default-domain none
+ split-dns none
+ intercept-dhcp 255.255.255.255 disable
+ secure-unit-authentication disable
+ user-authentication disable
+ user-authentication-idle-timeout 30
+ ip-phone-bypass disable
+ leap-bypass disable
+ nem disable
+ backup-servers keep-client-config
+ msie-proxy server none
+ msie-proxy method no-modify
+ msie-proxy except-list none
+ msie-proxy local-bypass disable
+ nac disable
+ nac-sq-period 300
+ nac-reval-period 36000
+ nac-default-acl none
+ address-pools none
+ smartcard-removal-disconnect enable
+ client-firewall none
+ client-access-rule none
+ webvpn
+  functions url-entry
+  html-content-filter none
+  homepage none
+  keep-alive-ignore 4
+  http-comp gzip
+  filter none
+  url-list none
+  customization value DfltCustomization
+  port-forward none
+  port-forward-name value Application Access
+  sso-server none
+  deny-message value Login was successful, but because certain criteria have not been met or due to some specific group policy, you do not have permission to use any of the VPN features. Contact your IT administrator for more information
+  svc none    
+  svc keep-installer installed
+  svc keepalive none
+  svc rekey time none
+  svc rekey method none
+  svc dpd-interval client none
+  svc dpd-interval gateway none
+  svc compression deflate
+username NZurcher password c0z1a542RjuukqgB encrypted
+username root password GTJgz2A4EQd0h6TQ encrypted privilege 15
+username DZurcher password eVdW1JVHGGfxNOsq encrypted
+username andronicos password NdhVUTMC1kBrYstB encrypted
+username andronicos attributes
+ vpn-simultaneous-logins 14
+tunnel-group 66.133.106.5 type ipsec-l2l
+tunnel-group 66.133.106.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group and type ipsec-ra
+tunnel-group and general-attributes
+ address-pool AND
+tunnel-group and ipsec-attributes
+ pre-shared-key *
+tunnel-group 208.177.140.5 type ipsec-l2l
+tunnel-group 208.177.140.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group 12.25.177.82 type ipsec-l2l
+tunnel-group 12.25.177.82 ipsec-attributes
+ pre-shared-key *
+tunnel-group 209.125.57.139 type ipsec-l2l
+tunnel-group 209.125.57.139 ipsec-attributes
+ pre-shared-key *
+tunnel-group 64.75.23.1 type ipsec-l2l
+tunnel-group 64.75.23.1 ipsec-attributes
+ pre-shared-key *
+tunnel-group 12.28.112.36 type ipsec-l2l
+tunnel-group 12.28.112.36 ipsec-attributes
+ pre-shared-key *
+tunnel-group 198.203.192.170 type ipsec-l2l
+tunnel-group 198.203.192.170 ipsec-attributes
+ pre-shared-key *
+tunnel-group 63.226.84.109 type ipsec-l2l
+tunnel-group 63.226.84.109 ipsec-attributes
+ pre-shared-key *
+tunnel-group 69.214.17.66 type ipsec-l2l
+tunnel-group 69.214.17.66 ipsec-attributes
+ pre-shared-key *
+tunnel-group 207.104.54.253 type ipsec-l2l
+tunnel-group 207.104.54.253 ipsec-attributes
+ pre-shared-key *
+tunnel-group 67.128.237.205 type ipsec-l2l
+tunnel-group 67.128.237.205 ipsec-attributes
+ pre-shared-key *
+tunnel-group 12.10.219.57 type ipsec-l2l
+tunnel-group 12.10.219.57 ipsec-attributes
+ pre-shared-key *
+ isakmp keepalive threshold 3600 retry 5
+tunnel-group ZUR type ipsec-ra
+tunnel-group ZUR general-attributes
+ address-pool ZUR
+tunnel-group ZUR ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.216.228.2 type ipsec-l2l
+tunnel-group 65.216.228.2 ipsec-attributes
+ pre-shared-key *
+tunnel-group 12.193.203.34 type ipsec-l2l
+tunnel-group 12.193.203.34 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.82.130.22 type ipsec-l2l
+tunnel-group 65.82.130.22 ipsec-attributes
+ pre-shared-key *
+tunnel-group 67.69.167.130 type ipsec-l2l
+tunnel-group 67.69.167.130 ipsec-attributes
+ pre-shared-key *
+tunnel-group 142.179.170.66 type ipsec-l2l
+tunnel-group 142.179.170.66 ipsec-attributes
+ pre-shared-key *
+tunnel-group 75.155.2.47 type ipsec-l2l
+tunnel-group 75.155.2.47 ipsec-attributes
+ pre-shared-key *
+tunnel-group 67.214.249.50 type ipsec-l2l
+tunnel-group 67.214.249.50 ipsec-attributes
+ pre-shared-key *
+!
+class-map class_ftp
+ match port tcp eq ftp-data
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map global_policy
+ class inspection_default
+  inspect ftp 
+  inspect icmp 
+  inspect icmp error 
+ class class_ftp
+!
+service-policy global_policy global
+prompt hostname context 
+Cryptochecksum:34114af069e8f251ca6a035737d4606e
+: end

@@ -1,0 +1,27 @@
+!Generated on 01/08/2010 07:34:32
+!Active version: sg0810301
+
+configure
+
+
+!*************************** GLOBAL ***************************
+  username admin des-password wamebe3gbhggdgmfjaaaebgfbehe3ehh superuser 
+
+!************************* INTERFACE *************************
+interface  1/1
+  bridge vlan 225 
+
+interface  1/2
+  bridge vlan 226 
+
+interface Ethernet-Mgmt
+  admin-shutdown 
+
+!************************** CIRCUIT **************************
+circuit VLAN226
+
+  ip address 10.110.10.34 255.255.255.224 
+
+circuit VLAN225
+
+  ip address 10.110.10.6 255.255.255.224

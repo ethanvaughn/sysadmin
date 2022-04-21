@@ -1,0 +1,157 @@
+Device Data Structures
+
+
+
+getDeviceList
+	{hash}
+	afs01 => {hash},
+             hostname => 'afs01',
+             serialno => '1234',
+             comment  =>  "App Server",
+             .
+             .
+	afs02 => {hash},
+             hostname => 'afs02',
+             serialno => '1232',
+             comment  =>  "DB Server",
+             .
+             .
+	afs03 => {hash},
+             hostname => 'afs03',
+             serialno => '1233',
+             comment  =>  "RF Server",
+             .
+             .
+	.
+	.
+
+	$dev_list->{afs01}->{hostname} = "afs01"
+
+
+
+
+getDevicePropList
+	{hash}
+	afs01 => {hash},
+             id => {hash},
+                   name  => "Vendor",
+                   value => "Redhat"
+
+             id => {hash},
+                   name  => "Rack",
+                   value => "U32"
+             .
+             .
+
+	afs02 => {hash},
+             id => {hash}
+                   name  => "Vendor",
+                   value => "Dell"
+
+             id => {hash}
+                   name  => "Rack",
+                   value => "U33"
+             .
+             .
+	.
+	.
+
+	$dev_prop_list->{afs01}->{60}->{name}  = "Vendor"
+	$dev_prop_list->{afs01}->{60}->{value} = "Redhat"
+
+
+
+
+getDeviceAddrList
+	{hash}
+	afs01 => {hash},
+             id => {hash},
+                   type    => "PHYSICAL",
+                   ipaddr  => "169357361",
+                   adminip => "f"
+
+             id => {hash},
+                   type    => "NAT",
+                   ipaddr  => "169357362",
+                   adminip => "t"
+             .
+             .
+
+	afs02 => {hash},
+                   type    => "LOM",
+                   ipaddr  => "169357366",
+                   adminip => "f"
+
+             id => {hash},
+                   type    => "PHYSICAL",
+                   ipaddr  => "169357364",
+                   adminip => "t"
+             .
+             .
+	.
+	.
+
+	$dev_addr_list->{afs01}->{145}->{type}    = "PHYSICAL"
+	$dev_addr_list->{afs01}->{145}->{ipaddr}  = "169357361"
+	$dev_addr_list->{afs01}->{145}->{adminip} = "f"
+
+
+
+
+getDeviceOwnerList
+	{hash}
+	dw01 => {hash},
+             id   => "12",
+             code => "DW",
+             name => "Duckwall Alco"
+
+	dw02 => {hash},
+             id   => "12",
+             code => "DW",
+             name => "Duckwall Alco"
+
+	afs01 => {hash},
+             id   => "13",
+             code => "AFS",
+             name => "Associated Food Stores"
+
+	.
+	.
+
+	$dev_owner_list->{afs01}->{code} = "AFS"
+
+
+
+
+getDeviceUserList
+	{hash}
+	q16u21 => {hash},
+             id => {hash},
+	             code => "DW",
+	             name => "Duckwall Alco"
+
+             id => {hash},
+	             code => "AFS",
+	             name => "Associated Food Stores"
+             .
+             .
+
+	a20u13 => {hash},
+             id => {hash},
+	             code => "ZUR",
+	             name => "Zurchers"
+
+             id => {hash},
+	             code => "ATG",
+	             name => "Air Terminal Gifts"
+             .
+             .
+	.
+	.
+
+	$dev_user_list->{q16u21}->{12}->{code}  = "DW"
+	$dev_user_list->{q16u21}->{12}->{name}  = "Duckwall Alco"
+
+
+
+

@@ -1,0 +1,113 @@
+configs/README
+
+
+How to Use This Directory:
+-------------------------------------------------------------------------------
+1.  Modifying and save the config on the network device.
+
+
+2.  Update this CVS directory.
+
+        cvs -q up -d
+
+
+3.  Copy or capture the full config (method depends on the device).
+
+    NOTE: for cisco routers start with the line immeidately after
+          the "show run" and stop with the "end" line.
+
+
+4.  Edit the appropriate file here and overwrite it with the new config.
+
+    Note: Try to keep the same format as the previous configs. This will 
+    allow us to use diff where possible.
+
+
+5.  Commit your changes
+
+        cvs ci -m "change message here" filename
+
+        eg.
+
+        cvs ci -m "added outbound port 7777 for inside interface" internal/tmxfw01
+
+
+
+
+
+General CVS Usage Reference:
+===============================================================================
+
+
+Adding a New File 
+-------------------------------------------------------------------------------
+    1. Copy the config text file into the configs/ directory.
+
+    2. Add the new file to the CVS repository:
+
+        cvs add newfile
+
+    3. Commit the new file:
+
+        cvs ci -m "change log message" newfile
+
+
+
+
+Committing a Revision
+-------------------------------------------------------------------------------
+    1. Copy the config text file into the configs/ directory
+       so that it overwrites the existing file.
+
+	2. Commit the changes:
+
+        cvs ci -m "change log message" ap07u16
+
+
+
+
+Checking for Local Revisions
+-------------------------------------------------------------------------------
+	Use the update subcommand to look at the status of the local repo:
+
+        cvs -q up 
+
+        [root@U19U33 configs]# cvs -q up 
+        M README
+        M ap07u16
+        ? aq07u43
+
+    M = File has been modified locally and needs to be committed.
+    ? = File has not yet been added to the repo.
+
+
+
+
+Viewing Revision History
+-------------------------------------------------------------------------------
+	1. Run the "log" subcommand.
+
+        cvs log ap07u16
+
+        RCS file: /u01/app/sarepo/sysadmin/configs/ap07u16,v
+        Working file: ap07u16
+        head: 1.2
+        branch:
+        locks: strict
+        access list:
+        symbolic names:
+        keyword substitution: kv
+        total revisions: 2;     selected revisions: 2
+        description:
+        ----------------------------
+        revision 1.2
+        date: 2008/07/24 17:56:28;  author: evaughn;  state: Exp;  lines: +73 -10
+        2008-10
+        ----------------------------
+        revision 1.1
+        date: 2008/07/24 17:55:57;  author: evaughn;  state: Exp;
+        2006-06-20
+        =============================================================================
+    
+	Note: In this example the change log messages are the dates the configs were saved.
+    

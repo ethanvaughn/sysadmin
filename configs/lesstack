@@ -1,0 +1,291 @@
+Building configuration...
+
+Current configuration : 5959 bytes
+!
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+service password-encryption
+!
+hostname lesstack
+!
+enable secret 5 $1$2BeB$zOsqWpeg0dxYXePhk3cwW/
+!
+no aaa new-model
+clock timezone MST -7
+switch 1 provision ws-c3750g-24t
+switch 2 provision ws-c3750g-24t
+ip subnet-zero
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+no file verify auto
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+interface Port-channel1
+ description lesnas01
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel2
+ description lesnas02
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/1
+ description leslb01-ge1
+ switchport access vlan 219
+!
+interface GigabitEthernet1/0/2
+ description leslb01-ge2
+ switchport access vlan 220
+!
+interface GigabitEthernet1/0/3
+ description les07-gb1
+ switchport access vlan 220
+!
+interface GigabitEthernet1/0/4
+ description lesvm01-gb1
+ switchport access vlan 219
+!
+interface GigabitEthernet1/0/5
+ description lesvm01-gb2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/6
+ description les09 GB1
+ switchport access vlan 220
+!
+interface GigabitEthernet1/0/7
+ description les10 GB1
+ switchport access vlan 220
+!
+interface GigabitEthernet1/0/8
+ description les06-gb1
+ switchport access vlan 220
+!
+interface GigabitEthernet1/0/9
+ description les 3120 uplink 1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/10
+ description lesvm01-hba
+ switchport access vlan 221
+!
+interface GigabitEthernet1/0/11
+ description lesvm01-pci1a
+ switchport access vlan 221
+ switchport mode access
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/12
+ description les07-hba
+ switchport access vlan 221
+!
+interface GigabitEthernet1/0/13
+ description les06-hba
+ switchport access vlan 221
+ switchport mode access
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/14
+ description lesvm01-pci1b
+ switchport access vlan 221
+!
+interface GigabitEthernet1/0/15
+ description lesnas02 - e0a
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode on
+!
+interface GigabitEthernet1/0/16
+ description lesnas02 - e0b
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode on
+!
+interface GigabitEthernet1/0/17
+ description lesnas01 - e0a
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface GigabitEthernet1/0/18
+ description lesnas01 - e0b
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface GigabitEthernet1/0/19
+ description les10 - pci1a
+ switchport access vlan 221
+!
+interface GigabitEthernet1/0/20
+ description les10 - gb2
+ switchport access vlan 221
+!
+interface GigabitEthernet1/0/21
+ description les10 - hba
+ switchport access vlan 221
+!
+interface GigabitEthernet1/0/22
+ description les09 - pci1a
+ switchport access vlan 221
+!
+interface GigabitEthernet1/0/23
+ description les09 - gb2
+ switchport access vlan 221
+!
+interface GigabitEthernet1/0/24
+ description les09 - hba
+ switchport access vlan 221
+!
+interface GigabitEthernet2/0/1
+ description leslb02-ge1
+ switchport access vlan 219
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/2
+ description leslb02-ge2
+ switchport access vlan 220
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/3
+ description les02 - gb1
+ switchport access vlan 220
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/4
+ description les03 - gb1
+ switchport access vlan 220
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/5
+ description les04 - gb1
+ switchport access vlan 220
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/6
+ description les05 - gb1
+ switchport access vlan 220
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/7
+ description les01-gb1
+ switchport access vlan 220
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/8
+ description free-port
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/9
+ description les 3120 uplink 2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet2/0/10
+ description les08 - gb2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/11
+ description free-port
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/12
+ description free-port
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/13
+ description free-port
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/14
+ description free-port
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/15
+ description free-port
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/16
+ description les05-hba
+ switchport access vlan 221
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/17
+ description les04-hba
+ switchport access vlan 221
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/18
+ description les03-hba
+ switchport access vlan 221
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/19
+ description les02 - pci1a
+ switchport access vlan 221
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/20
+ description les02 - gb2
+ switchport access vlan 221
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/21
+ description les02 - hba
+ switchport access vlan 221
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/22
+ description les01-pci1a
+ switchport access vlan 221
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/23
+ description les01-gb2
+ switchport access vlan 221
+ spanning-tree portfast
+!
+interface GigabitEthernet2/0/24
+ description les01-hba
+ switchport access vlan 221
+ spanning-tree portfast
+!
+interface Vlan1
+ no ip address
+!
+ip classless
+no ip http server
+ip http secure-server
+!
+!
+control-plane
+!
+!
+line con 0
+ session-timeout 30
+line vty 0 4
+ no login
+ transport input ssh
+line vty 5
+ no login
+ transport input none
+line vty 6 15
+ login
+ transport input none
+!
+end

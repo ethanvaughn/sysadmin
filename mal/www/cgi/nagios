@@ -1,0 +1,85 @@
+#!/usr/bin/perl -w
+
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+
+#use CGI qw(:standard);
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+
+use dao::saconnect;
+use www::cgi::helpers;
+use lib::mal;
+
+use strict;
+
+#---- Globals ----------------------------------------------------------------
+my $cgi = new CGI;
+#my $self_url = $cgi->url(-absolute => 1);
+my $htmlview;
+
+my $ACTION = $cgi->param( 'action' );
+if (!$ACTION) {
+	# Set to the default action:
+	$ACTION = "check";
+}
+
+my $tabmenu;
+my $vars = $cgi->Vars;
+my $msg;
+
+# CONNECT To The Database
+my $dbh = dao::saconnect::connect();
+www::cgi::helpers::chkDB( $dbh );
+
+
+
+#---- Main -------------------------------------------------------------------
+
+
+#---- Controller Engine ------------------------------------------------------
+# Route based on action. Each condition performs whatever data logic it 
+# requires, then loads and inits an HTML::Template. The template is 
+# instantiated at the end of the condition block ($htmlview->output).
+
+#---- check --------------------------
+if ($ACTION eq "check") {
+	# Set dummy values that will return zeros if no host or service is proviced.
+	my $hostname    = "defaulthost";
+	my $servicename = "defaultservice";
+
+	# Get the host and service values from querystr:
+	$hostname    = $cgi->param( 'h' ) if ($cgi->param( 'h' ));
+	$servicename = $cgi->param( 's' ) if ($cgi->param( 's' ));
+
+	my $data = lib::mal::getOpenListByService( $dbh, $hostname, $servicename );
+
+	my $crit_cnt = 0;
+	my $warn_cnt = 0;
+	# Check for level WARN vs. CRIT
+	foreach my $rec (@$data) {
+		if ( $rec->{level} eq "CRIT" ) {
+			$crit_cnt++;
+		} else {
+			$warn_cnt++;
+		}
+	}
+
+	print $cgi->header( 'text/plain' );
+	print "$crit_cnt,$warn_cnt\n";
+	
+#---- unknown --------------------------
+} else {
+	print $cgi->header( 'text/plain' );
+	print STDERR "Unknown ACTION in mal::nagios. ACTION=[$ACTION]\n";
+}
+#---- END Controller Engine ------------------------------------------------------
+
+
+
+if ($dbh) {
+	dao::saconnect::disconnect( $dbh );
+}
+
+
+exit (0);

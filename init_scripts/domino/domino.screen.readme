@@ -1,0 +1,58 @@
+------------------------------------------------------
+Domino Init Script Usage:
+------------------------------------------------------
+
+	[root@X19U23 root]# service domino
+	Usage: /etc/init.d/domino {start|stop|restart|status}
+
+The script consists of two parts, the domino init script located in "/etc/init.d/" and a helper script located in "/u01/app/lotus/" called "domino.screen.startup". 
+
+Rather than using the "nohup" utility, i went another route and employed the "screen" utility. Like "nohup", the "screen" util allows us to park the Domino console in the background, but with the added benefit that we can log into the box as the "notes" user and attach to the console at any time. 
+
+After logging in as "notes", just issue the following command to connect to the console:
+	
+	screen -r -S Domino
+
+To exit (detach) from the console use the escape sequence: CTRL-A d
+
+Also, starting/stopping the domino server is integrated into the "chkconfig" util which allows you to enable Domino to startup/shutdown with the system's runlevels. We no longer must  manually log in and shutdown Domino before rebooting: the system will shut Domino down and start it up like other services. 
+
+Note: You do need root access to start the Domino server in this manner, just like any other init.d script. Also, if Domino has been started using a different method, there is no guarantee that the "stop" command will work*.
+
+You can get a copy of the domino init script in the following directory of our beloved U19U9 "basestar" server:
+
+	/root/installs/domino/scripts/
+
+* The "stop" command  will consistently shutdown a Domino server that has been started with the "nohup" method. However, other methods, specifically using the "server -jc -c" command could cause problems with shutdown. 
+
+
+
+
+------------------------------------------------------
+Original Info 
+------------------------------------------------------
+
+
+File Name: Domino Server Startup Scripts for Linux
+Category: Linux, Lotus Notes
+
+Description: Startup scripts for starting/stoping a Domino Server on a Linux system.
+
+Comments: These are working on a Red Hat Linux 7.3 system running the Domino 6.0.1 server. They are an amalgamation of startup scripts seen on the Lotus Developer Domain (www.notes.net) and other IBM/Lotus forums, news groups, and publications. Their function is obvious but powerful.
+
+Body: The "domino" script goes into the /etc/rc.d/init.d directory. It gets linked to as follows:
+
+ln -s /etc/rc.d/init.d/domino /etc/rc.d/rc3.d/S98domino
+ln -s /etc/rc.d/init.d/domino /etc/rc.d/rc0.d/K05domino
+ln -s /etc/rc.d/init.d/domino /etc/rc.d.rc1.d/K05domino
+ln -s /etc/rc.d/init.d/domino /etc.rc.d/rc6.d/K05domino
+
+(in other words, start up for runlevel 3 (normal startup), take down for runlevel 1 (single user or maintenance mode), runlevel 0 (system halt), or runlevel 6 (system reboot)).
+
+The "startup" script executes in a shell under the server's userid. It makes its current directory the notes data directory, and starts the "server" process.
+
+You may need to change the directory paths or other parameters in the scripts if the userid you run the server under is not "notes", the Domino code is not at "/opt/lotus", or the notes data directory is not "/local/notesdata". No attempt has been made to factor out these parameters.
+
+domino startup
+
+These scripts use the "screen" command to run the server detached where the console can be attached to and commands directly entered if required. Attach to the console by logging onto the Linux box with the "notes" userid, and attach with the command "screen -r -S Domino". Release from the console before logging off with the keystrokes "Cntl-A d". For more information see "man screen".

@@ -1,0 +1,22 @@
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=dataset>.css" />
+</head>
+<body>
+<table>
+<caption>Archived Performance Reports by Year</caption>
+<tr>
+<td>
+<ul class="portal">
+<tmpl_loop name=desc>
+	<li><a href="readarchive.pl?year=<tmpl_var name=year>"><tmpl_var name=year></a></li>
+</tmpl_loop>
+</ul>
+</td>
+</tr>
+<table>
+</body>
+</html>
+

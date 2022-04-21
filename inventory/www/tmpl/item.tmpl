@@ -1,0 +1,175 @@
+<tmpl_include name = "../tmpl/header.tmpl">
+
+<div id="nav">
+	<tmpl_if name="ADMIN">
+		<a class="button" href="main?action=detailnew">Add New Item</a>
+		<a class="button" href="company">Company Maint</a>
+		<a class="button" href="property">Property Maint</a>
+		<a class="button" href="template">Template Maint</a>
+	</tmpl_if>
+</div>
+
+<div id="subtitle">
+	<h1>Item Detail</h1>
+	<h2><tmpl_var name='subtitle'></h2>
+</div>
+
+
+
+<tmpl_if name="debug">
+	<div id="debug" style="border: thick solid blue;">
+		<h3>D e b u g</h3>
+		<div>
+			<tmpl_var name="debug">	
+		</div>
+	</div>
+</tmpl_if>
+
+<form id="mainform" method="POST" action="main">
+
+<div class="notebox" style="width:782px;">
+	<span style="">Template:</span><tmpl_var name='select_tmpl'>
+</div>
+
+
+
+
+
+<div id="content-columns">
+<tmpl_if name="ADMIN">
+	<div class="buttonrow" style="width:772px">
+		<tmpl_if name="ADD">
+			<input type="submit" value="Add New Item">
+		<tmpl_else>
+			<input type="submit" value="Update">
+		</tmpl_if>
+	</div>
+</tmpl_if>
+
+<div id="twocol-left">
+	<tmpl_if name="msg">
+		<div class="message">
+		<tmpl_var name="msg">
+		</div>
+	</tmpl_if>
+
+	<table>
+	<tmpl_unless name="ADD">	
+	<tr>
+		<td>Unique ID:</td>
+		<td><tmpl_var name='id'></td>
+	</tr>
+		<tmpl_if name='auth_check'>
+		<tr>
+			<td>Last Auth Update:</td>
+			<td><div<tmpl_var name='warn'> style="display:inline;margin:0px;padding:4px;width:240px;"><tmpl_var name='auth_check'></div></td>
+		</tr>
+		</tmpl_if>
+	</tmpl_unless>
+
+		<tmpl_if name="ADD">
+			<input type="hidden" name="action" value="add">
+		<tmpl_else>
+			<input type="hidden" name="action" value="update">
+			<input type="hidden" name="id" value="<tmpl_var name='id'>">
+		</tmpl_if>
+<!--		<input type="hidden" name="sessid" value="<tmpl_var name='sessid'>"> -->
+
+
+		<tr>
+			<td>Item Name:</td>
+			<td>
+				<input <tmpl_if name="DISABLED">disabled</tmpl_if> 
+				tabindex=1 class="stdw" type="text" name="itemname" value="<tmpl_var name='itemname'>">
+			</td>
+		</tr>
+		<tr>
+			<td>Serial Number:</td>
+			<td>
+				<input <tmpl_if name="DISABLED">disabled</tmpl_if> 
+				tabindex=2 class="stdw" type="text" name="serialno" value="<tmpl_var name='serialno'>">
+			</td>
+		</tr>
+		<tr>
+			<td>Comment:</td>
+			<td>
+				<input <tmpl_if name="DISABLED">disabled</tmpl_if> 
+				tabindex=3 class="stdw" type="text" name="comment" value="<tmpl_var name='comment'>">
+			</td>
+		</tr>
+		<tr>
+			<td>Owner:</td>
+			<td><tmpl_var name="select_owner"></td>
+		</tr>
+
+		<tmpl_if name="DISPLAY_USERS">
+			<tr>
+				<td>Users:</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><tmpl_var name="select_users"></td>
+			</tr>
+		</tmpl_if>
+
+		<tr>
+			<td><h3>Properties:</h3></td>
+			<td></td>
+		</tr>
+
+		<tmpl_var name="proprows">
+		
+	</table>
+</div>
+
+
+
+<div id="twocol-right">
+	<tmpl_unless name="HIDE_IFACE">
+		<div class="stickynote" style="width: 100%;">
+			<div class="notebox" style="float:none">Interfaces</div>
+			<table>
+			<tmpl_loop name="iploop">
+			<tr>
+				<td><tmpl_if name=adminip><tmpl_var name="flag"></tmpl_if></td>
+			    <td><a href="../addr/ipaddr?action=detail&id=<tmpl_var name='id'>"><tmpl_var name="ipaddr"></a></td>
+				<td><tmpl_var name="iptype"></td>
+				<td><tmpl_var name="comment"></td>
+			</tr>
+			</tmpl_loop>
+			</table>
+		</div>
+	</tmpl_unless>
+
+	<div class="notebox" style="width: 100%;">
+		Notes
+		<textarea <tmpl_if name="DISABLED">disabled</tmpl_if> tabindex=200 name="notes" style="width: 100%" rows="10"><tmpl_var name='notes'></textarea>
+	</div>
+	
+	
+	<tmpl_if name="ADMIN">
+		<div class="notebox" style="width: 100%;">
+			Admin Notes:
+			<textarea <tmpl_if name="DISABLED">disabled</tmpl_if> tabindex=200 style="width: 100%;" name="admin_notes" rows="10"><tmpl_var name='admin_notes'></textarea>
+		</div>
+	</tmpl_if>
+
+</div>
+
+<tmpl_if name="ADMIN">
+	<div class="buttonrow" style="width:772px">
+		<tmpl_if name="ADD">
+			<input tabindex=300 type="submit" value="Add New Item">
+		<tmpl_else>
+			<input tabindex=300 type="submit" value="Update">
+		</tmpl_if>
+	</div>
+</tmpl_if>
+</div>
+
+
+
+</form>
+
+<tmpl_include name = "../tmpl/footer.tmpl">

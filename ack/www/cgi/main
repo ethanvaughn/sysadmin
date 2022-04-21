@@ -1,0 +1,328 @@
+#!/usr/bin/perl
+
+############################################################################################################
+#
+# Purpose:	UI controller for ACK tool
+#
+# $Id: main,v 1.5 2009/07/31 05:17:13 evaughn Exp $
+# $Date: 2009/07/31 05:17:13 $
+#
+############################################################################################################
+
+use strict;
+
+use CGI;
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use HTML::Template;
+#use threads;
+#use threads::shared;
+use FindBin qw( $Bin );
+use lib "$Bin/../..";
+use lib::ack;
+
+
+# Configuration Directives
+my $refresh_interval = 60;					# How often the page should refresh
+my $server_list_file = "$Bin/../../conf/servers.cfg";		# Config file listing each monitoring server
+my $groups_list_file = "$Bin/../../conf/groups.cfg";		# Config file listing groups / GIDs
+my $oncall_cfg_file  = "$Bin/../../conf/oncall.cfg";		# Config file listing groups / GIDs
+my $url = '/pcgi/ack';
+
+
+#----- Globals ---------------------------------------------------------------
+my $cgi = new CGI;
+my $self_url = $cgi->url( -absolute => 1 );
+my $ACTION = $cgi->param( 'action' );
+
+
+
+#----- mkProblemRows --------------------------------------------------------
+# Generate the rows of the problem table for each record in the problems array.
+sub mkProblemRows {
+	my $group    = shift;
+	my $username = shift;
+	my $problems = shift;
+
+	my $problem_rows = "";
+	for (my $i=0; $i<scalar( @$problems ); $i++) {
+		my $addl_info = qq|<a href="#" onClick="javascript:showLongOutput('| . 
+			@$problems[$i]->{long_output}  . qq|');return false;">| .
+			@$problems[$i]->{short_output} . qq|</a>|;
+		
+		my $severity_class = "critical";
+		$severity_class = "warning" if (exists( @$problems[$i]->{iswarning} )); 
+		
+		my $altrow = "";
+		$altrow = "class=altrow" if ($i%2 == 0);
+		
+		$problem_rows .= "<tr $altrow>";
+
+		if (exists( @$problems[$i]->{host} )) {
+			# Host Alert
+			# Set the checkbox variables:
+			$problem_rows .= qq|<td class=$severity_class><input type=checkbox name=problem value='action:ack|;
+			$problem_rows .= qq|,type:host|;
+			$problem_rows .= qq|,server:|   . @$problems[$i]->{nagios_ip};
+			$problem_rows .= qq|,host:|     . @$problems[$i]->{hostname};
+			$problem_rows .= qq|,user:|     . $username;
+			$problem_rows .= qq|'></td>|;
+
+			# Set the table fields:
+			$problem_rows .= "<td>" . @$problems[$i]->{category} . "</td>";
+			$problem_rows .= "<td>" . @$problems[$i]->{severity} . "</td>";
+			$problem_rows .= "<td>" . @$problems[$i]->{hostname} . "</td>";
+			$problem_rows .= "<td>" . @$problems[$i]->{hostdesc} . "</td>";
+			$problem_rows .= "<td>" . @$problems[$i]->{hostip}   . "</td>";
+			$problem_rows .= "<td>N/A</td>";
+			$problem_rows .= "<td>$addl_info</td>";
+		} else {
+			# Service Alert
+			# Set the checkbox variables:
+			$problem_rows .= qq|<td class=$severity_class><input size=1 type=checkbox name=problem value='action:|;
+#			if ($group ne "sysadmin") {
+#				$problem_rows .= qq|maint|;
+#			} else {
+#				$problem_rows .= qq|ack|;
+#			}
+			if ($severity_class eq "critical" && $group ne "sysadmin") {
+				$problem_rows .= qq|maint|;
+			} else {
+				$problem_rows .= qq|ack|;
+			}
+
+			$problem_rows .= qq|,type:service|;
+			$problem_rows .= qq|,ack_type:| . @$problems[$i]->{ack_type};
+			$problem_rows .= qq|,server:|   . @$problems[$i]->{nagios_ip};
+			$problem_rows .= qq|,host:|     . @$problems[$i]->{hostname};
+			$problem_rows .= qq|,service:|  . @$problems[$i]->{servicedesc};
+			$problem_rows .= qq|,user:|     . $username;
+			$problem_rows .= qq|'></td>|;
+  	
+			# Set the table fields:
+	  		$problem_rows .= "<td>" . @$problems[$i]->{category}    . "</td>";
+	  		$problem_rows .= "<td>" . @$problems[$i]->{severity}    . "</td>";
+	  		$problem_rows .= "<td>" . @$problems[$i]->{hostname}    . "</td>";
+	  		$problem_rows .= "<td>" . @$problems[$i]->{hostdesc}    . "</td>";
+	  		$problem_rows .= "<td>" . @$problems[$i]->{hostip}      . "</td>";
+	  		$problem_rows .= "<td>" . @$problems[$i]->{servicedesc} . "</td>";
+	  		$problem_rows .= "<td>$addl_info</td>";
+  		}
+
+		$problem_rows .= qq|</tr>\n|;
+
+	}#for
+
+
+	return $problem_rows;
+}
+
+
+#----- showProblems ----------------------------------------------------------
+sub showProblems {
+	my $group_name = shift;
+	my $username   = shift;
+
+	my $problem_rows;
+
+	# Query the monitoring servers
+	my ($problems, $servers) = lib::ack::queryServers( $server_list_file );
+	my $oncall_list = lib::ack::queryOnCallServer( $oncall_cfg_file );
+	if (ref( $problems ) ne 'ARRAY' || ref( $servers ) ne 'ARRAY') {
+		die 'showProblems($group_name): $_[0],$_[1] expected as array refs';
+	}
+	
+	
+	# Set the base template:
+	my $template = newTemplate('../tmpl/main.tmpl');
+
+	# $problems is an array ref of hashes, where each hash is a problem
+	# Short circuit: If $problems is empty, no point in parsing it out
+	# based on group assignments
+
+	# VERY IMPORTANT NOTE!!!! (PLEASE READ THIS, WHOEVER YOU ARE)
+	# As tempting as it might be to use a foreach to iterate the array
+	# of problems, you'll trigger all sorts of nasty Perl errors if you do.
+	# (at least, as of Perl version 5.8.5)  Why? This array of hashes is no
+	# ordinary array: it's been modified to be thread-safe.  Perl's foreach gets
+	# all messed up as it attempts to alias a thread-safe (shared) variable to a
+	# non-shared variable on each pass in the loop.  The only way around this
+	# (as of 5.8.5) is to NOT use a foreach and iterate the array by index instead.
+
+
+#if ($group_name eq 'dba') {
+#	my @temp_problems; # Temporary array to store the filtered problems
+#	my $has_critical = 0;
+#	for (my $i = 0; $i < scalar( @$problems ); $i++) {
+#		# If the category of this problem is DBA, it will get stored @temp_problems,
+#		# which will later be set to @problems, which is what will get set in the
+#		# template. This effectively removes all non-DBA problems from the list
+#
+#		if (!exists( @$problems[$i]->{host} )) {
+#			if (@$problems[$i]->{severity} eq 'CRITICAL') {
+#				# ACKs for critical should be sticky
+#				@$problems[$i]->{ack_type} = 'sticky';
+#			} else {	
+#				# Either WARNING or UNKNOWN, both non-sticky ACKs
+#				@$problems[$i]->{ack_type} = 'nonsticky';
+#			}
+#		}
+#
+#		if (@$problems[$i]->{category} eq 'DBA') {
+#			# Some environments that do not have remote SA services
+#			# go to the DBAs for everything.  Where that is the case,
+#			# they need to be able to ACK these instead of just
+#			push( @temp_problems, @$problems[$i] );
+#		}
+#		
+#		# TODO: this doesn't make sense to me ... does this mean that has_criical will 
+#		# ALWAYS be set???  -- ev 20080226
+#		if (!$has_critical) {
+#			if (!exists( @$problems[$i]->{iswarning} )) {
+#				$has_critical = 1;
+#			}
+#		}
+#	}
+#	# Now set $problems to \@temp_problems, our shortened list
+#	$problems = \@temp_problems;
+#	if (!$has_critical) {
+#		$template->param( hide_ack_button => 1 ); # Only show the ACK button if there's something to ACK
+#	}		
+#} elsif ($group_name eq 'sysadmin') {
+		# Iterate all of the problems:
+		# For each problem,
+		#  if host problem, do nothing -- ack type will be set to sticky automagically
+		#  otherwise for service probs, if severity != critical, ack_type = nonsticky (WARNING/UNKNOWN)
+		#  else, ack_type = sticky (CRITICAL)
+		# See nagios docs for the difference between sticky/non-sticky ACKs
+		for (my $i = 0; $i < scalar( @$problems ); $i++) {
+			if (!exists( @$problems[$i]->{host} )) {
+				# If this is NOT a host problem, we will set ack_type
+				if (@$problems[$i]->{severity} eq 'CRITICAL') {
+					# ACKs for critical should be sticky
+					@$problems[$i]->{ack_type} = 'sticky';
+				} else {	
+					# Either WARNING or UNKNOWN, both non-sticky ACKs
+					@$problems[$i]->{ack_type} = 'nonsticky';
+				}
+			}
+		}
+		
+#	} else {
+#		# Unknown group.  This means the group was defined in the config file, the user
+#		# was mapped to it by the lib::ack functions, but there's no case to handle it here.
+#		# This should never happen and means you, the maintainer of this app, are an idiot.
+#		die 'getProblemList(): Uncaught exception in unknown group:'.$group_name;
+#	}
+	
+	# Add a link to the URL that lists all problems.
+	# (This array has been through threads, therefore cannot be iterated by 
+	# foreach'd aliases either.)
+	for (my $i = 0; $i < scalar( @$servers ); $i++) {
+		my $path = qq|/nagios/cgi-bin/status.cgi?hostgroup=all&style=detail&servicestatustypes=28&hoststatustypes=15|;
+		my $link = qq|<a target="_blank" class="info" href="http://| . @$servers[$i]->{ip} . $path . qq|"><img src="../commonhtml/images/report_icon.gif"><span>View a list of all outstanding problem alerts.<br/><br/>username: "guest"<br/>no password.</span></a>|;
+		delete( @$servers[$i]->{ip} );
+		@$servers[$i]->{listlink} = $link;	
+	}
+
+
+	# Generate the output rows:
+	$problem_rows = mkProblemRows( $group_name, $username, $problems );
+
+	# Now add all the remaining elements to the template
+#	if (scalar( @$problems ) < 1) {
+#		# Only show the ACK button if there's something to ACK
+#		$template->param( hide_ack_button => 1 );
+#	}		
+	$template->param( subtitle     => "Acknowledge Problem Alerts" );
+	$template->param( username     => $username );
+	$template->param( cgi          => $self_url );
+	$template->param( problem_rows => $problem_rows );
+	$template->param( status       => $servers );
+	$template->param( oncall_list  => $oncall_list );
+	$template->param( current_time => scalar( localtime( time ) ) );
+
+	outputHTML( $template, $refresh_interval );
+}
+
+
+
+#----- outputHTML ------------------------------------------------------------
+sub outputHTML {
+	my ($template, $interval) = @_;
+	if ($interval) {
+		print 'Refresh:',$interval,"\n";		# Causes this page to reload at the specified interval
+	}
+	print 'Content-type:text/html',"\n\n";
+	print $template->output();
+}
+
+
+
+#----- newTemplate -----------------------------------------------------------
+sub newTemplate {
+	my $filename = shift;
+	return HTML::Template->new( filename=>$filename, loop_context_vars=>1, global_vars=>1 );
+}
+
+
+
+
+#----- main ------------------------------------------------------------------
+my $username = $ENV{'REMOTE_USER'};
+if (!$username) {
+	$username = 'UNKNOWN USER';
+	# This is not a valid user: only groups listed in $groups_list_file
+	# are allowed to use this tool!
+	my $template = newTemplate( '../tmpl/invalid_user.tmpl' );
+	$template->param( username => $username );
+	outputHTML( $template, 0 );
+	exit (1);
+}
+
+my $user_group = lib::ack::getUserGroup( $groups_list_file, $username );
+if (!defined( $user_group )) {
+	my $template = newTemplate( '../tmpl/invalid_user.tmpl' );
+	$template->param( username => $username );
+	outputHTML( $template, 0 );
+	exit (1);
+}	
+	
+	
+if (defined( $ACTION )) {
+	# if $ACTION is set to 'ack', that doesn't mean we're going to ACK the problem
+	# per-say.  This invokes the ACK functions, which depending on who is using the
+	# tool and what they want to ACK, will take the appropriate sub-action here.
+	# (i.e, 1 hour maintenance window on servies, ACK a down host, etc. etc. etc.)
+	if ($ACTION eq 'ack') {
+		# We need to see if the user actually selected any problems
+		my @problems = $cgi->param( 'problem' );
+		if (scalar( @problems ) > 0) {
+			# At least one problem was selected.
+			# Display refresh page while ACKs are sent in the background
+			my $template = newTemplate('../tmpl/refresh.tmpl');
+			$template->param( cgi => $self_url );
+			# The refresh page has its own refresh interval and causes a page
+			# reload with a meta refresh tag, as opposed to a HTTP header.  So
+			# refresh is set to 0 (disabled) here
+			outputHTML( $template, 0 );
+			lib::ack::sendCommands( \@problems );
+			exit (0);
+		}
+	} elsif ($ACTION eq 'show') {
+		my $output = $cgi->param('output');
+		if (defined( $output )) {
+			my $template = newTemplate('../tmpl/long_output.tmpl');
+			$template->param( long_output => $output );
+			outputHTML( $template, 0 );
+			exit (0);			
+		} 
+	} else {
+		# Uncaught exception: shouldn't happen under normal circumstances
+		die 'Uncaught exception: no case for ACTION:'.$ACTION;
+	}
+}
+
+# Default: show the main screen.  
+showProblems( $user_group, $username );
+
+exit (0);

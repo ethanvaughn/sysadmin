@@ -1,0 +1,703 @@
+: Saved
+:
+ASA Version 7.0(4)3
+!
+terminal width 200
+hostname bjmfw01
+domain-name tomax.com
+enable password 2jgWvEGp6tStauaH encrypted
+no names
+!
+interface GigabitEthernet0/0
+ nameif External
+ security-level 0
+ ip address 66.133.106.36 255.255.254.0 standby 66.133.106.37
+!
+interface GigabitEthernet0/1
+ nameif Internal
+ security-level 100
+ ip address 10.24.83.1 255.255.255.128 standby 10.24.83.2
+!
+interface GigabitEthernet0/2
+ nameif DMZ1
+ security-level 50
+ ip address 10.24.100.65 255.255.255.224 standby 10.24.100.66
+!
+interface GigabitEthernet0/3
+ description LAN Failover Interface
+!
+interface Management0/0
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface Management0/0.100
+ no vlan
+ no nameif
+ no security-level
+ no ip address
+ management-only
+!
+passwd 2jgWvEGp6tStauaH encrypted
+boot system disk0:/asa704-3-k8.bin
+ftp mode passive
+clock timezone MST -7
+same-security-traffic permit intra-interface
+object-group network vpnLocal
+ network-object 10.24.83.0 255.255.255.128
+object-group network vpnRemote
+ network-object host 10.24.74.9
+ network-object host 10.24.74.10
+ network-object host 10.24.74.12
+ network-object host 10.24.74.13
+ network-object host 10.24.74.14
+ network-object host 10.24.74.19
+ network-object host 10.24.74.20
+ network-object 172.30.230.0 255.255.254.0
+object-group network bmpLocal
+ network-object 10.24.83.0 255.255.255.128
+object-group network bmpRemote
+ network-object 10.21.0.0 255.255.0.0
+object-group network tmxDB
+ network-object host 10.24.83.30
+ network-object host 10.24.83.20
+object-group network usiDB
+ network-object host 10.223.2.226
+ network-object host 10.223.2.29
+ network-object host 10.223.2.129
+ network-object host 10.223.2.53
+object-group network bmpMgmt
+ network-object host 10.100.200.46
+ network-object host 10.100.200.73
+object-group network tmxAPP
+ network-object host 10.24.83.23
+ network-object host 10.24.83.31
+ network-object host 10.24.83.32
+object-group network usiAPP
+ network-object host 10.223.2.130
+ network-object host 10.223.2.137
+object-group network bmCorp
+ network-object 10.100.0.0 255.255.0.0
+ network-object 10.101.0.0 255.255.0.0
+ network-object 206.201.50.0 255.255.255.0
+ network-object 206.201.51.0 255.255.255.0
+ network-object 10.117.0.0 255.255.0.0
+ network-object 10.118.0.0 255.255.0.0
+ network-object 10.114.0.0 255.255.0.0
+ network-object 10.121.0.0 255.255.0.0
+ network-object 10.128.0.0 255.255.0.0
+ network-object 10.141.0.0 255.255.0.0
+ network-object 10.146.0.0 255.255.0.0
+object-group network accPac
+ network-object host 10.100.200.157
+object-group network prodDB
+ network-object host 10.24.83.30
+object-group network bmpStore
+ network-object 10.20.0.0 255.255.0.0
+ network-object 10.30.0.0 255.255.0.0
+ network-object 10.31.0.0 255.255.0.0
+ network-object 10.32.0.0 255.255.0.0
+object-group service posServices tcp
+ port-object eq sqlnet
+ port-object eq 7111
+ port-object eq 7112
+ port-object eq 7170
+ port-object eq 7171
+ port-object eq 7218
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8000
+ port-object eq 8001
+ port-object eq 8002
+ port-object eq 8990
+ port-object eq 8994
+ port-object eq 9001
+ port-object eq 9006
+ port-object eq 9008
+ port-object eq 15542
+ port-object eq 15444
+ port-object eq 15445
+ port-object eq 15457
+ port-object eq 16002
+ port-object eq 16010
+ port-object eq 16018
+ port-object eq 16109
+ port-object eq 16119
+ port-object eq 16120
+ port-object eq 16444
+ port-object eq 16556
+ port-object eq 17004
+ port-object eq 17016
+ port-object eq 19441
+ port-object eq 7118
+ port-object eq 15561
+ port-object eq 16020
+ port-object eq 16030
+ port-object eq 7780
+ port-object eq 9035
+ port-object eq 9045
+ port-object eq 4035
+ port-object eq 4025
+ port-object eq 9050
+object-group network imsDevTst
+ network-object host 10.24.83.22
+ network-object host 10.24.83.55
+object-group network imsProd
+ network-object host 10.24.83.52
+object-group service rrpPorts tcp
+ port-object eq 13401
+ port-object eq 13402
+ port-object eq 33657
+object-group network bmpMail
+ network-object host 10.100.200.170
+ network-object host 10.100.200.171
+object-group network radiusServers
+ network-object host 10.100.200.123
+ network-object host 10.100.207.16
+ network-object host 10.100.225.16
+object-group service radiusPortsTcp tcp
+ port-object eq 8080
+object-group service radiusPortsUdp udp
+ port-object eq radius
+object-group network ims_3000
+ network-object 10.30.0.0 255.255.255.0
+ network-object 10.20.248.0 255.255.255.0
+ network-object 10.30.1.0 255.255.255.0
+ network-object 10.30.2.0 255.255.255.0
+ network-object 10.30.3.0 255.255.255.0
+ network-object 10.30.4.0 255.255.255.0
+ network-object 10.30.5.0 255.255.255.0
+ network-object 10.30.6.0 255.255.255.0
+ network-object 10.30.7.0 255.255.255.0
+ network-object 10.30.8.0 255.255.255.0
+ network-object 10.30.9.0 255.255.255.0
+object-group service ims_3000tstPorts tcp
+ port-object eq 7117
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8001
+ port-object eq 8997
+ port-object eq 15503
+ port-object eq 16006
+ port-object eq 16015
+object-group service ims_3000devPorts tcp
+ port-object eq 7116
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8002
+ port-object eq 8996
+ port-object eq 15502
+ port-object eq 16005
+ port-object eq 16013
+object-group service ims_3000prodPorts tcp
+ port-object eq 7114
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 9002
+ port-object eq 15557
+ port-object eq 16006
+ port-object eq 16014
+object-group network ims_3010
+ network-object 10.30.1.0 255.255.255.0
+ network-object 10.20.98.0 255.255.255.0
+ network-object 10.30.11.0 255.255.255.0
+ network-object 10.30.12.0 255.255.255.0
+ network-object 10.30.13.0 255.255.255.0
+ network-object 10.30.14.0 255.255.255.0
+ network-object 10.30.15.0 255.255.255.0
+ network-object 10.30.16.0 255.255.255.0
+ network-object 10.30.17.0 255.255.255.0
+ network-object 10.30.18.0 255.255.255.0
+ network-object 10.30.19.0 255.255.255.0
+object-group service ims_3010devPorts tcp
+ port-object eq 7115
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8002
+ port-object eq 8993
+ port-object eq 15500
+ port-object eq 16003
+ port-object eq 16011
+object-group service ims_3010tstPorts tcp
+ port-object eq 7113
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8001
+ port-object eq 8995
+ port-object eq 15501
+ port-object eq 16004
+ port-object eq 16012
+object-group service ims_3010prodPorts tcp
+ port-object eq 7113
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 9001
+ port-object eq 15556
+ port-object eq 16004
+ port-object eq 16012
+object-group network ims_3020
+ network-object 10.30.2.0 255.255.255.0
+ network-object 10.20.99.0 255.255.255.0
+ network-object 10.30.21.0 255.255.255.0
+ network-object 10.30.22.0 255.255.255.0
+ network-object 10.30.23.0 255.255.255.0
+ network-object 10.30.24.0 255.255.255.0
+ network-object 10.30.25.0 255.255.255.0
+ network-object 10.30.26.0 255.255.255.0
+ network-object 10.30.27.0 255.255.255.0
+ network-object 10.30.28.0 255.255.255.0
+ network-object 10.30.29.0 255.255.255.0
+object-group service ims_3020tstPorts tcp
+ port-object eq 7118
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8001
+ port-object eq 8998
+ port-object eq 15504
+ port-object eq 16007
+ port-object eq 16016
+object-group service ims_3020prodPorts tcp
+ port-object eq 7115
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8000
+ port-object eq 9003
+ port-object eq 15558
+ port-object eq 16008
+ port-object eq 16016
+object-group network ims_3030
+ network-object 10.30.3.0 255.255.255.0
+ network-object 10.20.105.0 255.255.255.0
+ network-object 10.30.31.0 255.255.255.0
+ network-object 10.30.32.0 255.255.255.0
+ network-object 10.30.33.0 255.255.255.0
+ network-object 10.30.34.0 255.255.255.0
+ network-object 10.30.35.0 255.255.255.0
+ network-object 10.30.36.0 255.255.255.0
+ network-object 10.30.37.0 255.255.255.0
+ network-object 10.30.38.0 255.255.255.0
+ network-object 10.30.39.0 255.255.255.0
+object-group service ims_3030tstPorts tcp
+ port-object eq 7120
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8001
+ port-object eq 8999
+ port-object eq 15505
+ port-object eq 16008
+ port-object eq 16017
+object-group service ims_3030prodPorts tcp
+ port-object eq 7116
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8000
+ port-object eq 9004
+ port-object eq 15559
+ port-object eq 16018
+ port-object eq 16028
+object-group network ims_3040
+ network-object 10.30.4.0 255.255.255.0
+ network-object 10.30.5.0 255.255.255.0
+ network-object 10.30.6.0 255.255.255.0
+ network-object 10.30.7.0 255.255.255.0
+ network-object 10.30.8.0 255.255.255.0
+ network-object 10.20.33.0 255.255.255.0
+ network-object 10.20.34.0 255.255.255.0
+ network-object 10.20.36.0 255.255.255.0
+ network-object 10.20.37.0 255.255.255.0
+ network-object 10.20.38.0 255.255.255.0
+ network-object 10.30.41.0 255.255.255.0
+ network-object 10.30.42.0 255.255.255.0
+ network-object 10.30.43.0 255.255.255.0
+ network-object 10.30.44.0 255.255.255.0
+ network-object 10.30.45.0 255.255.255.0
+ network-object 10.30.46.0 255.255.255.0
+ network-object 10.30.47.0 255.255.255.0
+ network-object 10.30.48.0 255.255.255.0
+ network-object 10.30.49.0 255.255.255.0
+object-group service ims_3040tstPorts tcp
+ port-object eq 7126
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8000
+ port-object eq 9005
+ port-object eq 15560
+ port-object eq 16019
+ port-object eq 16029
+ port-object eq 16556
+ port-object eq 17004
+ port-object eq 8001
+ port-object eq 9041
+object-group service ims_3040prodPorts tcp
+ port-object eq 7117
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8000
+ port-object eq 9005
+ port-object eq 15560
+ port-object eq 16019
+ port-object eq 16029
+object-group network dmzNetwork
+ network-object 10.24.100.64 255.255.255.224
+object-group service globalTstPorts tcp
+ port-object eq 9008
+ port-object eq 16119
+ port-object eq 16120
+ port-object eq 7171
+ port-object eq 15457
+ port-object eq 8001
+ port-object eq 7779
+ port-object eq 7778
+ port-object eq 9007
+ port-object eq 16030
+ port-object eq 17006
+ port-object eq 7126
+ port-object eq 16557
+ port-object eq 7780
+ port-object eq 8990
+object-group network testServers
+ network-object host 10.24.83.22
+ network-object host 10.24.83.21
+object-group network accpacLocal
+ network-object host 10.24.83.30
+ network-object host 10.24.83.20
+object-group network accpacRemote
+ network-object host 10.20.82.63
+object-group service accpac_services tcp
+ port-object eq ftp
+object-group network ims_01
+ network-object 10.20.0.0 255.255.0.0
+ network-object 10.30.0.0 255.255.0.0
+ network-object 10.31.0.0 255.255.0.0
+ network-object 10.32.0.0 255.255.0.0
+object-group service ims_01tstPorts tcp
+ port-object eq 7127
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8001
+ port-object eq 9007
+ port-object eq 16030
+ port-object eq 16557
+ port-object eq 17006
+object-group service ims_01devPorts tcp
+ port-object eq 7218
+ port-object eq 7779
+ port-object eq 8001
+ port-object eq 9006
+ port-object eq 16556
+ port-object eq 17004
+ port-object eq 17016
+object-group service ims_01prodPorts tcp
+ port-object eq 7118
+ port-object eq 7777
+ port-object eq 7778
+ port-object eq 7779
+ port-object eq 8000
+ port-object eq 9006
+ port-object eq 15561
+ port-object eq 16020
+ port-object eq 16030
+object-group network isdRemote
+ network-object host 69.214.17.69
+object-group service rrpTestPorts tcp
+ port-object eq 33657
+object-group network bmpStoreJanovic
+ network-object 10.20.82.215 255.255.255.255
+object-group service JanovicServices tcp
+ port-object eq sqlnet
+object-group service ism02testPorts tcp
+ port-object eq 9009
+ port-object eq 16013
+ port-object eq 16021
+ port-object eq 15502
+ port-object eq 7119
+ port-object eq 8993
+ port-object eq 16441
+object-group service ism02prodPorts tcp
+ port-object eq 8000
+ port-object eq 7778
+ port-object eq 9007
+ port-object eq 16022
+ port-object eq 16031
+ port-object eq 7119
+ port-object eq 15562
+ port-object eq 8993
+ port-object eq 16441
+object-group network ism_5000
+ network-object 10.20.83.0 255.255.255.0
+ network-object 10.20.84.0 255.255.255.0
+ network-object 10.20.85.0 255.255.255.0
+ network-object 10.20.86.0 255.255.255.0
+ network-object 10.20.87.0 255.255.255.0
+ network-object 10.20.88.0 255.255.255.0
+ network-object 10.20.89.0 255.255.255.0
+object-group network bjmLive
+ network-object 10.20.251.0 255.255.255.0
+object-group network ftpOut
+ network-object host 10.24.83.20
+ network-object host 10.24.83.30
+object-group network externalFtp
+ network-object host 216.127.135.91
+object-group network fdmsServer
+ network-object host 206.201.50.177
+access-list noNAT extended permit ip object-group vpnLocal object-group vpnRemote
+access-list noNAT extended permit ip object-group bmCorp object-group bmpLocal
+access-list noNAT extended permit ip object-group bmpLocal object-group bmCorp
+access-list noNAT extended permit ip object-group accPac object-group prodDB
+access-list noNAT extended permit ip object-group prodDB object-group accPac
+access-list noNAT extended permit ip object-group bmpStore object-group bmpLocal
+access-list noNAT extended permit ip object-group bmpLocal object-group bmpStore
+access-list noNAT extended permit ip object-group bmpLocal object-group bmpMail
+access-list noNAT extended permit ip object-group bmpMail object-group bmpLocal
+access-list noNAT extended permit ip object-group bmpLocal object-group radiusServers
+access-list noNAT extended permit ip object-group radiusServers object-group bmpLocal
+access-list noNAT extended permit ip object-group bmpLocal object-group bmpRemote
+access-list noNAT extended permit ip object-group tmxDB object-group usiDB
+access-list noNAT extended permit ip object-group tmxAPP object-group usiAPP
+access-list noNAT extended permit ip object-group bmpLocal object-group ims_3000
+access-list noNAT extended permit ip object-group bmpLocal object-group ims_3010
+access-list noNAT extended permit ip object-group bmpLocal object-group ims_3020
+access-list noNAT extended permit ip object-group bmpLocal object-group ims_3030
+access-list noNAT extended permit ip object-group bmpLocal object-group ims_3040
+access-list noNAT extended permit ip object-group ims_3000 object-group bmpLocal
+access-list noNAT extended permit ip object-group ims_3010 object-group bmpLocal
+access-list noNAT extended permit ip object-group ims_3020 object-group bmpLocal
+access-list noNAT extended permit ip object-group ims_3030 object-group bmpLocal
+access-list noNAT extended permit ip object-group ims_3040 object-group bmpLocal
+access-list noNAT extended permit ip object-group bmpLocal object-group ims_01
+access-list noNAT extended permit ip object-group ims_01 object-group bmpLocal
+access-list noNAT extended permit icmp object-group bmCorp object-group bmpLocal
+access-list noNAT extended permit icmp object-group bmpStore object-group bmpLocal
+access-list noNAT extended permit ip object-group bmpLocal object-group isdRemote
+access-list noNAT extended permit ip object-group accpacLocal object-group bmpStoreJanovic
+access-list noNAT extended permit ip object-group bmpLocal object-group ism_5000
+access-list noNAT extended permit ip object-group ism_5000 object-group bmpLocal
+access-list tmxVPN extended permit ip object-group vpnLocal object-group vpnRemote
+access-list bmpVPN extended permit ip object-group bmpLocal object-group bmpRemote
+access-list usiVPN extended permit ip object-group tmxDB object-group usiDB
+access-list usiVPN extended permit ip object-group tmxAPP object-group usiAPP
+access-list bmpOut extended permit ip object-group bmpLocal object-group bmCorp
+access-list bmpOut extended permit ip object-group prodDB object-group accPac
+access-list bmpOut extended permit tcp object-group bmpLocal object-group bmpStore
+access-list bmpOut extended permit ip object-group bmpLocal object-group bmpMail
+access-list bmpOut extended permit ip object-group bmpLocal object-group radiusServers
+access-list bmpOut extended permit ip object-group tmxDB object-group usiDB
+access-list bmpOut extended permit ip object-group vpnLocal object-group vpnRemote
+access-list bmpOut extended permit ip object-group tmxAPP object-group usiAPP
+access-list bmpOut extended permit ip object-group bmpLocal object-group ims_3000
+access-list bmpOut extended permit ip object-group bmpLocal object-group ims_3010
+access-list bmpOut extended permit ip object-group bmpLocal object-group ims_3020
+access-list bmpOut extended permit ip object-group bmpLocal object-group ims_3030
+access-list bmpOut extended permit ip object-group bmpLocal object-group ims_3040
+access-list bmpOut extended permit ip object-group bmpLocal object-group ims_01
+access-list bmpOut extended permit ip object-group accpacLocal object-group bmpStoreJanovic
+access-list bmpOut extended permit ip object-group bmpLocal object-group ism_5000
+access-list bmpOut extended permit tcp object-group ftpOut object-group externalFtp object-group accpac_services
+access-list bmpOut extended permit ip object-group imsDevTst object-group fdmsServer
+access-list dmz1Out extended permit ip object-group bmCorp object-group bmpLocal
+access-list dmz1Out extended permit ip object-group accPac object-group prodDB
+access-list dmz1Out extended permit tcp object-group bmpStore object-group bmpLocal object-group posServices
+access-list dmz1Out extended permit tcp object-group bmpStore object-group bmpLocal object-group rrpPorts
+access-list dmz1Out extended permit tcp object-group bmpMail object-group bmpLocal eq smtp
+access-list dmz1Out extended permit tcp object-group radiusServers object-group bmpLocal object-group radiusPortsTcp
+access-list dmz1Out extended permit udp object-group radiusServers object-group bmpLocal object-group radiusPortsUdp
+access-list dmz1Out extended permit icmp object-group bmpMgmt any
+access-list dmz1Out extended permit tcp object-group ims_3000 object-group bmpLocal object-group ims_3000tstPorts
+access-list dmz1Out extended permit tcp object-group ims_3000 object-group bmpLocal object-group ims_3000devPorts
+access-list dmz1Out extended permit tcp object-group ims_3000 object-group bmpLocal object-group ims_3000prodPorts
+access-list dmz1Out extended permit tcp object-group ims_3010 object-group bmpLocal object-group ims_3010tstPorts
+access-list dmz1Out extended permit tcp object-group ims_3010 object-group bmpLocal object-group ims_3010devPorts
+access-list dmz1Out extended permit tcp object-group ims_3010 object-group bmpLocal object-group ims_3010prodPorts
+access-list dmz1Out extended permit tcp object-group ims_3020 object-group bmpLocal object-group ims_3020tstPorts
+access-list dmz1Out extended permit tcp object-group ims_3020 object-group bmpLocal object-group ims_3020prodPorts
+access-list dmz1Out extended permit tcp object-group ims_3030 object-group bmpLocal object-group ims_3030tstPorts
+access-list dmz1Out extended permit tcp object-group ims_3030 object-group bmpLocal object-group ims_3030prodPorts
+access-list dmz1Out extended permit tcp object-group ims_3040 object-group bmpLocal object-group ims_3040tstPorts
+access-list dmz1Out extended permit tcp object-group ims_3040 object-group bmpLocal object-group ims_3040prodPorts
+access-list dmz1Out extended permit ip object-group bmpMgmt object-group dmzNetwork
+access-list dmz1Out extended permit tcp object-group bmCorp object-group testServers object-group globalTstPorts
+access-list dmz1Out extended permit tcp object-group bmpStore object-group testServers object-group globalTstPorts
+access-list dmz1Out extended permit tcp object-group ims_01 object-group bmpLocal object-group ims_01tstPorts
+access-list dmz1Out extended permit tcp object-group ims_01 object-group bmpLocal object-group ims_01devPorts
+access-list dmz1Out extended permit tcp object-group ims_01 object-group bmpLocal object-group ims_01prodPorts
+access-list dmz1Out extended permit icmp object-group bmCorp object-group bmpLocal
+access-list dmz1Out extended permit icmp object-group bmpStore object-group bmpLocal
+access-list dmz1Out extended permit tcp object-group bmCorp object-group testServers object-group rrpTestPorts
+access-list dmz1Out extended permit tcp object-group bmpStore object-group testServers object-group rrpTestPorts
+access-list dmz1Out extended permit ip object-group accpacRemote object-group accpacLocal
+access-list dmz1Out extended permit ip object-group bmpStoreJanovic object-group accpacLocal
+access-list dmz1Out extended permit tcp object-group bmCorp object-group testServers object-group ism02testPorts
+access-list dmz1Out extended permit tcp object-group bmpStore object-group testServers object-group ism02testPorts
+access-list dmz1Out extended permit tcp object-group ism_5000 object-group bmpLocal object-group ism02prodPorts
+access-list dmz1Out extended permit tcp object-group ism_5000 object-group bmpLocal object-group ism02testPorts
+access-list dmz1Out extended permit tcp object-group bmCorp object-group bmpLocal object-group ism02prodPorts
+access-list dmz1Out extended permit tcp object-group bmpStore object-group bmpLocal object-group ism02prodPorts
+access-list dmz1Out extended permit tcp object-group bjmLive object-group testServers object-group posServices
+access-list dmz1Out extended permit ip object-group fdmsServer object-group imsDevTst
+access-list isd extended permit ip object-group bmpLocal object-group isdRemote
+access-list cap extended permit ip host 10.24.74.9 host 10.24.83.5
+access-list cap extended permit ip host 10.24.83.5 host 10.24.74.9
+access-list cap extended permit ip any any
+access-list newNAT extended permit ip object-group vpnLocal 10.0.0.0 255.0.0.0
+access-list newNAT extended permit ip 10.0.0.0 255.0.0.0 object-group vpnLocal
+access-list newNAT extended permit ip object-group vpnLocal 206.201.50.0 255.255.255.0
+access-list newNAT extended permit ip object-group vpnLocal 206.201.51.0 255.255.255.0
+access-list newNAT extended permit ip 206.201.50.0 255.255.255.0 object-group vpnLocal
+access-list newNAT extended permit ip 206.201.51.0 255.255.255.0 object-group vpnLocal
+access-list newNAT extended permit ip object-group bmpLocal object-group isdRemote
+access-list newNAT extended permit ip object-group isdRemote object-group bmpLocal
+access-list newNAT extended permit ip 172.30.230.0 255.255.254.0 object-group vpnLocal
+access-list newNAT extended permit ip object-group vpnLocal 172.30.230.0 255.255.254.0
+pager lines 24
+logging enable
+logging buffered debugging
+logging trap errors
+logging asdm informational
+logging host Internal 10.24.74.13
+mtu External 1500
+mtu Internal 1500
+mtu DMZ1 1500
+failover
+failover lan unit primary
+failover lan interface fail-link GigabitEthernet0/3
+failover interface ip fail-link 1.1.1.1 255.255.255.0 standby 1.1.1.2
+icmp permit host 10.100.200.46 Internal
+icmp permit any Internal
+icmp permit host 10.100.200.46 DMZ1
+icmp permit any DMZ1
+asdm image disk0:/asdm502.bin
+no asdm history enable
+arp timeout 14400
+global (External) 1 interface
+nat (Internal) 0 access-list newNAT
+nat (Internal) 1 10.24.83.0 255.255.255.128
+nat (DMZ1) 1 10.1.1.0 255.255.255.0
+nat (DMZ1) 1 206.201.50.0 255.255.255.0
+nat (DMZ1) 1 206.201.51.0 255.255.255.0
+nat (DMZ1) 1 10.20.0.0 255.255.0.0
+nat (DMZ1) 1 10.30.0.0 255.255.0.0
+nat (DMZ1) 1 10.31.0.0 255.255.0.0
+nat (DMZ1) 1 10.32.0.0 255.255.0.0
+nat (DMZ1) 1 10.100.0.0 255.255.0.0
+nat (DMZ1) 1 10.101.0.0 255.255.0.0
+nat (DMZ1) 1 10.114.0.0 255.255.0.0
+nat (DMZ1) 1 10.117.0.0 255.255.0.0
+nat (DMZ1) 1 10.118.0.0 255.255.0.0
+nat (DMZ1) 1 10.121.0.0 255.255.0.0
+nat (DMZ1) 1 10.128.0.0 255.255.0.0
+nat (DMZ1) 1 10.141.0.0 255.255.0.0
+nat (DMZ1) 1 10.146.0.0 255.255.0.0
+nat (DMZ1) 1 10.161.0.0 255.255.0.0
+nat (DMZ1) 1 10.164.0.0 255.255.0.0
+access-group bmpOut in interface Internal
+access-group dmz1Out in interface DMZ1
+route External 0.0.0.0 0.0.0.0 66.133.106.1 1
+route DMZ1 10.146.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.118.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.101.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 206.201.51.0 255.255.255.0 10.24.100.75 1
+route DMZ1 10.1.1.0 255.255.255.0 10.24.100.75 1
+route DMZ1 206.201.50.0 255.255.255.0 10.24.100.75 1
+route DMZ1 10.121.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.114.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.128.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.100.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.141.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.20.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.30.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.31.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.32.0.0 255.255.0.0 10.24.100.75 1
+route DMZ1 10.117.0.0 255.255.0.0 10.24.100.75 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00
+timeout mgcp-pat 0:05:00 sip 0:30:00 sip_media 0:02:00
+timeout uauth 0:05:00 absolute
+username benmoore password 4MfGvA5S6pW2rRNk encrypted privilege 15
+username cisco password 3USUcOPFUiMCO4Jk encrypted
+aaa authentication ssh console LOCAL
+snmp-server host Internal 10.24.74.9 community public
+no snmp-server location
+no snmp-server contact
+snmp-server community public
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+crypto ipsec transform-set 3desmd5 esp-3des esp-md5-hmac
+crypto dynamic-map cvpn 1 set transform-set 3desmd5
+crypto dynamic-map cvpn 1 set reverse-route
+crypto map vpn 1 match address tmxVPN
+crypto map vpn 1 set peer 66.133.106.5
+crypto map vpn 1 set transform-set 3desmd5
+crypto map vpn 2 match address bmpVPN
+crypto map vpn 2 set peer 65.220.114.150
+crypto map vpn 2 set transform-set 3desmd5
+crypto map vpn 3 match address usiVPN
+crypto map vpn 3 set peer 65.160.54.36
+crypto map vpn 3 set transform-set 3desmd5
+crypto map vpn 5 match address isd
+crypto map vpn 5 set peer 69.214.17.66
+crypto map vpn 5 set transform-set 3desmd5
+crypto map vpn 100 ipsec-isakmp dynamic cvpn
+crypto map vpn interface External
+isakmp identity address
+isakmp enable External
+isakmp policy 1 authentication pre-share
+isakmp policy 1 encryption 3des
+isakmp policy 1 hash md5
+isakmp policy 1 group 2
+isakmp policy 1 lifetime 86400
+isakmp policy 2 authentication pre-share
+isakmp policy 2 encryption 3des
+isakmp policy 2 hash md5
+isakmp policy 2 group 1
+isakmp policy 2 lifetime 86400
+isakmp nat-traversal  20
+tunnel-group 66.133.106.5 type ipsec-l2l
+tunnel-group 66.133.106.5 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.220.114.150 type ipsec-l2l
+tunnel-group 65.220.114.150 ipsec-attributes
+ pre-shared-key *
+tunnel-group 65.160.54.36 type ipsec-l2l
+tunnel-group 65.160.54.36 ipsec-attributes
+ pre-shared-key *
+tunnel-group 69.214.17.66 type ipsec-l2l
+tunnel-group 69.214.17.66 ipsec-attributes
+ pre-shared-key *
+telnet timeout 5
+ssh 10.100.200.73 255.255.255.255 DMZ1
+ssh timeout 60
+console timeout 30
+management-access Internal
+!
+class-map class_ftp
+ match port tcp eq ftp-data
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map global_policy
+ class inspection_default
+  inspect ftp
+  inspect icmp
+  inspect icmp error
+ class class_ftp
+  inspect ftp
+!
+service-policy global_policy global
+Cryptochecksum:ccf34a56dea4bd825ebce981b80c61e7
+: end

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# send_nsca_crit
+# Send an 'OK' (0) passive check alert to the specified nagios server.
+
+. /u01/app/utils/send_nsca_lib
+
+if [ $# -ne 3 ]; then
+	usage_exit
+fi
+
+# Command-line args
+serv_desc=$1
+msg=$2
+nagios_server=$(get_nagios_server $3)
+
+# Varibales
+hostname=$(get_nagios_hostname)
+
+echo "$hostname	$serv_desc	0	$msg" | /usr/bin/send_nsca -H $nagios_server -c /etc/send_nsca.cfg
+
+exit 0

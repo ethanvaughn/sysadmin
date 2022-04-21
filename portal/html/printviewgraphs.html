@@ -1,0 +1,26 @@
+<html>
+<head>
+<title><tmpl_var name=title></title>
+<link rel="stylesheet" type="text/css" href="../css/portal.css" />
+<link rel="stylesheet" type="text/css" href="../css/<tmpl_var name=desc>.css" />
+</head>
+<table>
+<tmpl_loop name=dataset>
+<tr class='<TMPL_IF NAME="__odd__">altrow</tmpl_if>'>
+	<td>
+	<tmpl_if name=location>
+		<p><img src="retrieveGraph.pl?dclocation=west&image=<tmpl_var name=image>&imgnum=<tmpl_var name=imgnum>">
+		<p><tmpl_var name=timeperiod>
+		<p>
+	<tmpl_else>
+		<p><img src="retrieveGraph.pl?dclocation=south&image=<tmpl_var name=image>&imgnum=<tmpl_var name=imgnum>">
+		<p><tmpl_var name=timeperiod><br>
+		<p>
+	</tmpl_if>
+	</td>
+</tr>
+</tmpl_loop>
+</table>
+<body>
+</body>
+</html>

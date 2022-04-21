@@ -1,0 +1,32 @@
+# Common function libarary for send_nsca wrappers.
+
+
+#----- usage_exit ------------------------------------------------
+function usage_exit {
+	echo
+	echo "usage: $0 \"Service Description\" \"Output message.\" [wdc|sdc]"
+	echo
+	exit 1
+}
+
+
+
+#----- get_nagios_hostname -------------------------------------------------------
+function get_nagios_hostname {
+	HOSTNAME=$(/bin/hostname | tr -t [:upper:] [:lower:])
+	echo ${HOSTNAME%%.*}
+}
+
+
+
+#----- get_nagios_server -------------------------------------------------------
+function get_nagios_server {
+	if [ "X${1}" = "Xwdc" ]; then
+		echo "10.24.74.9"
+	elif [ "X${1}" = "Xsdc" ]; then
+		echo "10.9.15.10"
+	else
+	 	echo "Unknown data center designation. Use: 'wdc' or 'sdc'."
+		usage_exit
+	fi
+}

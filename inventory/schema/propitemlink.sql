@@ -1,0 +1,19 @@
+CREATE TABLE propitemlink (
+
+	prop_id BIGINT NOT NULL REFERENCES prop(id)
+		ON UPDATE CASCADE
+        ON DELETE CASCADE
+        DEFERRABLE,
+	propval_id BIGINT NOT NULL REFERENCES propval(id)
+		ON UPDATE CASCADE
+        ON DELETE CASCADE
+        DEFERRABLE,
+	item BIGINT NOT NULL REFERENCES item(id)
+		ON UPDATE CASCADE
+        ON DELETE CASCADE
+        DEFERRABLE,
+
+	PRIMARY KEY (prop_id, propval_id, item_id)
+) WITHOUT OIDS;
+
+GRANT SELECT,INSERT,UPDATE,DELETE ON propitemlink TO appuser;
